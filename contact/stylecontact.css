@@ -9,6 +9,7 @@
 body {
     background-color: #0d1b2a; /* Warna biru gelap dasar */
     color: white;
+
 }
 
 /* Header */
@@ -24,6 +25,11 @@ header {
     color: #c5a059;
     font-weight: bold;
     font-size: 1.2rem;
+}
+.logo img {
+    width: 150px;   /* ubah sesuai selera */
+    height: auto;
+    display: block;
 }
 
 nav a {
@@ -134,9 +140,9 @@ footer {
 .footer-container {
     display: flex;
     justify-content: space-between;
+    align-items: flex-start; /* ini penting */
     flex-wrap: wrap;
 }
-
 .footer-brand {
     max-width: 400px;
 }
@@ -146,16 +152,28 @@ footer {
     font-weight: bold;
     margin-bottom: 10px;
 }
-
 .footer-brand h2 {
+    font-family: 'Playfair Display', serif;
     font-size: 2.5rem;
     margin-bottom: 15px;
+    color: black;
+    letter-spacing: 1px;
 }
+.footer-brand p {
+    font-family: 'Poppins', sans-serif;
+    font-size: 0.9rem;
+    line-height: 1.6;
+    margin-bottom: 20px;
+    color: black;
+}
+
+
 
 .footer-brand p {
     font-size: 0.9rem;
     line-height: 1.5;
     margin-bottom: 20px;
+    color: black;
 }
 
 .social-icons i {
@@ -166,15 +184,20 @@ footer {
 
 .footer-info {
     text-align: right;
+    margin-top: 20px;
 }
 
 .info-group {
-    margin-bottom: 30px;
+    margin-bottom: 25px;
 }
 
 .info-group h4 {
+    margin-bottom: 8px;
     font-weight: bold;
-    margin-bottom: 5px;
+}
+
+.info-group p {
+    line-height: 1.6;
 }
 
 .copyright {
