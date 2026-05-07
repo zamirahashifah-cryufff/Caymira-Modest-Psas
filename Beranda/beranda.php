@@ -35,6 +35,13 @@
                 </div>
             </div>
         </div>
+
+        <!-- search form start -->
+        <div class="search-form">
+            <input type="search" id="search-box" placeholder="search here...">
+            <label for="search-box"><i data-feather="search"></i></label>
+        </div>
+        <!-- search form end -->
     </nav>
 
     <!-- Feather Icon -->
