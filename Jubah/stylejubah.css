@@ -1,0 +1,192 @@
+/* --- PENGATURAN DASAR --- */
+:root {
+    --bg-color: #0b1120;       
+    --card-bg: #111a2f;        
+    --gold-color: #d4af37;     
+    --text-white: #ffffff;
+    --text-gray: #a0aec0;
+    --font-heading: 'Times New Roman', serif; 
+    --font-body: 'Montserrat', 'Segoe UI', Tahoma, sans-serif;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: var(--bg-color);
+    color: var(--text-white);
+    font-family: var(--font-body);
+}
+
+/* ================= HEADER (NAVBAR) SESUAI GAMBAR ================= */
+.navbar-custom {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 8%;
+    background-color: var(--bg-color);
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+}
+
+.navbar-custom .logo img {
+    height: 35px; /* Sesuaikan ukuran logomu di sini */
+}
+
+.nav-links {
+    display: flex;
+    gap: 40px;
+}
+
+.nav-links a {
+    color: var(--text-white);
+    text-decoration: none;
+    font-size: 0.9rem;
+    font-weight: 500;
+    letter-spacing: 1px;
+}
+
+.nav-links a:hover {
+    color: var(--gold-color);
+}
+
+.nav-icons {
+    display: flex;
+    gap: 25px;
+}
+
+.nav-icons a {
+    color: var(--text-white);
+    text-decoration: none;
+    font-size: 1.3rem;
+}
+
+.nav-icons a:hover {
+    color: var(--gold-color);
+}
+
+/* ================= KONTEN JUBAH ================= */
+.hero-jubah {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 60px 8%;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.hero-text { flex: 1; padding-right: 40px; }
+.hero-text h1 { font-family: var(--font-heading); font-size: 3.5rem; color: var(--gold-color); margin-bottom: 20px; letter-spacing: 2px;}
+.hero-text p { font-size: 1.1rem; line-height: 1.6; margin-bottom: 30px; }
+.btn-belanja { display: inline-block; background: linear-gradient(135deg, #f0e68c, #d4af37); color: #000; font-weight: bold; padding: 10px 25px; border-radius: 5px; text-decoration: none; transition: 0.2s;}
+.btn-belanja:hover { transform: scale(1.05); }
+
+.hero-image { flex: 1; display: flex; justify-content: flex-end; }
+.hero-image img { max-width: 100%; height: auto; }
+
+.divider { border: none; border-top: 1px solid rgba(255, 255, 255, 0.2); margin: 0 8%; }
+
+.produk-jubah { padding: 60px 8%; max-width: 1200px; margin: 0 auto; text-align: center; }
+.judul-kategori { margin-bottom: 50px; }
+.judul-kategori h2 { font-family: var(--font-heading); font-size: 2.5rem; margin-bottom: 10px; letter-spacing: 1px;}
+.judul-kategori h2 span { color: var(--gold-color); }
+.judul-kategori p { color: var(--text-gray); }
+
+.grid-produk { display: grid; grid-template-columns: repeat(4, 1fr); gap: 25px; }
+.kartu-produk { background-color: var(--card-bg); border: 1px solid var(--gold-color); border-radius: 15px; padding: 20px; text-align: center; transition: 0.3s; }
+.kartu-produk:hover { transform: translateY(-5px); }
+.kartu-produk img { width: 100%; height: auto; object-fit: cover; margin-bottom: 15px; border-radius: 8px;}
+.kartu-produk h3 { font-size: 1rem; color: var(--text-white); margin: 10px 0 5px; }
+.kartu-produk .harga { color: var(--text-gray); font-size: 0.9rem; margin: 0; }
+
+/* ================= FOOTER (REFERENSI BARU) ================= */
+.footer-custom {
+    background-color: #ffffff;
+    color: #000000;
+}
+
+.footer-top {
+    display: flex;
+    justify-content: space-between;
+    padding: 60px 8%;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.footer-left {
+    max-width: 500px;
+}
+
+.footer-logo {
+    height: 40px; /* Ukuran logo di footer, sesuaikan dengan aslinya */
+    margin-bottom: 15px;
+}
+
+.footer-left h2 {
+    font-family: var(--font-heading);
+    font-size: 2rem;
+    margin-bottom: 15px;
+    letter-spacing: 1px;
+}
+
+.footer-left p {
+    font-size: 0.9rem;
+    line-height: 1.8;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+.social-icons a {
+    color: #000;
+    font-size: 1.5rem;
+    margin-right: 15px;
+    text-decoration: none;
+}
+
+.footer-right {
+    text-align: right;
+}
+
+.footer-right h4 {
+    font-size: 1.1rem;
+    margin-bottom: 10px;
+    font-weight: 700;
+}
+
+.footer-right p {
+    font-size: 0.95rem;
+    line-height: 1.6;
+    color: #444;
+}
+
+.mt-20 {
+    margin-top: 25px;
+}
+
+.footer-bottom {
+    background-color: #000000;
+    color: #ffffff;
+    text-align: center;
+    padding: 15px 0;
+    font-size: 0.85rem;
+}
+
+/* ================= RESPONSIVE ================= */
+@media (max-width: 992px) {
+    .grid-produk { grid-template-columns: repeat(3, 1fr); }
+    .footer-top { flex-direction: column; gap: 40px; }
+    .footer-right { text-align: left; }
+}
+
+@media (max-width: 768px) {
+    .navbar-custom { flex-direction: column; gap: 15px; }
+    .hero-jubah { flex-direction: column; text-align: center; }
+    .hero-text { padding-right: 0; margin-bottom: 40px; }
+    .grid-produk { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 480px) {
+    .grid-produk { grid-template-columns: 1fr; }
+}
