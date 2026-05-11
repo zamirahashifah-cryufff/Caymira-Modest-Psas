@@ -22,49 +22,101 @@ body {
 }
 
 /* ================= HEADER (NAVBAR) SESUAI GAMBAR ================= */
-.navbar-custom {
+/* === NAVBAR === */
+nav {
+    padding: 4px 0;
+    border-bottom: 1px solid rgba(228, 202, 114, 0.984);
+}
+.nav-right .navbar-extra a :hover{
+    color: var(--gold);
+}
+.nav-container {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 20px 8%;
-    background-color: var(--bg-color);
-    border-bottom: 1px solid rgba(255,255,255,0.05);
 }
-
-.navbar-custom .logo img {
-    height: 35px; /* Sesuaikan ukuran logomu di sini */
+.logo {
+    display: flex;
+    align-items: center;
 }
-
+.logo img {
+    max-height: 68px; 
+    width: auto;
+    object-fit: contain;
+}
 .nav-links {
     display: flex;
-    gap: 40px;
-}
-
-.nav-links a {
-    color: var(--text-white);
-    text-decoration: none;
-    font-size: 0.9rem;
-    font-weight: 500;
+    gap: 30px;
+    font-size: 12px;
+    text-transform: uppercase;
     letter-spacing: 1px;
 }
-
 .nav-links a:hover {
-    color: var(--gold-color);
+    color: var(--gold);
 }
-
-.nav-icons {
+.nav-links a::after{
+    content: '';
+    display: block;
+    padding-bottom: 0.5rem;
+    border-bottom: 0.1rem solid var(--gold-light);
+    transform: scaleX(0);
+    transition: 0.2s linear;
+}
+.nav-links a:hover::after{
+    transform: scaleX(0.5);
+}
+.nav-right {
     display: flex;
-    gap: 25px;
+    align-items: center;
+    gap: 15px;
 }
-
-.nav-icons a {
-    color: var(--text-white);
-    text-decoration: none;
-    font-size: 1.3rem;
+.nav .search-bar {
+    background-color: #fff;
+    border-radius: 20px;
+    padding: 5px 15px;
+    display: flex;
+    align-items: center;
 }
-
-.nav-icons a:hover {
-    color: var(--gold-color);
+.search-bar input {
+    border: none;
+    outline: none;
+    padding: 5px;
+    font-family: var(--font-body);
+}
+.search-bar i {
+    color: #333;
+    cursor: pointer;
+}
+/* Navbar search form */
+.search-form{
+    position: absolute;
+    top: 100px;
+    right: 7%;
+    background-color: white;
+    width: 50rem;
+    height: 5rem;
+    display: flex;
+    align-items: center;
+    transform: scaleY(0);
+    transform-origin: top;
+    transition: transform 0.3s ease;
+}  
+.search-form.active{
+    transform: scaleY(1);
+    transition: transform 0.3s ease;
+}
+.search-form input{
+    height: 100%;
+    width: 100%;
+    font-size: 1.6rem;
+    color: #000000;
+    padding: 1rem;
+}
+.search-form label{
+    cursor: pointer;
+    font-size: 2rem;
+    margin-right: 1.5rem;
+    color: #000000;
 }
 
 /* ================= KONTEN JUBAH ================= */
