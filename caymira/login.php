@@ -13,7 +13,7 @@ $row = mysqli_fetch_assoc($result);
 if (password_verify($password, $row['password'])) {
 $_SESSION['user_id'] = $row['id'];
 $_SESSION['username'] = $row['username'];
-header("Location: index.html"); // Arahkan ke Beranda
+header("Location: beranda/beranda.html"); // Arahkan ke Beranda
 exit;
 } else {
 $msg = "Password salah!";
