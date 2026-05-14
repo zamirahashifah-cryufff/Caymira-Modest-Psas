@@ -1,3 +1,12 @@
+<?php
+session_start();
+
+// Jika user mencoba masuk ke beranda tapi belum login, lempar ke halaman login
+if (!isset($_SESSION['user_id'])) {
+    header("Location: ../login_register/auth.php");
+    exit();
+}
+?>
 <!DOCTYPE html>
 <html lang="id">
 <head>
@@ -1185,10 +1194,10 @@
 
 
         <ul class="nav-links" id="navLinks">
-            <li><a href="../Beranda/beranda.html" >Beranda</a></li>
-            <li><a href="#about" class="active">About Us</a></li>
+            <li><a href="../Beranda/beranda.php" >Beranda</a></li>
+            <li><a href="aboutus.php" class="active">About Us</a></li>
             <li><a href="#bestseller">Best Seller</a></li>
-            <li><a href="#contact">Contact</a></li>
+            <li><a href="../login_register/contact.php">Contact</a></li>
         </ul>
          
 
