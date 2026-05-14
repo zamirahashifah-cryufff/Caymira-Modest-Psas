@@ -14,12 +14,6 @@ if (!isset($_SESSION['user_id'])) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Caymira Modest - Fashion Syar'i</title>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
-
-
-    <link rel="stylesheet" href="../style.css">
-    
-
-
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <style>
 /* === VARIABEL WARNA & FONT === */
@@ -603,18 +597,6 @@ img { max-width: 100%; height: auto; }
 }
 .section-title.visible::after {
     width: 80px;
-}
-.logokoleksipilihan {
-    width: 100px;
-    display: block;
-    margin: 25px auto 35px auto;
-    opacity: 0.5;
-    filter: drop-shadow(0 0 10px rgba(201, 168, 76, 0.3));
-    opacity: 0;
-    transform: scale(0.8);
-}
-.logokoleksipilihan.visible {
-    animation: fadeInScale 0.8s ease 0.2s forwards;
 }
 @keyframes fadeInScale {
     to { opacity: 0.5; transform: scale(1); }
@@ -1777,24 +1759,18 @@ img { max-width: 100%; height: auto; }
         <ul class="nav-links" id="navLinks">
             <li><a href="../Beranda/beranda.php" class="active">Beranda</a></li>
             <li><a href="../About-us/aboutus.php">About Us</a></li>
-            <li><a href="#bestseller">Best Seller</a></li>
-            <li><a href="../login_register/contact.php">Contact</a></li>
+            <li><a href="../contact/contact.php">Contact</a></li>
         </ul>
 
         <div class="nav-icons">
-    <i class="fas fa-search" onclick="toggleSearch()"></i>
-    
-    <a href="../login_register/profil.php" style="color: inherit;">
-        <i class="fas fa-user"></i>
-    </a>
-    
-    <div class="cart-icon">
-        <i class="fas fa-shopping-cart" onclick="showToast('🛒 Menuju keranjang belanja...')"></i>
-    </div>
-    
-    <div class="mobile-menu-btn" id="mobileMenuBtn" onclick="toggleMobileMenu()">
-    </div>
-</div>
+            <i class="fas fa-search" onclick="toggleSearch()"></i>
+            <i class="fas fa-user" onclick="showToast('👤 Menuju halaman akun...')"></i>
+            <div class="cart-icon">
+                <i class="fas fa-shopping-cart" onclick="showToast('🛒 Menuju keranjang belanja...')"></i>
+            </div>
+            <div class="mobile-menu-btn" id="mobileMenuBtn" onclick="toggleMobileMenu()">
+            </div>
+        </div>
     </nav>
 
     <!-- Hero Section -->
@@ -1840,13 +1816,14 @@ img { max-width: 100%; height: auto; }
     <!-- Koleksi Pilihan -->
     <section class="container categories" id="collection">
         <h2 class="section-title">Koleksi Pilihan</h2>
-        <img src="Gambarberanda/logo_caymira_modest.png" class="logokoleksipilihan" alt="Logo">
         <p class="section-subtitle">Pilihan terbaik untuk gaya syar'i Anda</p>
 
         <div class="category-grid">
             <div class="category-item" onclick="showToast('👗 Melihat koleksi Gamis...')">
-                <img src="Gambarberanda/gamis_icon.png" alt="Gamis">
-                <span>Gamis</span>
+                <a href="../Gamis/gamis.php" class="category-item" onclick="showToast('👗 Melihat koleksi Gamis...')">
+                  <img src="Gambarberanda/gamis_icon.png" alt="Gamis">
+                  <span>Gamis</span>
+                </a>
             </div>
             <div class="category-item" onclick="showToast('🧕 Melihat koleksi Hijab...')">
                 <img src="Gambarberanda/kerudung_icon.png" alt="Hijab">
@@ -2004,11 +1981,10 @@ img { max-width: 100%; height: auto; }
             <div class="footer-col">
                 <h4 class="footer-title">Quick Links</h4>
                 <ul class="footer-links">
-                    <li><a href="#home">Home</a></li>
-                    <li><a href="../About-us/aboutus.html">About Us</a></li>
-                    <li><a href="#collection">Collection</a></li>
+                    <li><a href="../Beranda/beranda.php" class="active">Beranda</a></li>
+                    <li><a href="../About-us/aboutus.php">About Us</a></li>
                     <li><a href="#bestseller">Best Seller</a></li>
-                    <li><a href="#contact">Contact</a></li>
+                    <li><a href="../contact/contact.php">Contact</a></li>
                 </ul>
             </div>
 
