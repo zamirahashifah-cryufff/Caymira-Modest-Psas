@@ -1,3 +1,12 @@
+<?php
+session_start();
+
+// Jika user mencoba masuk ke beranda tapi belum login, lempar ke halaman login
+if (!isset($_SESSION['user_id'])) {
+    header("Location: ../login_register/auth.php");
+    exit();
+}
+?>
 <!DOCTYPE html>
 <html lang="id">
 <head>
@@ -1766,21 +1775,26 @@ img { max-width: 100%; height: auto; }
         </div>
 
         <ul class="nav-links" id="navLinks">
-            <li><a href="../Beranda/beranda.html" class="active">Beranda</a></li>
-            <li><a href="../About-us/aboutus.html">About Us</a></li>
+            <li><a href="../Beranda/beranda.php" class="active">Beranda</a></li>
+            <li><a href="../About-us/aboutus.php">About Us</a></li>
             <li><a href="#bestseller">Best Seller</a></li>
-            <li><a href="#contact">Contact</a></li>
+            <li><a href="../login_register/contact.php">Contact</a></li>
         </ul>
 
         <div class="nav-icons">
-            <i class="fas fa-search" onclick="toggleSearch()"></i>
-            <i class="fas fa-user" onclick="showToast('👤 Menuju halaman akun...')"></i>
-            <div class="cart-icon">
-                <i class="fas fa-shopping-cart" onclick="showToast('🛒 Menuju keranjang belanja...')"></i>
-            </div>
-            <div class="mobile-menu-btn" id="mobileMenuBtn" onclick="toggleMobileMenu()">
-            </div>
-        </div>
+    <i class="fas fa-search" onclick="toggleSearch()"></i>
+    
+    <a href="../login_register/profil.php" style="color: inherit;">
+        <i class="fas fa-user"></i>
+    </a>
+    
+    <div class="cart-icon">
+        <i class="fas fa-shopping-cart" onclick="showToast('🛒 Menuju keranjang belanja...')"></i>
+    </div>
+    
+    <div class="mobile-menu-btn" id="mobileMenuBtn" onclick="toggleMobileMenu()">
+    </div>
+</div>
     </nav>
 
     <!-- Hero Section -->
