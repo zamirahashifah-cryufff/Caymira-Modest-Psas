@@ -1,3 +1,42 @@
+<?php
+include 'koneksi.php';
+
+// Ambil parameter filter dari URL
+$filter = isset($_GET['filter']) ? $_GET['filter'] : 'all';
+$sort = isset($_GET['sort']) ? $_GET['sort'] : 'newest';
+
+// Build query
+$sql = "SELECT * FROM produk WHERE 1=1";
+
+// Filter
+if ($filter == 'new') {
+    $sql .= " AND is_new = 1";
+} elseif ($filter == 'bestseller') {
+    $sql .= " AND is_bestseller = 1";
+} elseif ($filter == 'sale') {
+    $sql .= " AND is_sale = 1";
+}
+
+// Sort
+if ($sort == 'price-low') {
+    $sql .= " ORDER BY COALESCE(harga_diskon, harga) ASC";
+} elseif ($sort == 'price-high') {
+    $sql .= " ORDER BY COALESCE(harga_diskon, harga) DESC";
+} elseif ($sort == 'popular') {
+    $sql .= " ORDER BY is_bestseller DESC, id DESC";
+} else {
+    $sql .= " ORDER BY id DESC"; // newest
+}
+
+$result = mysqli_query($conn, $sql);
+
+// Hitung total produk
+$count_sql = "SELECT COUNT(*) as total FROM produk";
+$count_result = mysqli_query($conn, $count_sql);
+$count_row = mysqli_fetch_assoc($count_result);
+$total_produk = $count_row['total'];
+?>
+
 <!DOCTYPE html>
 <html lang="id">
 <head>
@@ -10,6 +49,7 @@
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
  :root {
+        :root {
             --navy: #0a1628;
             --navy-light: #0f1d35;
             --navy-lighter: #152238;
@@ -68,6 +108,8 @@
             transition: opacity 0.6s, visibility 0.6s;
        }
        .loader.hidden {
+        }
+        .loader.hidden {
             opacity: 0;
             visibility: hidden;
         }
@@ -78,6 +120,8 @@
             animation: loaderPulse 1.5s ease-in-out infinite;
        }
        .loader-bar {
+        }
+        .loader-bar {
             width: 200px;
             height: 2px;
             background: rgba(201, 168, 76, 0.2);
@@ -95,6 +139,11 @@
             0%, 100% { opacity: 0.4; letter-spacing: 2px; }
             50% { opacity: 1; letter-spacing: 8px; }
        }
+        }
+        @keyframes loaderPulse {
+            0%, 100% { opacity: 0.4; letter-spacing: 2px; }
+            50% { opacity: 1; letter-spacing: 8px; }
+        }
         @keyframes loadProgress {
             0% { width: 0%; }
             100% { width: 100%; }
@@ -509,6 +558,8 @@
             cursor: pointer;
             transition: all 0.3s ease;
             border-radius: 4px;
+            text-decoration: none;
+            display: inline-block;
         }
         .filter-btn:hover, .filter-btn.active {
             background: var(--gold);
@@ -568,6 +619,14 @@
         .sort-menu li:last-child { border-bottom: none; }
         .sort-menu li:hover {
             background: rgba(201, 168, 76, 0.1);
+            color: var(--gold);
+        }
+        .sort-menu li a {
+            color: var(--text-light);
+            text-decoration: none;
+            display: block;
+        }
+        .sort-menu li a:hover {
             color: var(--gold);
         }
 
@@ -835,6 +894,7 @@
         }
 
        /* Footer */
+        /* Footer */
         .footer {
             background: #ffffff;
             border-top: 1px solid rgba(201, 168, 76, 0.15);
@@ -1063,6 +1123,7 @@
         }
 
        .footer-bottom {
+        .footer-bottom {
             text-align: center;
             padding-top: 35px;
             margin-top: 35px;
@@ -1172,6 +1233,26 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
+        /* No products message */
+        .no-products {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 60px 20px;
+            color: var(--text-muted);
+        }
+        .no-products i {
+            font-size: 48px;
+            color: var(--gold);
+            margin-bottom: 20px;
+            display: block;
+        }
+        .no-products h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 24px;
+            color: var(--gold);
+            margin-bottom: 10px;
+        }
+
         /* Responsive */
         @media (max-width: 1024px) {
             .hero { flex-direction: column; text-align: center; padding: 30px; }
@@ -1182,6 +1263,7 @@
             .values-grid { grid-template-columns: repeat(2, 1fr); }
             .stats-section { gap: 40px; }
             .footer-content { grid-template-columns: 1fr 1fr; }
+            .products-grid { grid-template-columns: repeat(3, 1fr); }
         }
 
         @media (max-width: 768px) {
@@ -1220,6 +1302,13 @@
             .footer-content { grid-template-columns: 1fr; gap: 25px; }
             .gold-branch-left, .gold-branch-right, .gold-branch-footer { display: none; }
             .custom-cursor, .cursor-dot { display: none; }
+            .products-grid { grid-template-columns: repeat(2, 1fr); gap: 15px; }
+            .products-section { padding: 30px; }
+            .filter-section { padding: 20px 30px; }
+            .filter-container { flex-direction: column; align-items: flex-start; }
+        }
+        @media (max-width: 480px) {
+            .products-grid { grid-template-columns: 1fr; }
         }
     </style>
        
@@ -1344,6 +1433,13 @@
                 <button class="filter-btn" onclick="filterProducts('new', this)">Terbaru</button>
                 <button class="filter-btn" onclick="filterProducts('bestseller', this)">Best Seller</button>
                 <button class="filter-btn" onclick="filterProducts('sale', this)">Diskon</button>
+                Koleksi Gamis <span><?php echo $total_produk; ?> Produk</span>
+            </div>
+            <div class="filter-buttons">
+                <a href="?filter=all&sort=<?php echo $sort; ?>" class="filter-btn <?php echo $filter == 'all' ? 'active' : ''; ?>">Semua</a>
+                <a href="?filter=new&sort=<?php echo $sort; ?>" class="filter-btn <?php echo $filter == 'new' ? 'active' : ''; ?>">Terbaru</a>
+                <a href="?filter=bestseller&sort=<?php echo $sort; ?>" class="filter-btn <?php echo $filter == 'bestseller' ? 'active' : ''; ?>">Best Seller</a>
+                <a href="?filter=sale&sort=<?php echo $sort; ?>" class="filter-btn <?php echo $filter == 'sale' ? 'active' : ''; ?>">Diskon</a>
             </div>
             <div class="sort-dropdown">
                 <button class="sort-btn" onclick="toggleSort()">
@@ -1354,6 +1450,10 @@
                     <li onclick="sortProducts('price-low')">Harga: Rendah ke Tinggi</li>
                     <li onclick="sortProducts('price-high')">Harga: Tinggi ke Rendah</li>
                     <li onclick="sortProducts('popular')">Paling Populer</li>
+                    <li><a href="?filter=<?php echo $filter; ?>&sort=newest" class="<?php echo $sort == 'newest' ? 'active' : ''; ?>">Terbaru</a></li>
+                    <li><a href="?filter=<?php echo $filter; ?>&sort=price-low" class="<?php echo $sort == 'price-low' ? 'active' : ''; ?>">Harga: Rendah ke Tinggi</a></li>
+                    <li><a href="?filter=<?php echo $filter; ?>&sort=price-high" class="<?php echo $sort == 'price-high' ? 'active' : ''; ?>">Harga: Tinggi ke Rendah</a></li>
+                    <li><a href="?filter=<?php echo $filter; ?>&sort=popular" class="<?php echo $sort == 'popular' ? 'active' : ''; ?>">Paling Populer</a></li>
                 </ul>
             </div>
         </div>
@@ -1367,6 +1467,31 @@
                 <div class="product-image">
                     <img src="https://images.unsplash.com/photo-1558618666-fcd25c85f82e?w=400&h=533&fit=crop" alt="Gamis Alesha">
                     <span class="product-badge badge-new">New</span>
+            <?php
+            if (mysqli_num_rows($result) > 0):
+                while($row = mysqli_fetch_assoc($result)):
+                    // Build category string for data-category
+                    $categories = [];
+                    if($row['is_new']) $categories[] = 'new';
+                    if($row['is_bestseller']) $categories[] = 'bestseller';
+                    if($row['is_sale']) $categories[] = 'sale';
+                    $category_string = implode(' ', $categories);
+                    
+                    // Determine effective price
+                    $effective_price = $row['harga_diskon'] ? $row['harga_diskon'] : $row['harga'];
+            ?>
+            <div class="product-card" data-category="<?php echo $category_string; ?>" data-price="<?php echo $effective_price; ?>">
+                <div class="product-image">
+                    <img src="<?php echo !empty($row['gambar']) ? $row['gambar'] : 'https://images.unsplash.com/photo-1558618666-fcd25c85f82e?w=400&h=533&fit=crop'; ?>" 
+                         alt="<?php echo htmlspecialchars($row['nama']); ?>"
+                         onerror="this.src='https://images.unsplash.com/photo-1558618666-fcd25c85f82e?w=400&h=533&fit=crop'; this.onerror=null;">
+                    
+                    <?php if(!empty($row['badge'])): ?>
+                        <span class="product-badge badge-<?php echo strtolower(str_replace(' ', '-', $row['badge'])); ?>">
+                            <?php echo $row['badge']; ?>
+                        </span>
+                    <?php endif; ?>
+                    
                     <div class="product-overlay">
                         <button class="overlay-btn" onclick="showToast('❤️ Ditambahkan ke wishlist')"><i class="far fa-heart"></i></button>
                         <button class="overlay-btn" onclick="showToast('👁️ Melihat detail produk')"><i class="far fa-eye"></i></button>
@@ -1657,6 +1782,43 @@
                     </div>
                 </div>
             </div>
+                    <h3 class="product-name"><?php echo htmlspecialchars($row['nama']); ?></h3>
+                    <div class="product-price">
+                        <?php if($row['harga_diskon'] && $row['harga_diskon'] < $row['harga']): ?>
+                            <span class="price-current">Rp <?php echo number_format($row['harga_diskon'], 0, ',', '.'); ?></span>
+                            <span class="price-original">Rp <?php echo number_format($row['harga'], 0, ',', '.'); ?></span>
+                        <?php else: ?>
+                            <span class="price-current">Rp <?php echo number_format($row['harga'], 0, ',', '.'); ?></span>
+                        <?php endif; ?>
+                    </div>
+                    <div class="product-colors">
+                        <?php 
+                        if(!empty($row['warna'])):
+                            $colors = explode(',', $row['warna']);
+                            foreach($colors as $i => $color): 
+                                $color = trim($color);
+                                if(!empty($color)):
+                        ?>
+                            <span class="color-dot <?php echo $i==0 ? 'active' : ''; ?>" 
+                                  style="background: <?php echo htmlspecialchars($color); ?>;"></span>
+                        <?php 
+                                endif;
+                            endforeach;
+                        endif;
+                        ?>
+                    </div>
+                </div>
+            </div>
+            <?php 
+                endwhile;
+            else:
+            ?>
+            <div class="no-products">
+                <i class="fas fa-box-open"></i>
+                <h3>Belum Ada Produk</h3>
+                <p>Produk akan segera hadir. Stay tuned!</p>
+            </div>
+            <?php endif; ?>
         </div>
     </section>
 
@@ -1666,6 +1828,7 @@
             <div class="newsletter-icon">
                <i class="fa-regular fa-bell on"></i>
 <           </div>
+            </div>
             <h2 class="newsletter-title">Jangan Lewatkan Update Terbaru</h2>
             <p class="newsletter-desc">
                 Dapatkan info koleksi terbaru, promo eksklusif, dan diskon spesial
@@ -1679,6 +1842,7 @@
     </section>
 
  <!-- Footer -->
+    <!-- Footer -->
     <footer class="footer" id="contact">
         <svg class="gold-branch-footer" viewBox="0 0 200 300" fill="none">
             <path d="M100 300 Q120 250 100 200 Q80 150 100 100 Q120 50 100 0" stroke="#c9a84c" stroke-width="1" fill="none" opacity="0.4"/>
@@ -1760,3 +1924,122 @@
             </script>
     </body>
 
+    <!-- JavaScript -->
+    <script>
+        // Loading
+        window.addEventListener("load", function () {
+            const loader = document.querySelector(".loader");
+            setTimeout(function () {
+                loader.classList.add("hidden");
+            }, 1500); 
+        });
+
+        // Custom Cursor
+        const cursor = document.getElementById('cursor');
+        const cursorDot = document.getElementById('cursorDot');
+        
+        document.addEventListener('mousemove', (e) => {
+            cursor.style.left = e.clientX - 10 + 'px';
+            cursor.style.top = e.clientY - 10 + 'px';
+            cursorDot.style.left = e.clientX - 3 + 'px';
+            cursorDot.style.top = e.clientY - 3 + 'px';
+        });
+
+        document.querySelectorAll('a, button, .product-card').forEach(el => {
+            el.addEventListener('mouseenter', () => cursor.classList.add('hover'));
+            el.addEventListener('mouseleave', () => cursor.classList.remove('hover'));
+        });
+
+        // Particles
+        const particlesContainer = document.getElementById('particles');
+        for(let i = 0; i < 30; i++) {
+            const particle = document.createElement('div');
+            particle.className = 'particle';
+            particle.style.left = Math.random() * 100 + '%';
+            particle.style.animationDelay = Math.random() * 12 + 's';
+            particle.style.animationDuration = (8 + Math.random() * 8) + 's';
+            particlesContainer.appendChild(particle);
+        }
+
+        // Search
+        function toggleSearch() {
+            document.getElementById('searchOverlay').classList.toggle('active');
+        }
+
+        // Mobile Menu
+        function toggleMobileMenu() {
+            document.getElementById('navLinks').classList.toggle('active');
+            document.getElementById('mobileMenuBtn').classList.toggle('active');
+        }
+
+        // Sort Dropdown
+        function toggleSort() {
+            document.getElementById('sortMenu').classList.toggle('active');
+        }
+
+        // Close sort when clicking outside
+        document.addEventListener('click', (e) => {
+            if(!e.target.closest('.sort-dropdown')) {
+                document.getElementById('sortMenu').classList.remove('active');
+            }
+        });
+
+        // Toast
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            const toastText = document.getElementById('toastText');
+            toastText.textContent = message;
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 3000);
+        }
+
+        // Scroll to top
+        const scrollTop = document.createElement('button');
+        scrollTop.className = 'scroll-top';
+        scrollTop.innerHTML = '<i class="fas fa-arrow-up"></i>';
+        document.body.appendChild(scrollTop);
+
+        window.addEventListener('scroll', () => {
+            if(window.scrollY > 500) {
+                scrollTop.classList.add('visible');
+            } else {
+                scrollTop.classList.remove('visible');
+            }
+        });
+
+        scrollTop.addEventListener('click', () => {
+            window.scrollTo({top: 0, behavior: 'smooth'});
+        });
+
+        // Navbar scroll effect
+        window.addEventListener('scroll', () => {
+            const navbar = document.getElementById('navbar');
+            if(window.scrollY > 50) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        });
+
+        // Handle newsletter subscribe
+        function handleSubscribe(e) {
+            e.preventDefault();
+            const email = document.getElementById('emailInput').value;
+            showToast('📧 Terima kasih! ' + email + ' telah berlangganan.');
+            document.getElementById('emailInput').value = '';
+        }
+
+        function handleBannerSubscribe(e) {
+            e.preventDefault();
+            const email = e.target.querySelector('input').value;
+            showToast('📧 Terima kasih! ' + email + ' telah berlangganan.');
+            e.target.querySelector('input').value = '';
+        }
+    </script>
+</body>
+</html>
+
+<?php
+// Close database connection
+mysqli_close($conn);
+?>
