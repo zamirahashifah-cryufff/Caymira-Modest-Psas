@@ -1504,20 +1504,20 @@ img { max-width: 100%; height: auto; }
 
     <!-- Navbar -->
     <nav class="navbar" id="navbar">
-        <div class="logo" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">
+         <div class="logo" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">
             <img src="Gambarberanda/logo_caymira_modest.png" alt="Caymira Modest" class="logo-img">
         </div>
 
         <ul class="nav-links" id="navLinks">
-            <li><a href="../Beranda/beranda.html">Beranda</a></li>
-            <li><a href="../About-us/aboutus.html">About Us</a></li>
+            <li><a href="../Beranda/beranda.php">Beranda</a></li>
+            <li><a href="../About-us/aboutus.php">About Us</a></li>
             <li><a href="#bestseller">Best Seller</a></li>
-            <li><a href="#contact">Contact</a></li>
+            <li><a href="../login_register/contact.php">Contact</a></li>
         </ul>
 
         <div class="nav-icons">
             <i class="fas fa-search" onclick="toggleSearch()"></i>
-            <i class="fas fa-user" onclick="showToast('👤 Menuju halaman akun...')"></i>
+            <i class="fas fa-user" onclick="window.location.href='../login_register/profil.php'"></i>
             <div class="cart-icon">
                 <i class="fas fa-shopping-cart" onclick="showToast('🛒 Menuju keranjang belanja...')"></i>
                 <span class="cart-badge">3</span>

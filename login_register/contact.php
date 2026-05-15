@@ -187,9 +187,9 @@ if (!isset($_SESSION['user_id'])) {
         </div>
         <ul class="nav-links">
             <li><a href="../Beranda/beranda.php" class="interactive">Beranda</a></li>
-            <li><a href="../About-us/aboutus.html" class="interactive">About Us</a></li>
-            <li><a href="../login_register/contact.php" class="interactive" style="color: var(--gold);">Contact</a></li>
+            <li><a href="../About-us/aboutus.php" class="interactive">About Us</a></li>
             <li><a href="#" class="interactive">Best Seller</a></li>
+            <li><a href="../login_register/contact.php" class="interactive" style="color: var(--gold);">Contact</a></li>
         </ul>
         <div class="nav-icons">
             <i class="fas fa-search interactive"></i>

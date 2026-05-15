@@ -153,7 +153,7 @@ $email_user = isset($data['email']) ? $data['email'] : 'Email tidak ditemukan';
         </div>
         <ul class="nav-links">
             <li><a href="../Beranda/beranda.php" class="interactive">Beranda</a></li>
-            <li><a href="../About-us/aboutus.html" class="interactive">About Us</a></li>
+            <li><a href="../About-us/aboutus.php" class="interactive">About Us</a></li>
             <li><a href="../login_register/contact.php" class="interactive">Contact</a></li>
             <li><a href="#" class="interactive">Best Seller</a></li>
         
