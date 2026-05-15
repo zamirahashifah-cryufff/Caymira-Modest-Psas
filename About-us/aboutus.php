@@ -1195,9 +1195,13 @@ if (!isset($_SESSION['user_id'])) {
 
         <ul class="nav-links" id="navLinks">
             <li><a href="../Beranda/beranda.php" >Beranda</a></li>
+
             <li><a href="../About-us/aboutus.php" class="active">About Us</a></li>
+
+            <li><a href="#about" class="active">About Us</a></li>
+
             <li><a href="#bestseller">Best Seller</a></li>
-            <li><a href="../login_register/contact.php">Contact</a></li>
+            <li><a href="../contact/contact.php">Contact</a></li>
         </ul>
          
 
@@ -1382,11 +1386,10 @@ if (!isset($_SESSION['user_id'])) {
             <div class="footer-col">
                 <h4 class="footer-title">Quick Links</h4>
                 <ul class="footer-links">
-                    <li><a href="#home">Home</a></li>
-                    <li><a href="#about">About Us</a></li>
-                    <li><a href="#collection">Collection</a></li>
+                   <li><a href="../Beranda/beranda.php" class="active">Beranda</a></li>
+                    <li><a href="../About-us/aboutus.php">About Us</a></li>
                     <li><a href="#bestseller">Best Seller</a></li>
-                    <li><a href="#contact">Contact</a></li>
+                    <li><a href="../contact/contact.php">Contact</a></li>
                 </ul>
             </div>
 
