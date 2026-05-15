@@ -1226,7 +1226,7 @@ img { max-width: 100%; height: auto; }
     padding: 0 15px;
 }
 
-/* === FOOTER - TIDAK DIUBAH === */
+/* === FOOTER === */
 .footer {
     background: #ffffff;
     border-top: 1px solid rgba(201, 168, 76, 0.15);

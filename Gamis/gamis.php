@@ -1761,3 +1761,122 @@
         </body>
         </html>
 
+    <!-- JavaScript -->
+    <script>
+        // Loading
+        window.addEventListener("load", function () {
+            const loader = document.querySelector(".loader");
+            setTimeout(function () {
+                loader.classList.add("hidden");
+            }, 1500); 
+        });
+
+        // Custom Cursor
+        const cursor = document.getElementById('cursor');
+        const cursorDot = document.getElementById('cursorDot');
+        
+        document.addEventListener('mousemove', (e) => {
+            cursor.style.left = e.clientX - 10 + 'px';
+            cursor.style.top = e.clientY - 10 + 'px';
+            cursorDot.style.left = e.clientX - 3 + 'px';
+            cursorDot.style.top = e.clientY - 3 + 'px';
+        });
+
+        document.querySelectorAll('a, button, .product-card').forEach(el => {
+            el.addEventListener('mouseenter', () => cursor.classList.add('hover'));
+            el.addEventListener('mouseleave', () => cursor.classList.remove('hover'));
+        });
+
+        // Particles
+        const particlesContainer = document.getElementById('particles');
+        for(let i = 0; i < 30; i++) {
+            const particle = document.createElement('div');
+            particle.className = 'particle';
+            particle.style.left = Math.random() * 100 + '%';
+            particle.style.animationDelay = Math.random() * 12 + 's';
+            particle.style.animationDuration = (8 + Math.random() * 8) + 's';
+            particlesContainer.appendChild(particle);
+        }
+
+        // Search
+        function toggleSearch() {
+            document.getElementById('searchOverlay').classList.toggle('active');
+        }
+
+        // Mobile Menu
+        function toggleMobileMenu() {
+            document.getElementById('navLinks').classList.toggle('active');
+            document.getElementById('mobileMenuBtn').classList.toggle('active');
+        }
+
+        // Sort Dropdown
+        function toggleSort() {
+            document.getElementById('sortMenu').classList.toggle('active');
+        }
+
+        // Close sort when clicking outside
+        document.addEventListener('click', (e) => {
+            if(!e.target.closest('.sort-dropdown')) {
+                document.getElementById('sortMenu').classList.remove('active');
+            }
+        });
+
+        // Toast
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            const toastText = document.getElementById('toastText');
+            toastText.textContent = message;
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 3000);
+        }
+
+        // Scroll to top
+        const scrollTop = document.createElement('button');
+        scrollTop.className = 'scroll-top';
+        scrollTop.innerHTML = '<i class="fas fa-arrow-up"></i>';
+        document.body.appendChild(scrollTop);
+
+        window.addEventListener('scroll', () => {
+            if(window.scrollY > 500) {
+                scrollTop.classList.add('visible');
+            } else {
+                scrollTop.classList.remove('visible');
+            }
+        });
+
+        scrollTop.addEventListener('click', () => {
+            window.scrollTo({top: 0, behavior: 'smooth'});
+        });
+
+        // Navbar scroll effect
+        window.addEventListener('scroll', () => {
+            const navbar = document.getElementById('navbar');
+            if(window.scrollY > 50) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        });
+
+        // Handle newsletter subscribe
+        function handleSubscribe(e) {
+            e.preventDefault();
+            const email = document.getElementById('emailInput').value;
+            showToast('📧 Terima kasih! ' + email + ' telah berlangganan.');
+            document.getElementById('emailInput').value = '';
+        }
+
+        function handleBannerSubscribe(e) {
+            e.preventDefault();
+            const email = e.target.querySelector('input').value;
+            showToast('📧 Terima kasih! ' + email + ' telah berlangganan.');
+            e.target.querySelector('input').value = '';
+        }
+    </script>
+</body>
+</html>
+
+<?php
+// Close database connection
+mysqli_close($conn);
+?>
