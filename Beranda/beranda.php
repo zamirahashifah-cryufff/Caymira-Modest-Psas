@@ -1852,10 +1852,10 @@ img { max-width: 100%; height: auto; }
                 <img src="Gambarberanda/kerudung_icon.png" alt="Hijab">
                 <span>Hijab</span>
             </div>
-            <div class="category-item" onclick="showToast('👔 Melihat koleksi Koko...')">
-                <img src="Gambarberanda/koko_icon.png" alt="Koko">
-                <span>Koko</span>
-            </div>
+            <div class="category-item" onclick="showToast('👔 Melihat koleksi Koko...'); setTimeout(() => { window.location.href='../Koko/index.php' }, 1000);">
+    <img src="Gambarberanda/koko_icon.png" alt="Koko">
+    <span>Koko</span>
+</div>
         </div>
     </section>
 

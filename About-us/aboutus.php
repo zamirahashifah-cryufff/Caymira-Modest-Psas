@@ -1195,19 +1195,22 @@ if (!isset($_SESSION['user_id'])) {
 
         <ul class="nav-links" id="navLinks">
             <li><a href="../Beranda/beranda.php" >Beranda</a></li>
-            <li><a href="aboutus.php" class="active">About Us</a></li>
+            <li><a href="../About-us/aboutus.php" class="active">About Us</a></li>
             <li><a href="#bestseller">Best Seller</a></li>
             <li><a href="../login_register/contact.php">Contact</a></li>
         </ul>
          
 
         <div class="nav-icons">
-            <i class="fas fa-search" onclick="toggleSearch()"></i>
-            <i class="fas fa-user" onclick="showToast('👤 Menuju halaman akun...')"></i>
-            <div class="cart-icon">
-                <i class="fas fa-shopping-cart" onclick="showToast('🛒 Menuju keranjang belanja...')"></i>
-            </div>
-            <div class="mobile-menu-btn" id="mobileMenuBtn" onclick="toggleMobileMenu()">
+    <i class="fas fa-search" onclick="toggleSearch()"></i>
+    
+    <i class="fas fa-user" onclick="window.location.href='../login_register/profil.php'"></i>
+    
+    <div class="cart-icon">
+        <i class="fas fa-shopping-cart" onclick="showToast('🛒 Menuju keranjang belanja...')"></i>
+    </div>
+    <div class="mobile-menu-btn" id="mobileMenuBtn" onclick="toggleMobileMenu()">
+</div>
                 <span></span>
                 <span></span>
                 <span></span>
