@@ -372,7 +372,6 @@
         align-items: center;
         justify-content: center;
         overflow: hidden;
-        margin-top: 70px;
       }
 
       /* Background Image */
@@ -825,48 +824,6 @@
         font-size: 18px;
       }
 
-      /* === MARQUEE BANNER === */
-      .marquee-banner {
-        background: linear-gradient(
-          90deg,
-          var(--navy),
-          var(--navy-light),
-          var(--navy)
-        );
-        padding: 15px 0;
-        overflow: hidden;
-        position: relative;
-        border-top: 1px solid rgba(201, 168, 76, 0.2);
-        border-bottom: 1px solid rgba(201, 168, 76, 0.2);
-      }
-      .marquee-content {
-        display: flex;
-        animation: marqueeScroll 20s linear infinite;
-        white-space: nowrap;
-      }
-      .marquee-item {
-        display: inline-flex;
-        align-items: center;
-        gap: 15px;
-        padding: 0 40px;
-        color: var(--gold);
-        font-size: 13px;
-        letter-spacing: 2px;
-        text-transform: uppercase;
-      }
-      .marquee-item i {
-        color: var(--gold);
-        font-size: 14px;
-      }
-      @keyframes marqueeScroll {
-        0% {
-          transform: translateX(0);
-        }
-        100% {
-          transform: translateX(-50%);
-        }
-      }
-
       /* === SECTION DIVIDER === */
       .section-divider {
         width: 100%;
@@ -1187,42 +1144,6 @@
       </div>
     </nav>
 
-    <!-- Marquee Banner -->
-    <div class="marquee-banner">
-      <div class="marquee-content">
-        <div class="marquee-item">
-          <i class="fas fa-star"></i> Gratis Ongkir Minimal Rp 500.000
-        </div>
-        <div class="marquee-item">
-          <i class="fas fa-shield-alt"></i> Garansi Kualitas Terbaik
-        </div>
-        <div class="marquee-item">
-          <i class="fas fa-truck"></i> Pengiriman Cepat 1-3 Hari
-        </div>
-        <div class="marquee-item">
-          <i class="fas fa-headset"></i> Customer Service 24/7
-        </div>
-        <div class="marquee-item">
-          <i class="fas fa-gift"></i> Diskon 20% Pembelian Pertama
-        </div>
-        <div class="marquee-item">
-          <i class="fas fa-star"></i> Gratis Ongkir Minimal Rp 500.000
-        </div>
-        <div class="marquee-item">
-          <i class="fas fa-shield-alt"></i> Garansi Kualitas Terbaik
-        </div>
-        <div class="marquee-item">
-          <i class="fas fa-truck"></i> Pengiriman Cepat 1-3 Hari
-        </div>
-        <div class="marquee-item">
-          <i class="fas fa-headset"></i> Customer Service 24/7
-        </div>
-        <div class="marquee-item">
-          <i class="fas fa-gift"></i> Diskon 20% Pembelian Pertama
-        </div>
-      </div>
-    </div>
-
     <header class="hero-section">
       <img src="banner hero.png" alt="Background" class="hero-bg-image">
       <div class="hero-content">
@@ -1256,39 +1177,33 @@
         </div>
       </div>
 
-      <div class="contact-form-container">
-        <h2>Get In Touch</h2>
+      <form id="contactForm">
+       <div class="form-group">
+          <label for="name">Name</label>
+          <!-- Tambahkan name="nama" -->
+          <input type="text" id="name" name="nama" placeholder="Your name..." required />
+        </div>
 
-        <form id="contactForm">
-          <div class="form-group">
-            <label for="name">Name</label>
-            <input type="text" id="name" placeholder="Your name..." required />
-          </div>
-          <div class="form-group">
-            <label for="email">Email</label>
-            <input
-              type="email"
-              id="email"
-              placeholder="example@gmail.com"
-              required
-            />
-          </div>
-          <div class="form-group">
-            <label for="subject">Subject</label>
-            <input type="text" id="subject" placeholder="Title..." required />
-          </div>
-          <div class="form-group">
-            <label for="message">Message</label>
-            <textarea
-              id="message"
-              rows="5"
-              placeholder="Type here..."
-              required
-            ></textarea>
-          </div>
-          <button type="submit" class="submit-btn">Send Now</button>
-        </form>
-      </div>
+        <div class="form-group">
+          <label for="email">Email</label>
+          <!-- Tambahkan name="email" -->
+          <input type="email" id="email" name="email" placeholder="example@gmail.com" required />
+        </div>
+
+        <div class="form-group">
+          <label for="subject">Subject</label>
+          <!-- Tambahkan name="subject" -->
+          <input type="text" id="subject" name="subject" placeholder="Title..." required />
+        </div>
+
+        <div class="form-group">
+          <label for="message">Message</label>
+          <!-- Tambahkan name="pesan" -->
+          <textarea id="message" name="pesan" rows="5" placeholder="Type here..." required></textarea>
+        </div>
+
+        <button type="submit" class="submit-btn">Send Now</button>
+      </form>
     </section>
 
     <div class="section-divider"></div>
@@ -1551,20 +1466,47 @@
         });
       });
 
-      // ===== CONTACT FORM =====
+      // ===== CONTACT FORM DENGAN AJAX =====
       document.addEventListener("DOMContentLoaded", () => {
         const contactForm = document.getElementById("contactForm");
 
         if (contactForm) {
-          contactForm.addEventListener("submit", function (e) {
-            e.preventDefault();
-            showToast(
-              "✅ Terima kasih! Pesan Anda telah berhasil dikirim."
-            );
-            contactForm.reset();
-          });
-        }
-      });
+         contactForm.addEventListener("submit", function (e) {
+           e.preventDefault(); 
+      
+           const submitBtn = document.querySelector(".submit-btn");
+           submitBtn.innerHTML = "Sending... <i class='fas fa-spinner fa-spin'></i>";
+           submitBtn.disabled = true;
+
+          // Mengambil semua data dari form
+          const formData = new FormData(this);
+
+          // Mengirim data ke proses_contact.php
+        fetch("proses_contact.php", {
+          method: "POST",
+          body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+         if (data.status === "success") {
+           showToast("✅ " + data.message);
+           contactForm.reset(); // Kosongkan form jika sukses
+          } else {
+            showToast("❌ " + data.message);
+          }
+        })
+        .catch(error => {
+          showToast("❌ Terjadi kesalahan pada server.");
+          console.error("Error:", error);
+        })
+        .finally(() => {
+        // Kembalikan tombol seperti semula
+         submitBtn.innerHTML = "Send Now";
+         submitBtn.disabled = false;
+        });
+    });
+  }
+});
 
       // ===== KEYBOARD SHORTCUTS =====
       document.addEventListener("keydown", (e) => {
