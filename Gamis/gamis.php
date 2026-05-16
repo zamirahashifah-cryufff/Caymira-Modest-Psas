@@ -36,7 +36,6 @@ $count_result = mysqli_query($conn, $count_sql);
 $count_row = mysqli_fetch_assoc($count_result);
 $total_produk = $count_row['total'];
 ?>
-
 <!DOCTYPE html>
 <html lang="id">
 <head>
