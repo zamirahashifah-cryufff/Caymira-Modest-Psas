@@ -1,3 +1,7 @@
+<?php 
+include 'koneksi.php'; 
+$query = mysqli_query($koneksi, "SELECT * FROM produk");
+?>
 <!DOCTYPE html>
 <html lang="id">
 <head>
@@ -1598,316 +1602,64 @@ img { max-width: 100%; height: auto; }
     <section class="container koko-collection" id="collection">
         <div class="section-header">
             <h2>KOKO LAKI-LAKI</h2>
-            <p>Koleksi jubah stylish dan elegan untuk laki-laki dewasa</p>
+            <p>Koleksi koko stylish dan elegan untuk laki-laki dewasa</p>
         </div>
 
         <div class="koko-grid" id="kokoGrid">
-            <!-- Product 1 -->
-            <div class="koko-card" data-category="best" onclick="showToast('👔 Koko Arsyad - Rp 285.000')">
-                <span class="koko-badge best">Best Seller</span>
-                <div class="koko-img-wrapper">
-                    <img src="https://images.unsplash.com/photo-1596755094514-f87e34085b2c?w=400&h=500&fit=crop" alt="Koko Arsyad" class="koko-img">
-                    <div class="koko-img-overlay">
-                        <button class="overlay-btn"><i class="fas fa-eye"></i> Quick View</button>
-                        <button class="overlay-btn wishlist"><i class="far fa-heart"></i></button>
-                    </div>
-                </div>
-                <div class="koko-info">
-                    <h3>Koko Arsyad</h3>
-                    <p class="koko-price">Rp 285.000</p>
-                    <div class="koko-rating">
-                        <span class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></span>
-                        <span class="review-count">(324)</span>
-                    </div>
-                    <div class="koko-colors">
-                        <span class="color-dot active" style="background: #1a1a2e;"></span>
-                        <span class="color-dot" style="background: #5d4e37;"></span>
-                        <span class="color-dot" style="background: #8b4513;"></span>
-                        <span class="color-dot" style="background: #2f4f4f;"></span>
-                    </div>
-                </div>
+                       <?php 
+// 2. Mulai perulangan PHP di sini
+while($row = mysqli_fetch_assoc($query)) { 
+    // Mengubah format kategori & label menjadi huruf kecil untuk class CSS
+    $category_lbl = strtolower($row['label']); 
+?>
+
+    <div class="koko-card" data-category="<?php echo $category_lbl; ?>" onclick="showToast('👔 <?php echo $row['nama_produk']; ?> - Rp <?php echo number_format($row['harga'], 0, ',', '.'); ?>')">
+        
+        <?php if(!empty($row['label'])): ?>
+            <span class="koko-badge <?php echo $category_lbl; ?>"><?php echo $row['label']; ?></span>
+        <?php endif; ?>
+
+        <div class="koko-img-wrapper">
+    <img src="<?php echo $row['gambar']; ?>" alt="<?php echo $row['nama_produk']; ?>" class="koko-img" style="width: 100%; height: 320px; object-fit: cover; object-position: top; border-radius: 12px;">
+    
+    <div class="koko-img-overlay">
+        <button class="overlay-btn"><i class="fas fa-eye"></i> Quick View</button>
+        <button class="overlay-btn wishlist"><i class="far fa-heart"></i></button>
+    </div>
+</div>
+
+        <div class="koko-info">
+            <h3><?php echo $row['nama_produk']; ?></h3>
+            
+            <p class="koko-price">
+                Rp <?php echo number_format($row['harga'], 0, ',', '.'); ?>
+                <?php if($row['harga_coret'] > 0): ?>
+                    <span style="text-decoration: line-through; color: #888; font-size: 14px; margin-left: 5px;">
+                        Rp <?php echo number_format($row['harga_coret'], 0, ',', '.'); ?>
+                    </span>
+                <?php endif; ?>
+            </p>
+
+            <div class="koko-rating">
+                <span class="stars" style="color: #ffcc00;">
+                    <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star-half-alt"></i>
+                </span>
+                <span class="review-count">(<?php echo $row['total_ulasan']; ?>)</span>
             </div>
 
-            <!-- Product 2 -->
-            <div class="koko-card" data-category="new" onclick="showToast('👔 Koko Mewin - Rp 235.000')">
-                <span class="koko-badge new">New</span>
-                <div class="koko-img-wrapper">
-                    <img src="https://images.unsplash.com/photo-1594938298603-c8148c4dae35?w=400&h=500&fit=crop" alt="Koko Mewin" class="koko-img">
-                    <div class="koko-img-overlay">
-                        <button class="overlay-btn"><i class="fas fa-eye"></i> Quick View</button>
-                        <button class="overlay-btn wishlist"><i class="far fa-heart"></i></button>
-                    </div>
-                </div>
-                <div class="koko-info">
-                    <h3>Koko Mewin</h3>
-                    <p class="koko-price">Rp 235.000</p>
-                    <div class="koko-rating">
-                        <span class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star-half-alt"></i></span>
-                        <span class="review-count">(156)</span>
-                    </div>
-                    <div class="koko-colors">
-                        <span class="color-dot active" style="background: #2c2c54;"></span>
-                        <span class="color-dot" style="background: #40407a;"></span>
-                        <span class="color-dot" style="background: #706fd3;"></span>
-                    </div>
-                </div>
+            <div class="koko-colors">
+                <span class="color-dot active" style="background: #2c2c54;"></span>
+                <span class="color-dot" style="background: #40407a;"></span>
+                <span class="color-dot" style="background: #706fd3;"></span>
             </div>
-
-            <!-- Product 3 -->
-            <div class="koko-card" data-category="sale" onclick="showToast('👔 Koko Ahmad - Rp 250.000')">
-                <span class="koko-badge sale">Sale</span>
-                <div class="koko-img-wrapper">
-                    <img src="https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=400&h=500&fit=crop" alt="Koko Ahmad" class="koko-img">
-                    <div class="koko-img-overlay">
-                        <button class="overlay-btn"><i class="fas fa-eye"></i> Quick View</button>
-                        <button class="overlay-btn wishlist"><i class="far fa-heart"></i></button>
-                    </div>
-                </div>
-                <div class="koko-info">
-                    <h3>Koko Ahmad</h3>
-                    <p class="koko-price">Rp 250.000 <span class="old-price">Rp 350.000</span></p>
-                    <div class="koko-rating">
-                        <span class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></span>
-                        <span class="review-count">(412)</span>
-                    </div>
-                    <div class="koko-colors">
-                        <span class="color-dot active" style="background: #1e272e;"></span>
-                        <span class="color-dot" style="background: #485460;"></span>
-                        <span class="color-dot" style="background: #d2dae2;"></span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Product 4 -->
-            <div class="koko-card" data-category="new" onclick="showToast('👔 Koko Salih - Rp 229.000')">
-                <span class="koko-badge new">New</span>
-                <div class="koko-img-wrapper">
-                    <img src="https://images.unsplash.com/photo-1496747611176-843222e1e57c?w=400&h=500&fit=crop" alt="Koko Salih" class="koko-img">
-                    <div class="koko-img-overlay">
-                        <button class="overlay-btn"><i class="fas fa-eye"></i> Quick View</button>
-                        <button class="overlay-btn wishlist"><i class="far fa-heart"></i></button>
-                    </div>
-                </div>
-                <div class="koko-info">
-                    <h3>Koko Salih</h3>
-                    <p class="koko-price">Rp 229.000</p>
-                    <div class="koko-rating">
-                        <span class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></span>
-                        <span class="review-count">(89)</span>
-                    </div>
-                    <div class="koko-colors">
-                        <span class="color-dot active" style="background: #2f3542;"></span>
-                        <span class="color-dot" style="background: #57606f;"></span>
-                        <span class="color-dot" style="background: #a4b0be;"></span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Product 5 -->
-            <div class="koko-card" data-category="best" onclick="showToast('👔 Koko Dayyum - Rp 235.000')">
-                <span class="koko-badge best">Best Seller</span>
-                <div class="koko-img-wrapper">
-                    <img src="https://images.unsplash.com/photo-1509631179647-0177331693ae?w=400&h=500&fit=crop" alt="Koko Dayyum" class="koko-img">
-                    <div class="koko-img-overlay">
-                        <button class="overlay-btn"><i class="fas fa-eye"></i> Quick View</button>
-                        <button class="overlay-btn wishlist"><i class="far fa-heart"></i></button>
-                    </div>
-                </div>
-                <div class="koko-info">
-                    <h3>Koko Dayyum</h3>
-                    <p class="koko-price">Rp 235.000</p>
-                    <div class="koko-rating">
-                        <span class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star-half-alt"></i></span>
-                        <span class="review-count">(267)</span>
-                    </div>
-                    <div class="koko-colors">
-                        <span class="color-dot active" style="background: #2c3e50;"></span>
-                        <span class="color-dot" style="background: #34495e;"></span>
-                        <span class="color-dot" style="background: #7f8c8d;"></span>
-                        <span class="color-dot" style="background: #95a5a6;"></span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Product 6 -->
-            <div class="koko-card" data-category="new" onclick="showToast('👔 Koko Umar - Rp 229.000')">
-                <span class="koko-badge new">New</span>
-                <div class="koko-img-wrapper">
-                    <img src="https://images.unsplash.com/photo-1483985988355-763728e1935b?w=400&h=500&fit=crop" alt="Koko Umar" class="koko-img">
-                    <div class="koko-img-overlay">
-                        <button class="overlay-btn"><i class="fas fa-eye"></i> Quick View</button>
-                        <button class="overlay-btn wishlist"><i class="far fa-heart"></i></button>
-                    </div>
-                </div>
-                <div class="koko-info">
-                    <h3>Koko Umar</h3>
-                    <p class="koko-price">Rp 229.000</p>
-                    <div class="koko-rating">
-                        <span class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></span>
-                        <span class="review-count">(134)</span>
-                    </div>
-                    <div class="koko-colors">
-                        <span class="color-dot active" style="background: #1a1a2e;"></span>
-                        <span class="color-dot" style="background: #16213e;"></span>
-                        <span class="color-dot" style="background: #0f3460;"></span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Product 7 -->
-            <div class="koko-card" data-category="sale" onclick="showToast('👔 Koko Hassan - Rp 250.000')">
-                <span class="koko-badge sale">Sale</span>
-                <div class="koko-img-wrapper">
-                    <img src="https://images.unsplash.com/photo-1495385794356-15371f348c31?w=400&h=500&fit=crop" alt="Koko Hassan" class="koko-img">
-                    <div class="koko-img-overlay">
-                        <button class="overlay-btn"><i class="fas fa-eye"></i> Quick View</button>
-                        <button class="overlay-btn wishlist"><i class="far fa-heart"></i></button>
-                    </div>
-                </div>
-                <div class="koko-info">
-                    <h3>Koko Hassan</h3>
-                    <p class="koko-price">Rp 250.000 <span class="old-price">Rp 290.000</span></p>
-                    <div class="koko-rating">
-                        <span class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="far fa-star"></i></span>
-                        <span class="review-count">(198)</span>
-                    </div>
-                    <div class="koko-colors">
-                        <span class="color-dot active" style="background: #2d3436;"></span>
-                        <span class="color-dot" style="background: #636e72;"></span>
-                        <span class="color-dot" style="background: #b2bec3;"></span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Product 8 -->
-            <div class="koko-card" data-category="best" onclick="showToast('👔 Koko Umair - Rp 229.000')">
-                <span class="koko-badge best">Best Seller</span>
-                <div class="koko-img-wrapper">
-                    <img src="https://images.unsplash.com/photo-1487222477894-8943e31ef7b2?w=400&h=500&fit=crop" alt="Koko Umair" class="koko-img">
-                    <div class="koko-img-overlay">
-                        <button class="overlay-btn"><i class="fas fa-eye"></i> Quick View</button>
-                        <button class="overlay-btn wishlist"><i class="far fa-heart"></i></button>
-                    </div>
-                </div>
-                <div class="koko-info">
-                    <h3>Koko Umair</h3>
-                    <p class="koko-price">Rp 229.000</p>
-                    <div class="koko-rating">
-                        <span class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></span>
-                        <span class="review-count">(445)</span>
-                    </div>
-                    <div class="koko-colors">
-                        <span class="color-dot active" style="background: #1e272e;"></span>
-                        <span class="color-dot" style="background: #485460;"></span>
-                        <span class="color-dot" style="background: #808e9b;"></span>
-                        <span class="color-dot" style="background: #d2dae2;"></span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Product 9 -->
-            <div class="koko-card" data-category="new" onclick="showToast('👔 Koko Dayyum Premium - Rp 235.000')">
-                <span class="koko-badge new">New</span>
-                <div class="koko-img-wrapper">
-                    <img src="https://images.unsplash.com/photo-1596755094514-f87e34085b2c?w=400&h=500&fit=crop" alt="Koko Dayyum Premium" class="koko-img">
-                    <div class="koko-img-overlay">
-                        <button class="overlay-btn"><i class="fas fa-eye"></i> Quick View</button>
-                        <button class="overlay-btn wishlist"><i class="far fa-heart"></i></button>
-                    </div>
-                </div>
-                <div class="koko-info">
-                    <h3>Koko Dayyum Premium</h3>
-                    <p class="koko-price">Rp 235.000</p>
-                    <div class="koko-rating">
-                        <span class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star-half-alt"></i></span>
-                        <span class="review-count">(178)</span>
-                    </div>
-                    <div class="koko-colors">
-                        <span class="color-dot active" style="background: #1a1a2e;"></span>
-                        <span class="color-dot" style="background: #16213e;"></span>
-                        <span class="color-dot" style="background: #0f3460;"></span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Product 10 -->
-            <div class="koko-card" data-category="sale" onclick="showToast('👔 Koko Salih Exclusive - Rp 250.000')">
-                <span class="koko-badge sale">Sale</span>
-                <div class="koko-img-wrapper">
-                    <img src="https://images.unsplash.com/photo-1594938298603-c8148c4dae35?w=400&h=500&fit=crop" alt="Koko Salih Exclusive" class="koko-img">
-                    <div class="koko-img-overlay">
-                        <button class="overlay-btn"><i class="fas fa-eye"></i> Quick View</button>
-                        <button class="overlay-btn wishlist"><i class="far fa-heart"></i></button>
-                    </div>
-                </div>
-                <div class="koko-info">
-                    <h3>Koko Salih Exclusive</h3>
-                    <p class="koko-price">Rp 250.000 <span class="old-price">Rp 320.000</span></p>
-                    <div class="koko-rating">
-                        <span class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></span>
-                        <span class="review-count">(312)</span>
-                    </div>
-                    <div class="koko-colors">
-                        <span class="color-dot active" style="background: #2d3436;"></span>
-                        <span class="color-dot" style="background: #636e72;"></span>
-                        <span class="color-dot" style="background: #b2bec3;"></span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Product 11 -->
-            <div class="koko-card" data-category="best" onclick="showToast('👔 Koko Mewin Classic - Rp 235.000')">
-                <span class="koko-badge best">Best Seller</span>
-                <div class="koko-img-wrapper">
-                    <img src="https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=400&h=500&fit=crop" alt="Koko Mewin Classic" class="koko-img">
-                    <div class="koko-img-overlay">
-                        <button class="overlay-btn"><i class="fas fa-eye"></i> Quick View</button>
-                        <button class="overlay-btn wishlist"><i class="far fa-heart"></i></button>
-                    </div>
-                </div>
-                <div class="koko-info">
-                    <h3>Koko Mewin Classic</h3>
-                    <p class="koko-price">Rp 235.000</p>
-                    <div class="koko-rating">
-                        <span class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star-half-alt"></i></span>
-                        <span class="review-count">(256)</span>
-                    </div>
-                    <div class="koko-colors">
-                        <span class="color-dot active" style="background: #1e272e;"></span>
-                        <span class="color-dot" style="background: #485460;"></span>
-                        <span class="color-dot" style="background: #808e9b;"></span>
-                        <span class="color-dot" style="background: #d2dae2;"></span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Product 12 -->
-            <div class="koko-card" data-category="new" onclick="showToast('👔 Koko Arsyad Modern - Rp 285.000')">
-                <span class="koko-badge new">New</span>
-                <div class="koko-img-wrapper">
-                    <img src="https://images.unsplash.com/photo-1496747611176-843222e1e57c?w=400&h=500&fit=crop" alt="Koko Arsyad Modern" class="koko-img">
-                    <div class="koko-img-overlay">
-                        <button class="overlay-btn"><i class="fas fa-eye"></i> Quick View</button>
-                        <button class="overlay-btn wishlist"><i class="far fa-heart"></i></button>
-                    </div>
-                </div>
-                <div class="koko-info">
-                    <h3>Koko Arsyad Modern</h3>
-                    <p class="koko-price">Rp 285.000</p>
-                    <div class="koko-rating">
-                        <span class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></span>
-                        <span class="review-count">(142)</span>
-                    </div>
-                    <div class="koko-colors">
-                        <span class="color-dot active" style="background: #1a1a2e;"></span>
-                        <span class="color-dot" style="background: #5d4e37;"></span>
-                    </div>
-                </div>
-            </div>
-
-        </div> <div class="load-more-container">
-            <button class="btn-load-more" onclick="showToast('✨ Memuat koleksi lainnya...')">Muat Lebih Banyak</button>
         </div>
+    </div>
+
+<?php 
+} // 3. Selesai perulangan PHP (Penutup while)
+?>
+
+    
     </section>
 
     <hr class="section-divider">
