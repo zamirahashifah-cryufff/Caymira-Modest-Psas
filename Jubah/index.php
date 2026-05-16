@@ -1,3 +1,7 @@
+<?php 
+include 'koneksi.php'; 
+$query = mysqli_query($koneksi, "SELECT * FROM jubah");
+?>
 <!DOCTYPE html>
 <html lang="id">
 <head>
@@ -1662,314 +1666,60 @@ img { max-width: 100%; height: auto; display: block; }
 
         <div class="jubah-grid" id="jubahGrid">
 
-            <!-- Product 1 -->
-            <div class="jubah-card" data-category="best" data-price="285000" onclick="showToast('👔 Jubah Hasan - Rp 285.000')">
-                <span class="jubah-badge best">Best Seller</span>
-                <div class="jubah-img-wrapper">
-                    <img src="https://images.unsplash.com/photo-1596755094514-f87e34085b2c?w=400&h=500&fit=crop" alt="Jubah Hasan" class="jubah-img">
-                    <div class="jubah-img-overlay">
-                        <button class="overlay-btn"><i class="fas fa-eye"></i> Quick View</button>
-                        <button class="overlay-btn wishlist"><i class="far fa-heart"></i></button>
-                    </div>
-                </div>
-                <div class="jubah-info">
-                    <h3>Jubah Hasan</h3>
-                    <p class="jubah-price">Rp 285.000</p>
-                    <div class="jubah-rating">
-                        <span class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></span>
-                        <span class="review-count">(324)</span>
-                    </div>
-                    <div class="jubah-colors">
-                        <span class="color-dot active" style="background: #1a1a2e;"></span>
-                        <span class="color-dot" style="background: #5d4e37;"></span>
-                        <span class="color-dot" style="background: #8b4513;"></span>
-                        <span class="color-dot" style="background: #2f4f4f;"></span>
-                    </div>
-                </div>
+            <?php 
+// 2. Mulai perulangan PHP di sini
+while($row = mysqli_fetch_assoc($query)) { 
+    // Mengubah format kategori & label menjadi huruf kecil untuk class CSS
+    $category_lbl = strtolower($row['label']); 
+?>
+
+    <div class="jubah-card" data-category="<?php echo $category_lbl; ?>" onclick="showToast('👔 <?php echo $row['nama_produk']; ?> - Rp <?php echo number_format($row['harga'], 0, ',', '.'); ?>')">
+        
+        <?php if(!empty($row['label'])): ?>
+            <span class="jubah-badge <?php echo $category_lbl; ?>"><?php echo $row['label']; ?></span>
+        <?php endif; ?>
+
+        <div class="jubah-img-wrapper">
+    <img src="<?php echo $row['gambar']; ?>" alt="<?php echo $row['nama_produk']; ?>" class="jubah-img" style="width: 100%; height: 320px; object-fit: cover; object-position: top; border-radius: 12px;">
+    
+    <div class="jubah-img-overlay">
+        <button class="overlay-btn"><i class="fas fa-eye"></i> Quick View</button>
+        <button class="overlay-btn wishlist"><i class="far fa-heart"></i></button>
+    </div>
+</div>
+
+        <div class="jubah-info">
+            <h3><?php echo $row['nama_produk']; ?></h3>
+            
+            <p class="jubah-price">
+                Rp <?php echo number_format($row['harga'], 0, ',', '.'); ?>
+                <?php if($row['harga_coret'] > 0): ?>
+                    <span style="text-decoration: line-through; color: #888; font-size: 14px; margin-left: 5px;">
+                        Rp <?php echo number_format($row['harga_coret'], 0, ',', '.'); ?>
+                    </span>
+                <?php endif; ?>
+            </p>
+
+            <div class="jubah-rating">
+                <span class="stars" style="color: #ffcc00;">
+                    <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star-half-alt"></i>
+                </span>
+                <span class="review-count">(<?php echo $row['total_ulasan']; ?>)</span>
             </div>
 
-            <!-- Product 2 -->
-            <div class="jubah-card" data-category="new" data-price="235000" onclick="showToast('👔 Jubah Mewin - Rp 235.000')">
-                <span class="jubah-badge new">New</span>
-                <div class="jubah-img-wrapper">
-                    <img src="https://images.unsplash.com/photo-1594938298603-c8148c4dae35?w=400&h=500&fit=crop" alt="Jubah Mewin" class="jubah-img">
-                    <div class="jubah-img-overlay">
-                        <button class="overlay-btn"><i class="fas fa-eye"></i> Quick View</button>
-                        <button class="overlay-btn wishlist"><i class="far fa-heart"></i></button>
-                    </div>
-                </div>
-                <div class="jubah-info">
-                    <h3>Jubah Mewin</h3>
-                    <p class="jubah-price">Rp 235.000</p>
-                    <div class="jubah-rating">
-                        <span class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star-half-alt"></i></span>
-                        <span class="review-count">(156)</span>
-                    </div>
-                    <div class="jubah-colors">
-                        <span class="color-dot active" style="background: #2c2c54;"></span>
-                        <span class="color-dot" style="background: #40407a;"></span>
-                        <span class="color-dot" style="background: #706fd3;"></span>
-                    </div>
-                </div>
+            <div class="jubah-colors">
+                <span class="color-dot active" style="background: #2c2c54;"></span>
+                <span class="color-dot" style="background: #40407a;"></span>
+                <span class="color-dot" style="background: #706fd3;"></span>
             </div>
-
-            <!-- Product 3 -->
-            <div class="jubah-card" data-category="sale" data-price="250000" onclick="showToast('👔 Jubah Ahmad - Rp 250.000')">
-                <span class="jubah-badge sale">Sale</span>
-                <div class="jubah-img-wrapper">
-                    <img src="https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=400&h=500&fit=crop" alt="Jubah Ahmad" class="jubah-img">
-                    <div class="jubah-img-overlay">
-                        <button class="overlay-btn"><i class="fas fa-eye"></i> Quick View</button>
-                        <button class="overlay-btn wishlist"><i class="far fa-heart"></i></button>
-                    </div>
-                </div>
-                <div class="jubah-info">
-                    <h3>Jubah Ahmad</h3>
-                    <p class="jubah-price">Rp 250.000 <span class="old-price">Rp 350.000</span></p>
-                    <div class="jubah-rating">
-                        <span class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></span>
-                        <span class="review-count">(412)</span>
-                    </div>
-                    <div class="jubah-colors">
-                        <span class="color-dot active" style="background: #1e272e;"></span>
-                        <span class="color-dot" style="background: #485460;"></span>
-                        <span class="color-dot" style="background: #d2dae2;"></span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Product 4 -->
-            <div class="jubah-card" data-category="new" data-price="229000" onclick="showToast('👔 Jubah Salih - Rp 229.000')">
-                <span class="jubah-badge new">New</span>
-                <div class="jubah-img-wrapper">
-                    <img src="https://images.unsplash.com/photo-1496747611176-843222e1e57c?w=400&h=500&fit=crop" alt="Jubah Salih" class="jubah-img">
-                    <div class="jubah-img-overlay">
-                        <button class="overlay-btn"><i class="fas fa-eye"></i> Quick View</button>
-                        <button class="overlay-btn wishlist"><i class="far fa-heart"></i></button>
-                    </div>
-                </div>
-                <div class="jubah-info">
-                    <h3>Jubah Salih</h3>
-                    <p class="jubah-price">Rp 229.000</p>
-                    <div class="jubah-rating">
-                        <span class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></span>
-                        <span class="review-count">(89)</span>
-                    </div>
-                    <div class="jubah-colors">
-                        <span class="color-dot active" style="background: #2f3542;"></span>
-                        <span class="color-dot" style="background: #57606f;"></span>
-                        <span class="color-dot" style="background: #a4b0be;"></span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Product 5 -->
-            <div class="jubah-card" data-category="best" data-price="235000" onclick="showToast('👔 Jubah Dayyum - Rp 235.000')">
-                <span class="jubah-badge best">Best Seller</span>
-                <div class="jubah-img-wrapper">
-                    <img src="https://images.unsplash.com/photo-1509631179647-0177331693ae?w=400&h=500&fit=crop" alt="Jubah Dayyum" class="jubah-img">
-                    <div class="jubah-img-overlay">
-                        <button class="overlay-btn"><i class="fas fa-eye"></i> Quick View</button>
-                        <button class="overlay-btn wishlist"><i class="far fa-heart"></i></button>
-                    </div>
-                </div>
-                <div class="jubah-info">
-                    <h3>Jubah Dayyum</h3>
-                    <p class="jubah-price">Rp 235.000</p>
-                    <div class="jubah-rating">
-                        <span class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star-half-alt"></i></span>
-                        <span class="review-count">(267)</span>
-                    </div>
-                    <div class="jubah-colors">
-                        <span class="color-dot active" style="background: #2c3e50;"></span>
-                        <span class="color-dot" style="background: #34495e;"></span>
-                        <span class="color-dot" style="background: #7f8c8d;"></span>
-                        <span class="color-dot" style="background: #95a5a6;"></span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Product 6 -->
-            <div class="jubah-card" data-category="new" data-price="229000" onclick="showToast('👔 Jubah Umar - Rp 229.000')">
-                <span class="jubah-badge new">New</span>
-                <div class="jubah-img-wrapper">
-                    <img src="https://images.unsplash.com/photo-1483985988355-763728e1935b?w=400&h=500&fit=crop" alt="Jubah Umar" class="jubah-img">
-                    <div class="jubah-img-overlay">
-                        <button class="overlay-btn"><i class="fas fa-eye"></i> Quick View</button>
-                        <button class="overlay-btn wishlist"><i class="far fa-heart"></i></button>
-                    </div>
-                </div>
-                <div class="jubah-info">
-                    <h3>Jubah Umar</h3>
-                    <p class="jubah-price">Rp 229.000</p>
-                    <div class="jubah-rating">
-                        <span class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></span>
-                        <span class="review-count">(134)</span>
-                    </div>
-                    <div class="jubah-colors">
-                        <span class="color-dot active" style="background: #1a1a2e;"></span>
-                        <span class="color-dot" style="background: #16213e;"></span>
-                        <span class="color-dot" style="background: #0f3460;"></span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Product 7 -->
-            <div class="jubah-card" data-category="sale" data-price="250000" onclick="showToast('👔 Jubah Hassan - Rp 250.000')">
-                <span class="jubah-badge sale">Sale</span>
-                <div class="jubah-img-wrapper">
-                    <img src="https://images.unsplash.com/photo-1495385794356-15371f348c31?w=400&h=500&fit=crop" alt="Jubah Hassan" class="jubah-img">
-                    <div class="jubah-img-overlay">
-                        <button class="overlay-btn"><i class="fas fa-eye"></i> Quick View</button>
-                        <button class="overlay-btn wishlist"><i class="far fa-heart"></i></button>
-                    </div>
-                </div>
-                <div class="jubah-info">
-                    <h3>Jubah Hassan</h3>
-                    <p class="jubah-price">Rp 250.000 <span class="old-price">Rp 290.000</span></p>
-                    <div class="jubah-rating">
-                        <span class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="far fa-star"></i></span>
-                        <span class="review-count">(198)</span>
-                    </div>
-                    <div class="jubah-colors">
-                        <span class="color-dot active" style="background: #2d3436;"></span>
-                        <span class="color-dot" style="background: #636e72;"></span>
-                        <span class="color-dot" style="background: #b2bec3;"></span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Product 8 -->
-            <div class="jubah-card" data-category="best" data-price="229000" onclick="showToast('👔 Jubah Umair - Rp 229.000')">
-                <span class="jubah-badge best">Best Seller</span>
-                <div class="jubah-img-wrapper">
-                    <img src="https://images.unsplash.com/photo-1487222477894-8943e31ef7b2?w=400&h=500&fit=crop" alt="Jubah Umair" class="jubah-img">
-                    <div class="jubah-img-overlay">
-                        <button class="overlay-btn"><i class="fas fa-eye"></i> Quick View</button>
-                        <button class="overlay-btn wishlist"><i class="far fa-heart"></i></button>
-                    </div>
-                </div>
-                <div class="jubah-info">
-                    <h3>Jubah Umair</h3>
-                    <p class="jubah-price">Rp 229.000</p>
-                    <div class="jubah-rating">
-                        <span class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></span>
-                        <span class="review-count">(445)</span>
-                    </div>
-                    <div class="jubah-colors">
-                        <span class="color-dot active" style="background: #1e272e;"></span>
-                        <span class="color-dot" style="background: #485460;"></span>
-                        <span class="color-dot" style="background: #808e9b;"></span>
-                        <span class="color-dot" style="background: #d2dae2;"></span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Product 9 -->
-            <div class="jubah-card" data-category="new" data-price="235000" onclick="showToast('👔 Jubah Mutiara - Rp 235.000')">
-                <span class="jubah-badge new">New</span>
-                <div class="jubah-img-wrapper">
-                    <img src="https://images.unsplash.com/photo-1596755094514-f87e34085b2c?w=400&h=500&fit=crop" alt="Jubah Mutiara" class="jubah-img">
-                    <div class="jubah-img-overlay">
-                        <button class="overlay-btn"><i class="fas fa-eye"></i> Quick View</button>
-                        <button class="overlay-btn wishlist"><i class="far fa-heart"></i></button>
-                    </div>
-                </div>
-                <div class="jubah-info">
-                    <h3>Jubah Mutiara</h3>
-                    <p class="jubah-price">Rp 235.000</p>
-                    <div class="jubah-rating">
-                        <span class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star-half-alt"></i></span>
-                        <span class="review-count">(178)</span>
-                    </div>
-                    <div class="jubah-colors">
-                        <span class="color-dot active" style="background: #1a1a2e;"></span>
-                        <span class="color-dot" style="background: #16213e;"></span>
-                        <span class="color-dot" style="background: #0f3460;"></span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Product 10 -->
-            <div class="jubah-card" data-category="sale" data-price="250000" onclick="showToast('👔 Jubah Badawi - Rp 250.000')">
-                <span class="jubah-badge sale">Sale</span>
-                <div class="jubah-img-wrapper">
-                    <img src="https://images.unsplash.com/photo-1594938298603-c8148c4dae35?w=400&h=500&fit=crop" alt="Jubah Badawi" class="jubah-img">
-                    <div class="jubah-img-overlay">
-                        <button class="overlay-btn"><i class="fas fa-eye"></i> Quick View</button>
-                        <button class="overlay-btn wishlist"><i class="far fa-heart"></i></button>
-                    </div>
-                </div>
-                <div class="jubah-info">
-                    <h3>Jubah Badawi</h3>
-                    <p class="jubah-price">Rp 250.000 <span class="old-price">Rp 320.000</span></p>
-                    <div class="jubah-rating">
-                        <span class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></span>
-                        <span class="review-count">(312)</span>
-                    </div>
-                    <div class="jubah-colors">
-                        <span class="color-dot active" style="background: #2d3436;"></span>
-                        <span class="color-dot" style="background: #636e72;"></span>
-                        <span class="color-dot" style="background: #b2bec3;"></span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Product 11 -->
-            <div class="jubah-card" data-category="best" data-price="235000" onclick="showToast('👔 Jubah Marzuki - Rp 235.000')">
-                <span class="jubah-badge best">Best Seller</span>
-                <div class="jubah-img-wrapper">
-                    <img src="https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=400&h=500&fit=crop" alt="Jubah Marzuki" class="jubah-img">
-                    <div class="jubah-img-overlay">
-                        <button class="overlay-btn"><i class="fas fa-eye"></i> Quick View</button>
-                        <button class="overlay-btn wishlist"><i class="far fa-heart"></i></button>
-                    </div>
-                </div>
-                <div class="jubah-info">
-                    <h3>Jubah Marzuki</h3>
-                    <p class="jubah-price">Rp 235.000</p>
-                    <div class="jubah-rating">
-                        <span class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star-half-alt"></i></span>
-                        <span class="review-count">(256)</span>
-                    </div>
-                    <div class="jubah-colors">
-                        <span class="color-dot active" style="background: #1e272e;"></span>
-                        <span class="color-dot" style="background: #485460;"></span>
-                        <span class="color-dot" style="background: #808e9b;"></span>
-                        <span class="color-dot" style="background: #d2dae2;"></span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Product 12 -->
-            <div class="jubah-card" data-category="new" data-price="285000" onclick="showToast('👔 Jubah Ibrahim - Rp 285.000')">
-                <span class="jubah-badge new">New</span>
-                <div class="jubah-img-wrapper">
-                    <img src="https://images.unsplash.com/photo-1496747611176-843222e1e57c?w=400&h=500&fit=crop" alt="Jubah Ibrahim" class="jubah-img">
-                    <div class="jubah-img-overlay">
-                        <button class="overlay-btn"><i class="fas fa-eye"></i> Quick View</button>
-                        <button class="overlay-btn wishlist"><i class="far fa-heart"></i></button>
-                    </div>
-                </div>
-                <div class="jubah-info">
-                    <h3>Jubah Ibrahim</h3>
-                    <p class="jubah-price">Rp 285.000</p>
-                    <div class="jubah-rating">
-                        <span class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></span>
-                        <span class="review-count">(142)</span>
-                    </div>
-                    <div class="jubah-colors">
-                        <span class="color-dot active" style="background: #1a1a2e;"></span>
-                        <span class="color-dot" style="background: #5d4e37;"></span>
-                    </div>
-                </div>
-            </div>
-
         </div>
+    </div>
 
-        <div class="load-more-container">
-            <button class="btn-load-more" onclick="showToast('✨ Memuat koleksi lainnya...')">Muat Lebih Banyak</button>
-        </div>
+<?php 
+} // 3. Selesai perulangan PHP (Penutup while)
+?>
+
+
     </section>
 
     <hr class="section-divider">
