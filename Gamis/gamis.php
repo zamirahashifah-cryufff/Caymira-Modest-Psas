@@ -1211,7 +1211,7 @@ $total_produk = $count_row['total'];
         <ul class="nav-links" id="navLinks">
             <li><a href="../Beranda/beranda.php">Beranda</a></li>
             <li><a href="../About/about.php">About Us</a></li>
-            <li><a href="#bestseller">Best Seller</a></li>
+            <li><a href="../best-seller/best-seller.php">Best Seller</a></li>
             <li><a href="../contact/contact.php">Contact</a></li>
         </ul>
 
@@ -1426,7 +1426,7 @@ $total_produk = $count_row['total'];
                 <ul class="footer-links">
                     <li><a href="../Beranda/beranda.php">Beranda</a></li>
                     <li><a href="../About-us/aboutus.php">About Us</a></li>
-                    <li><a href="#bestseller">Best Seller</a></li>
+                    <li><a href="../best-seller/best-seller.php">Best Seller</a></li>
                     <li><a href="../contact/contact.php">Contact</a></li>
                 </ul>
             </div>

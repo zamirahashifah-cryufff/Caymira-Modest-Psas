@@ -1842,54 +1842,55 @@ img { max-width: 100%; height: auto; }
     <section class="container products" id="bestseller">
         <div class="products-header">
             <h3>Produk Terlaris</h3>
-            <a href="#" class="view-all">Lihat Semua <i class="fas fa-arrow-right"></i></a>
+           <a href="../best-seller/best-seller.php" class="view-all">Lihat Semua <i class="fas fa-arrow-right"></i></a>
         </div>
         <div class="product-grid">
-            <div class="product-card" onclick="showToast('👗 Gamis Ruffle - Rp 299.000')">
+            <div class="product-card" onclick="showToast('👗 Lunara Gamis - Rp 198.000')">
                 <span class="badge-new">NEW</span>
                 <div class="product-img-wrapper">
-                    <img src="Gambarberanda/gamis ruffel .jpeg" alt="Gamis Ruffle" class="product-img">
+                    <img src="../gambar all product/Lunara Gamis.png" class="product-img">
                     <div class="product-img-overlay">
                         <button class="quick-view-btn">Quick View</button>
                     </div>
                 </div>
                 <div class="product-info">
-                    <h4>Gamis Ruffle</h4>
-                    <p class="product-price">Rp 299.000</p>
+                    <h4>Lunara Gamis</h4>
+                    <p class="product-price">Rp 198.000</p>
                     <div class="stars">
                         <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
                         <span>(126)</span>
                     </div>
                 </div>
             </div>
-            <div class="product-card" onclick="showToast('🧕 Jilbab Maryam - Rp 109.000')">
+
+            <div class="product-card" onclick="showToast('🧕 seliana hijab - Rp 45.000')">
                 <span class="badge-new">NEW</span>
                 <div class="product-img-wrapper">
-                    <img src="Gambarberanda/gamis miryam.jpeg" alt="Jilbab Maryam" class="product-img">
+                    <img src="../gambar all product/Seliana Hijab.png" alt="Seliana Hijab" class="product-img">
                     <div class="product-img-overlay">
                         <button class="quick-view-btn">Quick View</button>
                     </div>
                 </div>
                 <div class="product-info">
-                    <h4>Jilbab Maryam</h4>
-                    <p class="product-price">Rp 109.000</p>
+                    <h4>Seliana Hijab</h4>
+                    <p class="product-price">Rp 45.000</p>
                     <div class="stars">
                         <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
                         <span>(235)</span>
                     </div>
                 </div>
             </div>
-            <div class="product-card" onclick="showToast('👔 Koko Bordir Istiqah - Rp 189.000')">
+            <div class="product-card" onclick="showToast('👔 Raell Koko - Rp 156.000')">
                 <span class="badge-new">NEW</span>
                 <div class="product-img-wrapper">
-                    <img src="Gambarberanda/koko.jpeg" alt="Koko Bordir" class="product-img">
+                    <img src="../gambar all product/Raell Koko.png" alt="Raell Koko" class="product-img">
                     <div class="product-img-overlay">
                         <button class="quick-view-btn">Quick View</button>
                     </div>
                 </div>
                 <div class="product-info">
-                    <h4>Koko Bordir Istiqah</h4>
-                    <p class="product-price">Rp 189.000</p>
+                    <h4>Raell Koko</h4>
+                    <p class="product-price">Rp 156.000</p>
                     <div class="stars">
                         <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star-half-alt"></i>
                         <span>(182)</span>
