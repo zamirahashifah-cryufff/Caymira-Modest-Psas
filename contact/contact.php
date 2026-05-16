@@ -1114,7 +1114,7 @@
       <ul class="nav-links" id="navLinks">
         <li><a href="../Beranda/beranda.php">Beranda</a></li>
         <li><a href="../About-us/aboutus.php">About Us</a></li>
-        <li><a href="../Beranda/beranda.php#bestseller">Best Seller</a></li>
+        <li><a href="../best-seller/best-seller.php">Best Seller</a></li>
         <li><a href="../login_register/contact.php" class="active">Contact</a></li>
       </ul>
 
@@ -1262,7 +1262,7 @@
           <ul class="footer-links">
             <li><a href="../Beranda/beranda.php">Beranda</a></li>
             <li><a href="../About-us/aboutus.php">About Us</a></li>
-            <li><a href="../Beranda/beranda.php#bestseller">Best Seller</a></li>
+            <li><a href="../best-seller/best-seller.php">Best Seller</a></li>
             <li><a href="../contact/contact.php">Contact</a></li>
           </ul>
         </div>
