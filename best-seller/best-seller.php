@@ -1,3 +1,13 @@
+<?php
+include "koneksi.php";
+
+$query = mysqli_query($conn, "SELECT * FROM best_seller");
+
+if(!$query){
+   die("Error: ".mysqli_error($conn));
+}
+?>
+
 <!DOCTYPE html>
 <html lang="id">
 <head>
@@ -690,253 +700,57 @@
             </div>
         </aside>
 
-        <!-- PRODUCT GRID -->
+
+           <!-- PRODUCT GRID -->
         <div class="product-grid" id="productGrid">
+
+         <?php while($data = mysqli_fetch_assoc($query)) { ?>
+
+            <div class="product-card" data-category="<?= $data['kategori'] ?>">
+
+             <div class="product-img-wrap">
+                 <div class="badge-bestseller">
+                 BEST SELLER
+             </div>
+
+             <img src="<?= $data['gambar'] ?>"
+              alt="<?= $data['nama_produk'] ?>">
+            </div>
+
+            <div class="product-info">
+
+              <div class="product-name">
+              <?= $data['nama_produk'] ?>
+            </div>
+
+            <div class="product-price">
+              Rp. <?= number_format($data['harga'],0,',','.') ?>
+            </div>
+
+            <div class="product-rating">
+              <span class="stars">
+                 <i class="fas fa-star"></i>
+                 <i class="fas fa-star"></i>
+                 <i class="fas fa-star"></i>
+                 <i class="fas fa-star"></i>
+                 <i class="fas fa-star"></i>
+                </span>
+
+              <span class="reviews">
+                (<?= $data['ulasan'] ?>)
+              </span>
+            </div>
+
+        </div>
+
+    </div>
+
+  <?php } ?>
+
+</div> 
+           
             
-            <!-- GAMIS PRODUCTS -->
-            <div class="product-card" data-category="gamis">
-                <div class="product-img-wrap">
-                    <div class="badge-bestseller">BEST SELLER</div>
-                    <img src="gambar all product/Ameera Gamis.png" alt="Ameera Gamis">
-                </div>
-                <div class="product-info">
-                    <div class="product-name">Ameera Gamis</div>
-                    <div class="product-price">Rp. 248.000</div>
-                    <div class="product-rating">
-                        <span class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></span>
-                        <span class="reviews">(434)</span>
-                    </div>
-                </div>
-            </div>
-
-            <div class="product-card" data-category="gamis">
-                <div class="product-img-wrap">
-                    <div class="badge-bestseller">BEST SELLER</div>
-                    <img src="gambar all product/Elora Gamis.png" alt="Elora Gamis">
-                </div>
-                <div class="product-info">
-                    <div class="product-name">Elora Gamis</div>
-                    <div class="product-price">Rp. 234.000</div>
-                    <div class="product-rating">
-                        <span class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></span>
-                        <span class="reviews">(345)</span>
-                    </div>
-                </div>
-            </div>
-
-            <div class="product-card" data-category="gamis">
-                <div class="product-img-wrap">
-                    <div class="badge-bestseller">BEST SELLER</div>
-                    <img src="gambar all product/Lunara Gamis.png" alt="Lunara Gamis">
-                </div>
-                <div class="product-info">
-                    <div class="product-name">Lunara Gamis</div>
-                    <div class="product-price">Rp. 198.000</div>
-                    <div class="product-rating">
-                        <span class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></span>
-                        <span class="reviews">(256)</span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- HIJAB PRODUCTS -->
-            <div class="product-card" data-category="hijab">
-                <div class="product-img-wrap">
-                    <div class="badge-bestseller">BEST SELLER</div>
-                    <img src="gambar all product/Meytha Hijab.png" alt="Meytha Hijab">
-                </div>
-                <div class="product-info">
-                    <div class="product-name">Meytha Hijab</div>
-                    <div class="product-price">Rp. 60.000</div>
-                    <div class="product-rating">
-                        <span class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></span>
-                        <span class="reviews">(278)</span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- KOKO PRODUCTS -->
-            <div class="product-card" data-category="koko">
-                <div class="product-img-wrap">
-                    <div class="badge-bestseller">BEST SELLER</div>
-                    <img src="gambar all product/Keyfaf Koko.png" alt="Keyfaf Koko">
-                </div>
-                <div class="product-info">
-                    <div class="product-name">Keyfaf Koko</div>
-                    <div class="product-price">Rp. 265.000</div>
-                    <div class="product-rating">
-                        <span class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></span>
-                        <span class="reviews">(298)</span>
-                    </div>
-                </div>
-            </div>
-
-            <div class="product-card" data-category="koko">
-                <div class="product-img-wrap">
-                    <div class="badge-bestseller">BEST SELLER</div>
-                    <img src="gambar all product/Azran Koko.png" alt="Azran Koko">
-                </div>
-                <div class="product-info">
-                    <div class="product-name">Azran Koko</div>
-                    <div class="product-price">Rp. 200.000</div>
-                    <div class="product-rating">
-                        <span class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></span>
-                        <span class="reviews">(199)</span>
-                    </div>
-                </div>
-            </div>
-
-            <div class="product-card" data-category="koko">
-                <div class="product-img-wrap">
-                    <div class="badge-bestseller">BEST SELLER</div>
-                    <img src="gambar all product/Raell Koko.png" alt="Raell Koko">
-                </div>
-                <div class="product-info">
-                    <div class="product-name">Raell Koko</div>
-                    <div class="product-price">Rp. 156.000</div>
-                    <div class="product-rating">
-                        <span class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></span>
-                        <span class="reviews">(289)</span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- HIJAB 2 -->
-            <div class="product-card" data-category="hijab">
-                <div class="product-img-wrap">
-                    <div class="badge-bestseller">BEST SELLER</div>
-                    <img src="gambar all product/Seliana Hijab.png" alt="Seliana Hijab">
-                </div>
-                <div class="product-info">
-                    <div class="product-name">Seliana Hijab</div>
-                    <div class="product-price">Rp. 45.000</div>
-                    <div class="product-rating">
-                        <span class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></span>
-                        <span class="reviews">(234)</span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- JUBAH PRODUCTS -->
-            <div class="product-card" data-category="jubah">
-                <div class="product-img-wrap">
-                    <div class="badge-bestseller">BEST SELLER</div>
-                    <img src="gambar jubah/qaireen jubah.png" alt="Qaireen Jubah">
-                </div>
-                <div class="product-info">
-                    <div class="product-name">Qaireen Jubah</div>
-                    <div class="product-price">Rp. 180.000</div>
-                    <div class="product-rating">
-                        <span class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></span>
-                        <span class="reviews">(228)</span>
-                    </div>
-                </div>
-            </div>
-
-            <div class="product-card" data-category="jubah">
-                <div class="product-img-wrap">
-                    <div class="badge-bestseller">BEST SELLER</div>
-                    <img src="gambar jubah/ravero jubah.png" alt="Ravero Jubah">
-                </div>
-                <div class="product-info">
-                    <div class="product-name">Ravero Jubah</div>
-                    <div class="product-price">Rp. 145.000</div>
-                    <div class="product-rating">
-                        <span class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></span>
-                        <span class="reviews">(214)</span>
-                    </div>
-                </div>
-            </div>
-
-            <div class="product-card" data-category="jubah">
-                <div class="product-img-wrap">
-                    <div class="badge-bestseller">BEST SELLER</div>
-                    <img src="gambar jubah/azfar jubah.png" alt="Azfar Jubah">
-                </div>
-                <div class="product-info">
-                    <div class="product-name">Azfar Jubah</div>
-                    <div class="product-price">Rp. 190.000</div>
-                    <div class="product-rating">
-                        <span class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></span>
-                        <span class="reviews">(234)</span>
-                    </div>
-                </div>
-            </div>
-
-            <div class="product-card" data-category="jubah">
-                <div class="product-img-wrap">
-                    <div class="badge-bestseller">BEST SELLER</div>
-                    <img src="gambar jubah/keyda jubah.png" alt="Keyda Jubah">
-                </div>
-                <div class="product-info">
-                    <div class="product-name">Keyda Jubah</div>
-                    <div class="product-price">Rp. 179.000</div>
-                    <div class="product-rating">
-                        <span class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></span>
-                        <span class="reviews">(356)</span>
-                    </div>
-                </div>
-            </div>
-
-            <div class="product-card" data-category="jubah">
-                <div class="product-img-wrap">
-                    <div class="badge-bestseller">BEST SELLER</div>
-                    <img src="gambar jubah/aryzen jubah.png" alt="Aryzan Jubah">
-                </div>
-                <div class="product-info">
-                    <div class="product-name">Aryzan Jubah</div>
-                    <div class="product-price">Rp. 155.000</div>
-                    <div class="product-rating">
-                        <span class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></span>
-                        <span class="reviews">(213)</span>
-                    </div>
-                </div>
-            </div>
-
-            <div class="product-card" data-category="jubah">
-                <div class="product-img-wrap">
-                    <div class="badge-bestseller">BEST SELLER</div>
-                    <img src="gambar jubah/nareeq jubah.png" alt="Nareeq Jubah">
-                </div>
-                <div class="product-info">
-                    <div class="product-name">Nareeq Jubah</div>
-                    <div class="product-price">Rp. 170.000</div>
-                    <div class="product-rating">
-                        <span class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></span>
-                        <span class="reviews">(239)</span>
-                    </div>
-                </div>
-            </div>
-
-            <div class="product-card" data-category="jubah">
-                <div class="product-img-wrap">
-                    <div class="badge-bestseller">BEST SELLER</div>
-                    <img src="gambar jubah/zafran jubah.png" alt="Zafran Jubah">
-                </div>
-                <div class="product-info">
-                    <div class="product-name">Zafran Jubah</div>
-                    <div class="product-price">Rp. 200.000</div>
-                    <div class="product-rating">
-                        <span class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></span>
-                        <span class="reviews">(262)</span>
-                    </div>
-                </div>
-            </div>
-
-            <div class="product-card" data-category="jubah">
-                <div class="product-img-wrap">
-                    <div class="badge-bestseller">BEST SELLER</div>
-                    <img src="gambar jubah/sheyfa jubah.png" alt="Sheyfa Jubah">
-                </div>
-                <div class="product-info">
-                    <div class="product-name">Sheyfa Jubah</div>
-                    <div class="product-price">Rp. 188.000</div>
-                    <div class="product-rating">
-                        <span class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></span>
-                        <span class="reviews">(232)</span>
-                    </div>
-                </div>
-            </div>
+            
 
         </div> <!-- END OF PRODUCT GRID -->
     </div> <!-- END OF MAIN CONTAINER -->
