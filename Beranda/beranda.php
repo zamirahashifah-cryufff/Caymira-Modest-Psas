@@ -1759,6 +1759,7 @@ img { max-width: 100%; height: auto; }
         <ul class="nav-links" id="navLinks">
             <li><a href="../Beranda/beranda.php" class="active">Beranda</a></li>
             <li><a href="../About-us/aboutus.php">About Us</a></li>
+            <li><a href="../best-seller/best-seller.php">Best Seller</a></li>
             <li><a href="../contact/contact.php">Contact</a></li>
         </ul>
 
@@ -1826,13 +1827,23 @@ img { max-width: 100%; height: auto; }
                 </a>
             </div>
             <div class="category-item" onclick="showToast('🧕 Melihat koleksi Hijab...')">
-                <img src="Gambarberanda/kerudung_icon.png" alt="Hijab">
-                <span>Hijab</span>
+                <a href="../Hijab/hijab.php" class="category-item" onclick="showToast('👗 Melihat koleksi Gamis...')">
+                    <img src="Gambarberanda/kerudung_icon.png" alt="Hijab">
+                    <span>Hijab</span>
+                </a>
             </div>
             <div class="category-item" onclick="showToast('👔 Melihat koleksi Koko...'); setTimeout(() => { window.location.href='../Koko/index.php' }, 1000);">
-    <img src="Gambarberanda/koko_icon.png" alt="Koko">
-    <span>Koko</span>
-</div>
+             <a href="../Koko/index.php" class="category-item" onclick="showToast('👔 Melihat koleksi Koko...'); setTimeout(() => { window.location.href='../Koko/index.php' }, 1000);">
+                 <img src="Gambarberanda/koko_icon.png" alt="Koko">
+                 <span>Koko</span>
+             </a>
+            </div>
+            <div class="category-item" onclick="showToast('👔 Melihat koleksi Jubah...'); setTimeout(() => { window.location.href='../Jubah/index.php' }, 1000);">
+             <a href="../Jubah/index.php" class="category-item" onclick="showToast('👔 Melihat koleksi Jubah...'); setTimeout(() => { window.location.href='../Jubah/index.php' }, 1000);">
+                 <img src="Gambarberanda/jubah_icon.png" alt="Jubah">
+                 <span>Jubah</span>
+             </a>
+            </div>
         </div>
     </section>
 
@@ -1848,7 +1859,7 @@ img { max-width: 100%; height: auto; }
             <div class="product-card" onclick="showToast('👗 Lunara Gamis - Rp 198.000')">
                 <span class="badge-new">NEW</span>
                 <div class="product-img-wrapper">
-                    <img src="../gambar all product/Lunara Gamis.png" class="product-img">
+                    <img src="../best-seller/gambar all product/lunara gamis.png" class="product-img">
                     <div class="product-img-overlay">
                         <button class="quick-view-btn">Quick View</button>
                     </div>
@@ -1866,7 +1877,7 @@ img { max-width: 100%; height: auto; }
             <div class="product-card" onclick="showToast('🧕 seliana hijab - Rp 45.000')">
                 <span class="badge-new">NEW</span>
                 <div class="product-img-wrapper">
-                    <img src="../gambar all product/Seliana Hijab.png" alt="Seliana Hijab" class="product-img">
+                    <img src="../best-seller/gambar all product/seliana hijab.png" class="product-img">
                     <div class="product-img-overlay">
                         <button class="quick-view-btn">Quick View</button>
                     </div>
@@ -1883,7 +1894,7 @@ img { max-width: 100%; height: auto; }
             <div class="product-card" onclick="showToast('👔 Raell Koko - Rp 156.000')">
                 <span class="badge-new">NEW</span>
                 <div class="product-img-wrapper">
-                    <img src="../gambar all product/Raell Koko.png" alt="Raell Koko" class="product-img">
+                    <img src="../best-seller/gambar all product/raell koko.png" alt="Raell Koko" class="product-img">
                     <div class="product-img-overlay">
                         <button class="quick-view-btn">Quick View</button>
                     </div>
@@ -1984,7 +1995,7 @@ img { max-width: 100%; height: auto; }
                 <ul class="footer-links">
                     <li><a href="../Beranda/beranda.php" class="active">Beranda</a></li>
                     <li><a href="../About-us/aboutus.php">About Us</a></li>
-                    <li><a href="#bestseller">Best Seller</a></li>
+                    <li><a href="../best-seller/best-seller.php">Best Seller</a></li>
                     <li><a href="../contact/contact.php">Contact</a></li>
                 </ul>
             </div>

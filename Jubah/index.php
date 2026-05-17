@@ -37,7 +37,6 @@ body {
     font-family: var(--font-body);
     line-height: 1.6;
     overflow-x: hidden;
-    cursor: none;
 }
 a { text-decoration: none; color: inherit; transition: color 0.3s ease; }
 img { max-width: 100%; height: auto; display: block; }
@@ -53,7 +52,7 @@ img { max-width: 100%; height: auto; display: block; }
 ::-webkit-scrollbar-thumb { background: var(--gold); border-radius: 4px; }
 ::-webkit-scrollbar-thumb:hover { background: var(--gold-light); }
 
-/* === CUSTOM CURSOR === */
+/* === CUSTOM CURSOR (Dari About Us) === */
 .custom-cursor {
     width: 20px;
     height: 20px;
@@ -62,23 +61,13 @@ img { max-width: 100%; height: auto; display: block; }
     position: fixed;
     pointer-events: none;
     z-index: 99999;
-    transition: transform 0.1s, background 0.3s, border-color 0.3s;
+    transition: transform 0.1s, background 0.3s;
     mix-blend-mode: difference;
-    top: 0;
-    left: 0;
 }
-
 .custom-cursor.hover {
     transform: scale(2);
     background: rgba(201, 168, 76, 0.2);
-    border-color: var(--gold-light);
 }
-
-.custom-cursor.click {
-    transform: scale(0.8);
-    background: var(--gold);
-}
-
 .cursor-dot {
     width: 6px;
     height: 6px;
@@ -87,12 +76,9 @@ img { max-width: 100%; height: auto; display: block; }
     position: fixed;
     pointer-events: none;
     z-index: 99999;
-    top: 0;
-    left: 0;
-    transition: transform 0.05s;
 }
 
-/* === LOADING SCREEN === */
+/* === LOADING SCREEN (Dari About Us) === */
 .loader {
     position: fixed;
     top: 0; left: 0;
@@ -162,7 +148,7 @@ img { max-width: 100%; height: auto; display: block; }
     100% { transform: translateY(-100vh) rotate(720deg); opacity: 0; }
 }
 
-/* === NAVBAR === */
+/* === NAVBAR (Dari About Us) === */
 .navbar {
     position: fixed;
     top: 0;
@@ -192,12 +178,10 @@ img { max-width: 100%; height: auto; display: block; }
     position: relative;
     z-index: 1001;
 }
-
 .logo:hover .logo-img {
     transform: scale(1.05);
     filter: drop-shadow(0 0 10px rgba(201, 168, 76, 0.5));     
 }
-
 .nav-links {
     display: flex;
     gap: 45px;
@@ -558,55 +542,30 @@ img { max-width: 100%; height: auto; display: block; }
 }
 
 .hero-deco-1 {
-    width: 350px;
-    height: 350px;
-    top: -80px;
-    right: -100px;
+    width: 350px; height: 350px; top: -80px; right: -100px;
     animation: rotate 25s linear infinite;
 }
 
 .hero-deco-2 {
-    width: 200px;
-    height: 200px;
-    bottom: 20px;
-    right: 250px;
+    width: 200px; height: 200px; bottom: 20px; right: 250px;
     animation: rotate 20s linear infinite reverse;
 }
 
 .hero-deco-3 {
-    width: 120px;
-    height: 120px;
-    top: 40%;
-    left: -60px;
+    width: 120px; height: 120px; top: 40%; left: -60px;
     animation: rotate 18s linear infinite;
 }
 
 .hero-deco-line {
-    position: absolute;
-    width: 1px;
-    height: 150px;
+    position: absolute; width: 1px; height: 150px;
     background: linear-gradient(to bottom, transparent, var(--gold), transparent);
-    opacity: 0.3;
-    pointer-events: none;
+    opacity: 0.3; pointer-events: none;
 }
 
-.hero-deco-line-1 {
-    top: 20%;
-    left: 10%;
-    animation: linePulse 3s ease-in-out infinite;
-}
+.hero-deco-line-1 { top: 20%; left: 10%; animation: linePulse 3s ease-in-out infinite; }
+.hero-deco-line-2 { bottom: 15%; right: 15%; animation: linePulse 3s ease-in-out infinite 1.5s; }
 
-.hero-deco-line-2 {
-    bottom: 15%;
-    right: 15%;
-    animation: linePulse 3s ease-in-out infinite 1.5s;
-}
-
-@keyframes rotate {
-    from { transform: rotate(0deg); }
-    to { transform: rotate(360deg); }
-}
-
+@keyframes rotate { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
 @keyframes linePulse {
     0%, 100% { opacity: 0.2; transform: scaleY(1); }
     50% { opacity: 0.5; transform: scaleY(1.2); }
@@ -615,40 +574,23 @@ img { max-width: 100%; height: auto; display: block; }
 /* === MARQUEE BANNER === */
 .marquee-banner {
     background: linear-gradient(90deg, var(--navy), var(--navy-light), var(--navy));
-    padding: 15px 0;
-    overflow: hidden;
-    position: relative;
+    padding: 15px 0; overflow: hidden; position: relative;
     border-top: 1px solid rgba(201, 168, 76, 0.2);
     border-bottom: 1px solid rgba(201, 168, 76, 0.2);
 }
 
 .marquee-content {
-    display: flex;
-    animation: marqueeScroll 20s linear infinite;
-    white-space: nowrap;
+    display: flex; animation: marqueeScroll 20s linear infinite; white-space: nowrap;
 }
 
 .marquee-item {
-    display: inline-flex;
-    align-items: center;
-    gap: 15px;
-    padding: 0 40px;
-    color: var(--gold);
-    font-size: 13px;
-    letter-spacing: 2px;
-    text-transform: uppercase;
+    display: inline-flex; align-items: center; gap: 15px; padding: 0 40px;
+    color: var(--gold); font-size: 13px; letter-spacing: 2px; text-transform: uppercase;
 }
 
-.marquee-item i {
-    color: var(--gold);
-    font-size: 14px;
-}
+.marquee-item i { color: var(--gold); font-size: 14px; }
 
-@keyframes marqueeScroll {
-    0% { transform: translateX(0); }
-    100% { transform: translateX(-50%); }
-}
-
+@keyframes marqueeScroll { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
 
 /* === FILTER BAR === */
 .filter-bar {
@@ -661,168 +603,67 @@ img { max-width: 100%; height: auto; display: block; }
     border-bottom: 1px solid rgba(201, 168, 76, 0.15);
 }
 
-.filter-wrapper {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    flex-wrap: wrap;
-    gap: 20px;
-}
-
-.filter-categories {
-    display: flex;
-    gap: 15px;
-    flex-wrap: wrap;
-}
-
+.filter-wrapper { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 20px; }
+.filter-categories { display: flex; gap: 15px; flex-wrap: wrap; }
 .filter-btn {
-    background: transparent;
-    border: 1px solid rgba(201, 168, 76, 0.3);
-    color: var(--text-light);
-    padding: 10px 24px;
-    border-radius: 25px;
-    font-size: 13px;
-    font-weight: 500;
-    letter-spacing: 1px;
-    text-transform: uppercase;
-    cursor: pointer;
-    transition: all 0.4s ease;
+    background: transparent; border: 1px solid rgba(201, 168, 76, 0.3);
+    color: var(--text-light); padding: 10px 24px; border-radius: 25px;
+    font-size: 13px; font-weight: 500; letter-spacing: 1px;
+    text-transform: uppercase; cursor: pointer; transition: all 0.4s ease;
     font-family: var(--font-body);
 }
-
 .filter-btn:hover, .filter-btn.active {
     background: linear-gradient(135deg, var(--gold), var(--gold-light));
-    color: var(--navy);
-    border-color: var(--gold);
-    box-shadow: 0 8px 25px rgba(201, 168, 76, 0.3);
-    transform: translateY(-2px);
+    color: var(--navy); border-color: var(--gold);
+    box-shadow: 0 8px 25px rgba(201, 168, 76, 0.3); transform: translateY(-2px);
 }
-
-.filter-sort {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
-
-.filter-sort label {
-    font-size: 13px;
-    color: var(--text-muted);
-    letter-spacing: 1px;
-}
-
+.filter-sort { display: flex; align-items: center; gap: 10px; }
+.filter-sort label { font-size: 13px; color: var(--text-muted); letter-spacing: 1px; }
 .filter-sort select {
-    background: rgba(201, 168, 76, 0.1);
-    border: 1px solid rgba(201, 168, 76, 0.2);
-    color: var(--gold);
-    padding: 10px 20px;
-    border-radius: 25px;
-    font-size: 13px;
-    font-family: var(--font-body);
-    cursor: pointer;
-    outline: none;
-    transition: all 0.3s;
+    background: rgba(201, 168, 76, 0.1); border: 1px solid rgba(201, 168, 76, 0.2);
+    color: var(--gold); padding: 10px 20px; border-radius: 25px; font-size: 13px;
+    font-family: var(--font-body); cursor: pointer; outline: none; transition: all 0.3s;
 }
-
-.filter-sort select:hover {
-    border-color: var(--gold);
-}
+.filter-sort select:hover { border-color: var(--gold); }
 
 /* === JUBAH COLLECTION SECTION === */
-.jubah-collection {
-    padding: 80px 0;
-    position: relative;
-}
-
+.jubah-collection { padding: 80px 0; position: relative; }
 .jubah-collection::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: 
-        radial-gradient(circle at 0% 50%, rgba(201, 168, 76, 0.03) 0%, transparent 50%),
-        radial-gradient(circle at 100% 50%, rgba(201, 168, 76, 0.03) 0%, transparent 50%);
+    content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+    background: radial-gradient(circle at 0% 50%, rgba(201, 168, 76, 0.03) 0%, transparent 50%),
+                radial-gradient(circle at 100% 50%, rgba(201, 168, 76, 0.03) 0%, transparent 50%);
     pointer-events: none;
 }
-
-.section-header {
-    text-align: center;
-    margin-bottom: 60px;
-    position: relative;
-    z-index: 1;
-}
-
+.section-header { text-align: center; margin-bottom: 60px; position: relative; z-index: 1; }
 .section-header h2 {
-    font-family: var(--font-heading);
-    font-size: 42px;
-    color: var(--gold);
-    margin-bottom: 15px;
-    position: relative;
-    display: inline-block;
-    opacity: 0;
-    transform: translateY(30px);
+    font-family: var(--font-heading); font-size: 42px; color: var(--gold);
+    margin-bottom: 15px; position: relative; display: inline-block;
+    opacity: 0; transform: translateY(30px);
 }
-
-.section-header h2.visible {
-    animation: fadeInUp 0.8s ease forwards;
-}
-
+.section-header h2.visible { animation: fadeInUp 0.8s ease forwards; }
 .section-header h2::after {
-    content: '';
-    position: absolute;
-    bottom: -12px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 0;
-    height: 2px;
-    background: var(--gold);
-    transition: width 0.6s ease;
+    content: ''; position: absolute; bottom: -12px; left: 50%;
+    transform: translateX(-50%); width: 0; height: 2px;
+    background: var(--gold); transition: width 0.6s ease;
 }
-
-.section-header h2.visible::after {
-    width: 80px;
-}
-
+.section-header h2.visible::after { width: 80px; }
 .section-header p {
-    color: var(--text-muted);
-    font-size: 16px;
-    margin-top: 25px;
-    font-style: italic;
-    opacity: 0;
-    transform: translateY(20px);
+    color: var(--text-muted); font-size: 16px; margin-top: 25px;
+    font-style: italic; opacity: 0; transform: translateY(20px);
 }
-
-.section-header p.visible {
-    animation: fadeInUp 0.8s ease 0.3s forwards;
-}
+.section-header p.visible { animation: fadeInUp 0.8s ease 0.3s forwards; }
 
 /* === PRODUCT GRID - MODERN CARDS === */
 .jubah-grid {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 30px;
-    position: relative;
-    z-index: 1;
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 30px; position: relative; z-index: 1;
 }
-
 .jubah-card {
-    background: rgba(201, 168, 76, 0.03);
-    border: 1px solid rgba(201, 168, 76, 0.1);
-    border-radius: 20px;
-    padding: 20px;
-    position: relative;
-    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-    overflow: hidden;
-    opacity: 0;
-    transform: translateY(50px);
-    cursor: pointer;
+    background: rgba(201, 168, 76, 0.03); border: 1px solid rgba(201, 168, 76, 0.1);
+    border-radius: 20px; padding: 20px; position: relative;
+    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1); overflow: hidden;
+    opacity: 0; transform: translateY(50px); cursor: pointer;
 }
-
-.jubah-card.visible {
-    animation: fadeInUp 0.8s ease forwards;
-}
-
+.jubah-card.visible { animation: fadeInUp 0.8s ease forwards; }
 .jubah-card:nth-child(1).visible { animation-delay: 0.1s; }
 .jubah-card:nth-child(2).visible { animation-delay: 0.15s; }
 .jubah-card:nth-child(3).visible { animation-delay: 0.2s; }
@@ -831,653 +672,208 @@ img { max-width: 100%; height: auto; display: block; }
 .jubah-card:nth-child(6).visible { animation-delay: 0.35s; }
 .jubah-card:nth-child(7).visible { animation-delay: 0.4s; }
 .jubah-card:nth-child(8).visible { animation-delay: 0.45s; }
-.jubah-card:nth-child(9).visible { animation-delay: 0.5s; }
-.jubah-card:nth-child(10).visible { animation-delay: 0.55s; }
-.jubah-card:nth-child(11).visible { animation-delay: 0.6s; }
-.jubah-card:nth-child(12).visible { animation-delay: 0.65s; }
 
 .jubah-card::before {
-    content: '';
-    position: absolute;
-    top: 0; left: 0;
-    width: 100%; height: 100%;
+    content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
     background: linear-gradient(135deg, rgba(201, 168, 76, 0.08) 0%, transparent 60%);
-    opacity: 0;
-    transition: opacity 0.5s;
+    opacity: 0; transition: opacity 0.5s;
 }
-
-.jubah-card:hover::before {
-    opacity: 1;
-}
-
+.jubah-card:hover::before { opacity: 1; }
 .jubah-card::after {
-    content: '';
-    position: absolute;
-    top: -2px; left: -2px; right: -2px; bottom: -2px;
+    content: ''; position: absolute; top: -2px; left: -2px; right: -2px; bottom: -2px;
     background: linear-gradient(45deg, var(--gold), transparent, var(--gold-light));
-    border-radius: 22px;
-    z-index: -1;
-    opacity: 0;
-    transition: opacity 0.5s;
+    border-radius: 22px; z-index: -1; opacity: 0; transition: opacity 0.5s;
 }
-
-.jubah-card:hover::after {
-    opacity: 0.3;
-}
-
+.jubah-card:hover::after { opacity: 0.3; }
 .jubah-card:hover {
-    transform: translateY(-15px) scale(1.02);
-    border-color: rgba(201, 168, 76, 0.3);
-    box-shadow: 
-        0 25px 50px rgba(0, 0, 0, 0.4),
-        0 0 30px rgba(201, 168, 76, 0.1);
+    transform: translateY(-15px) scale(1.02); border-color: rgba(201, 168, 76, 0.3);
+    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.4), 0 0 30px rgba(201, 168, 76, 0.1);
 }
 
 .jubah-badge {
-    position: absolute;
-    top: 30px;
-    left: 30px;
-    z-index: 2;
-    font-size: 10px;
-    font-weight: 700;
-    padding: 6px 14px;
-    border-radius: 20px;
-    letter-spacing: 1px;
-    text-transform: uppercase;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    position: absolute; top: 30px; left: 30px; z-index: 2; font-size: 10px;
+    font-weight: 700; padding: 6px 14px; border-radius: 20px;
+    letter-spacing: 1px; text-transform: uppercase; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
 }
-
 .jubah-badge.new {
-    background: linear-gradient(135deg, var(--gold), var(--gold-light));
-    color: var(--navy);
+    background: linear-gradient(135deg, var(--gold), var(--gold-light)); color: var(--navy);
     animation: badgePulse 2s ease-in-out infinite;
 }
+.jubah-badge.best { background: linear-gradient(135deg, #e74c3c, #c0392b); color: var(--white); }
+.jubah-badge.sale { background: linear-gradient(135deg, #27ae60, #2ecc71); color: var(--white); }
 
-.jubah-badge.best {
-    background: linear-gradient(135deg, #e74c3c, #c0392b);
-    color: var(--white);
-}
-
-.jubah-badge.sale {
-    background: linear-gradient(135deg, #27ae60, #2ecc71);
-    color: var(--white);
-}
-
-@keyframes badgePulse {
-    0%, 100% { transform: scale(1); }
-    50% { transform: scale(1.05); }
-}
-
-.jubah-img-wrapper {
-    position: relative;
-    overflow: hidden;
-    border-radius: 14px;
-    margin-bottom: 20px;
-}
-
+.jubah-img-wrapper { position: relative; overflow: hidden; border-radius: 14px; margin-bottom: 20px; }
 .jubah-img {
-    width: 100%;
-    height: 320px;
-    object-fit: cover;
-    border-radius: 14px;
-    transition: transform 0.6s ease;
+    width: 100%; height: 320px; object-fit: cover; border-radius: 14px; transition: transform 0.6s ease;
 }
-
-.jubah-card:hover .jubah-img {
-    transform: scale(1.08);
-}
-
+.jubah-card:hover .jubah-img { transform: scale(1.08); }
 .jubah-img-overlay {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    padding: 25px 15px 15px;
+    position: absolute; bottom: 0; left: 0; width: 100%; padding: 25px 15px 15px;
     background: linear-gradient(to top, rgba(10, 22, 40, 0.9), transparent);
-    opacity: 0;
-    transition: opacity 0.4s, transform 0.4s;
-    transform: translateY(20px);
-    display: flex;
-    justify-content: center;
-    gap: 10px;
+    opacity: 0; transition: opacity 0.4s, transform 0.4s; transform: translateY(20px);
+    display: flex; justify-content: center; gap: 10px;
 }
-
-.jubah-card:hover .jubah-img-overlay {
-    opacity: 1;
-    transform: translateY(0);
-}
+.jubah-card:hover .jubah-img-overlay { opacity: 1; transform: translateY(0); }
 
 .overlay-btn {
-    background: var(--gold);
-    color: var(--navy);
-    padding: 10px 20px;
-    border-radius: 25px;
-    font-size: 11px;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    border: none;
-    cursor: pointer;
-    transition: all 0.3s;
-    display: flex;
-    align-items: center;
-    gap: 6px;
+    background: var(--gold); color: var(--navy); padding: 10px 20px; border-radius: 25px;
+    font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px;
+    border: none; cursor: pointer; transition: all 0.3s; display: flex; align-items: center; gap: 6px;
 }
-
-.overlay-btn:hover {
-    background: var(--gold-light);
-    transform: scale(1.05);
-}
-
+.overlay-btn:hover { background: var(--gold-light); transform: scale(1.05); }
 .overlay-btn.wishlist {
-    background: rgba(255, 255, 255, 0.15);
-    color: var(--white);
-    width: 40px;
-    height: 40px;
-    padding: 0;
-    border-radius: 50%;
-    justify-content: center;
+    background: rgba(255, 255, 255, 0.15); color: var(--white); width: 40px; height: 40px;
+    padding: 0; border-radius: 50%; justify-content: center;
 }
-
-.overlay-btn.wishlist:hover {
-    background: #e74c3c;
-    color: var(--white);
-}
+.overlay-btn.wishlist:hover { background: #e74c3c; color: var(--white); }
 
 .jubah-info h3 {
-    font-size: 16px;
-    margin-bottom: 8px;
-    font-weight: 500;
-    color: var(--text-light);
-    transition: color 0.3s;
-    line-height: 1.4;
+    font-size: 16px; margin-bottom: 8px; font-weight: 500;
+    color: var(--text-light); transition: color 0.3s; line-height: 1.4;
 }
-
-.jubah-card:hover .jubah-info h3 {
-    color: var(--gold-light);
-}
+.jubah-card:hover .jubah-info h3 { color: var(--gold-light); }
 
 .jubah-price {
-    color: var(--gold);
-    font-size: 18px;
-    font-weight: 700;
-    margin-bottom: 10px;
-    display: flex;
-    align-items: center;
-    gap: 10px;
+    color: var(--gold); font-size: 18px; font-weight: 700;
+    margin-bottom: 10px; display: flex; align-items: center; gap: 10px;
 }
-
 .jubah-price .old-price {
-    color: var(--text-muted);
-    font-size: 14px;
-    text-decoration: line-through;
-    font-weight: 400;
+    color: var(--text-muted); font-size: 14px; text-decoration: line-through; font-weight: 400;
 }
-
-.jubah-rating {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-}
-
-.jubah-rating .stars {
-    color: var(--gold);
-    font-size: 12px;
-}
-
-.jubah-rating .review-count {
-    color: var(--text-muted);
-    font-size: 12px;
-}
-
-.jubah-colors {
-    display: flex;
-    gap: 6px;
-    margin-top: 12px;
-}
+.jubah-rating { display: flex; align-items: center; gap: 8px; }
+.jubah-rating .stars { color: var(--gold); font-size: 12px; }
+.jubah-rating .review-count { color: var(--text-muted); font-size: 12px; }
+.jubah-colors { display: flex; gap: 6px; margin-top: 12px; }
 
 .color-dot {
-    width: 16px;
-    height: 16px;
-    border-radius: 50%;
-    border: 2px solid transparent;
-    cursor: pointer;
-    transition: all 0.3s;
-    position: relative;
+    width: 16px; height: 16px; border-radius: 50%; border: 2px solid transparent;
+    cursor: pointer; transition: all 0.3s; position: relative;
 }
-
-.color-dot:hover, .color-dot.active {
-    border-color: var(--gold);
-    transform: scale(1.2);
-}
-
+.color-dot:hover, .color-dot.active { border-color: var(--gold); transform: scale(1.2); }
 .color-dot::after {
-    content: '';
-    position: absolute;
-    top: -4px; left: -4px;
-    width: 24px; height: 24px;
-    border: 1px solid transparent;
-    border-radius: 50%;
-    transition: all 0.3s;
+    content: ''; position: absolute; top: -4px; left: -4px;
+    width: 24px; height: 24px; border: 1px solid transparent; border-radius: 50%; transition: all 0.3s;
 }
-
-.color-dot:hover::after, .color-dot.active::after {
-    border-color: var(--gold);
-}
-
-/* === LOAD MORE BUTTON === */
-.load-more-container {
-    text-align: center;
-    margin-top: 60px;
-}
-
-.btn-load-more {
-    background: transparent;
-    border: 2px solid var(--gold);
-    color: var(--gold);
-    padding: 14px 40px;
-    border-radius: 30px;
-    font-size: 14px;
-    font-weight: 600;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    cursor: pointer;
-    transition: all 0.4s ease;
-    font-family: var(--font-body);
-    position: relative;
-    overflow: hidden;
-}
-
-.btn-load-more::before {
-    content: '';
-    position: absolute;
-    top: 0; left: -100%;
-    width: 100%; height: 100%;
-    background: linear-gradient(135deg, var(--gold), var(--gold-light));
-    transition: left 0.4s;
-    z-index: -1;
-}
-
-.btn-load-more:hover::before {
-    left: 0;
-}
-
-.btn-load-more:hover {
-    color: var(--navy);
-    transform: translateY(-3px);
-    box-shadow: 0 10px 30px rgba(201, 168, 76, 0.3);
-}
+.color-dot:hover::after, .color-dot.active::after { border-color: var(--gold); }
 
 /* === SECTION DIVIDER === */
 .section-divider {
-    width: 100%;
-    height: 1px;
-    background: linear-gradient(90deg, transparent, rgba(201, 168, 76, 0.5), transparent);
-    margin: 0;
-    border: none;
-    position: relative;
+    width: 100%; height: 1px; background: linear-gradient(90deg, transparent, rgba(201, 168, 76, 0.5), transparent);
+    margin: 0; border: none; position: relative;
 }
-
 .section-divider::before {
-    content: '';
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 60px;
-    height: 1px;
-    background: var(--gold);
+    content: ''; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+    width: 60px; height: 1px; background: var(--gold);
 }
-
 .section-divider::after {
-    content: '✦';
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    color: var(--gold);
-    font-size: 14px;
-    background: var(--navy);
-    padding: 0 15px;
+    content: '✦'; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+    color: var(--gold); font-size: 14px; background: var(--navy); padding: 0 15px;
 }
 
-/* === FOOTER === */
+/* === FOOTER (Dari About Us) === */
 .footer {
     background: #ffffff;
     border-top: 1px solid rgba(201, 168, 76, 0.15);
     padding: 50px 60px 30px;
     position: relative;
-    margin-top: 50px;
 }
-
 .gold-branch-footer {
-    position: absolute;
-    left: -30px;
-    top: -70px;
-    width: 200px;
-    opacity: 0.5;
-    pointer-events: none;
+    position: absolute; left: -30px; top: -70px; width: 200px; opacity: 0.5; pointer-events: none;
 }
-
 .footer-content {
-    display: grid;
-    grid-template-columns: 1.2fr 1fr 1.2fr 1.2fr;
-    gap: 35px;
-    max-width: 1300px;
-    margin: 0 auto;
+    display: grid; grid-template-columns: 1.2fr 1fr 1.2fr 1.2fr; gap: 35px; max-width: 1300px; margin: 0 auto;
 }
-
-.footer-brand .logo-main {
-    font-family: 'Playfair Display', serif;
-    font-size: 22px;
-    color: var(--gold);
-    font-weight: 600;
-    margin-bottom: 3px;
-}
-
-.footer-brand .logo-sub {
-    font-size: 9px;
-    color: var(--gold);
-    letter-spacing: 3px;
-    text-transform: uppercase;
-    margin-bottom: 18px;
-}
-
-.footer-brand p {
-    font-size: 12px;
-    line-height: 1.8;
-    color: #666;
-    max-width: 230px;
-}
-
-.social-links {
-    display: flex;
-    gap: 12px;
-    margin-top: 18px;
-}
-
+.footer-brand .logo-img { height: 75px; width: auto; object-fit: contain; margin-bottom: 15px; cursor: pointer; }
+.footer-brand p { font-size: 12px; line-height: 1.8; color: var(--text-muted); max-width: 230px; }
+.social-links { display: flex; gap: 12px; margin-top: 18px; }
 .social-links a {
-    width: 36px;
-    height: 36px;
-    border: 1px solid rgba(201, 168, 76, 0.35);
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: var(--gold);
-    text-decoration: none;
-    transition: all 0.3s;
-    font-size: 14px;
-    position: relative;
-    overflow: hidden;
+    width: 36px; height: 36px; border: 1px solid rgba(201, 168, 76, 0.35); border-radius: 50%;
+    display: flex; align-items: center; justify-content: center; color: var(--gold);
+    text-decoration: none; transition: all 0.3s; font-size: 14px; position: relative; overflow: hidden;
 }
-
 .social-links a::before {
-    content: '';
-    position: absolute;
-    top: 0; left: 0;
-    width: 100%; height: 100%;
-    background: var(--gold);
-    transform: scale(0);
-    transition: transform 0.3s;
-    border-radius: 50%;
+    content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+    background: var(--gold); transform: scale(0); transition: transform 0.3s; border-radius: 50%;
 }
-
-.social-links a:hover::before {
-    transform: scale(1);
-}
-
-.social-links a:hover {
-    color: var(--navy);
-    transform: translateY(-3px);
-}
-
-.social-links a i {
-    position: relative;
-    z-index: 1;
-}
+.social-links a:hover::before { transform: scale(1); }
+.social-links a:hover { color: var(--navy); transform: translateY(-3px); }
+.social-links a i { position: relative; z-index: 1; }
 
 .footer-title {
-    color: var(--gold);
-    font-size: 13px;
-    font-weight: 600;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    margin-bottom: 22px;
-    position: relative;
-    display: inline-block;
+    color: var(--gold); font-size: 13px; font-weight: 600; letter-spacing: 2px;
+    text-transform: uppercase; margin-bottom: 22px; position: relative; display: inline-block;
 }
-
 .footer-title::after {
-    content: '';
-    position: absolute;
-    bottom: -8px;
-    left: 0;
-    width: 35px;
-    height: 2px;
-    background: var(--gold);
-    transition: width 0.3s;
+    content: ''; position: absolute; bottom: -8px; left: 0; width: 35px; height: 2px;
+    background: var(--gold); transition: width 0.3s;
 }
-
-.footer-col:hover .footer-title::after {
-    width: 100%;
-}
+.footer-col:hover .footer-title::after { width: 100%; }
 
 .footer-links { list-style: none; }
 .footer-links li { margin-bottom: 10px; }
 .footer-links a {
-    color: #888;
-    text-decoration: none;
-    font-size: 13px;
-    transition: all 0.3s;
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
+    color: var(--text-muted); text-decoration: none; font-size: 13px; transition: all 0.3s;
+    display: inline-flex; align-items: center; gap: 8px;
 }
-
-.footer-links a::before {
-    content: '→';
-    color: var(--gold);
-    opacity: 0;
-    transform: translateX(-10px);
-    transition: all 0.3s;
-}
-
-.footer-links a:hover {
-    color: var(--gold);
-    transform: translateX(4px);
-}
-
-.footer-links a:hover::before {
-    opacity: 1;
-    transform: translateX(0);
-}
+.footer-links a::before { content: '→'; color: var(--gold); opacity: 0; transform: translateX(-10px); transition: all 0.3s; }
+.footer-links a:hover { color: var(--gold); transform: translateX(4px); }
+.footer-links a:hover::before { opacity: 1; transform: translateX(0); }
 
 .contact-item {
-    display: flex;
-    align-items: flex-start;
-    gap: 10px;
-    margin-bottom: 15px;
-    color: #888;
-    font-size: 13px;
-    transition: all 0.3s;
-    cursor: pointer;
+    display: flex; align-items: flex-start; gap: 10px; margin-bottom: 15px;
+    color: var(--text-muted); font-size: 13px; transition: all 0.3s; cursor: pointer;
 }
+.contact-item:hover { color: var(--gold); transform: translateX(5px); }
+.contact-item i { color: var(--gold); margin-top: 3px; font-size: 14px; width: 18px; transition: transform 0.3s; }
+.contact-item:hover i { transform: scale(1.2); }
 
-.contact-item:hover {
-    color: var(--gold);
-    transform: translateX(5px);
-}
-
-.contact-item i {
-    color: var(--gold);
-    margin-top: 3px;
-    font-size: 14px;
-    width: 18px;
-    transition: transform 0.3s;
-}
-
-.contact-item:hover i {
-    transform: scale(1.2);
-}
-
-.newsletter-text {
-    font-size: 12px;
-    color: #888;
-    line-height: 1.6;
-    margin-bottom: 18px;
-}
-
+.newsletter-text { font-size: 12px; color: var(--text-muted); line-height: 1.6; margin-bottom: 18px; }
 .newsletter-form {
-    display: flex;
-    border: 1px solid rgba(201, 168, 76, 0.25);
-    border-radius: 4px;
-    overflow: hidden;
-    transition: all 0.3s;
-    position: relative;
+    display: flex; border: 1px solid rgba(201, 168, 76, 0.25); border-radius: 4px;
+    overflow: hidden; transition: all 0.3s; position: relative;
 }
-
-.newsletter-form:focus-within {
-    border-color: var(--gold);
-    box-shadow: 0 0 20px rgba(201, 168, 76, 0.2);
-}
-
+.newsletter-form:focus-within { border-color: var(--gold); box-shadow: 0 0 20px rgba(201, 168, 76, 0.2); }
 .newsletter-form input {
-    flex: 1;
-    background: transparent;
-    border: none;
-    padding: 12px 14px;
-    color: #333;
-    font-size: 13px;
-    outline: none;
+    flex: 1; background: transparent; border: none; padding: 12px 14px;
+    color: #333; font-size: 13px; outline: none;
 }
-
 .newsletter-form input::placeholder { color: #aaa; }
 .newsletter-form button {
-    background: var(--gold);
-    border: none;
-    padding: 0 20px;
-    color: var(--navy);
-    cursor: pointer;
-    transition: all 0.3s;
-    position: relative;
-    overflow: hidden;
+    background: var(--gold); border: none; padding: 0 20px; color: var(--navy); cursor: pointer; transition: all 0.3s;
 }
-
-.newsletter-form button::before {
-    content: '';
-    position: absolute;
-    top: 50%; left: 50%;
-    width: 0; height: 0;
-    background: rgba(255,255,255,0.3);
-    border-radius: 50%;
-    transform: translate(-50%, -50%);
-    transition: width 0.6s, height 0.6s;
-}
-
-.newsletter-form button:hover::before {
-    width: 300px; height: 300px;
-}
-
-.newsletter-form button:hover {
-    background: var(--gold-light);
-}
-
-.newsletter-form button i {
-    font-size: 14px;
-    position: relative;
-    z-index: 1;
-}
+.newsletter-form button:hover { background: var(--gold-light); }
 
 .footer-bottom {
-    text-align: center;
-    padding-top: 35px;
-    margin-top: 35px;
-    border-top: 1px solid rgba(201, 168, 76, 0.15);
-    font-size: 12px;
-    color: #ffffff;
-    background-color: #000000;
-    padding-bottom: 35px;
-    margin-left: -60px;
-    margin-right: -60px;
+    text-align: center; padding-top: 35px; margin-top: 35px;
+    border-top: 1px solid rgba(201, 168, 76, 0.15); font-size: 12px; color: #ffffff;             
+    background-color: #000000; padding-bottom: 35px; margin-left: -60px; margin-right: -60px;
 }
 
-/* Scroll to top */
+/* Scroll to top (Dari About Us) */
 .scroll-top {
-    position: fixed;
-    bottom: 25px;
-    right: 25px;
-    width: 45px;
-    height: 45px;
-    background: var(--gold);
-    color: var(--navy);
-    border: none;
-    border-radius: 50%;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    opacity: 0;
-    visibility: hidden;
-    transition: all 0.3s;
-    z-index: 999;
-    box-shadow: 0 4px 15px rgba(201, 168, 76, 0.4);
-    font-size: 16px;
+    position: fixed; bottom: 25px; right: 25px; width: 45px; height: 45px;
+    background: var(--gold); color: var(--navy); border: none; border-radius: 50%;
+    cursor: pointer; display: flex; align-items: center; justify-content: center;
+    opacity: 0; visibility: hidden; transition: all 0.3s; z-index: 999;
+    box-shadow: 0 4px 15px rgba(201, 168, 76, 0.4); font-size: 16px;
 }
-
 .scroll-top.visible { opacity: 1; visibility: visible; }
-.scroll-top:hover {
-    transform: translateY(-5px) scale(1.1);
-    box-shadow: 0 8px 25px rgba(201, 168, 76, 0.5);
-}
+.scroll-top:hover { transform: translateY(-5px) scale(1.1); box-shadow: 0 8px 25px rgba(201, 168, 76, 0.5); }
 
-/* Toast */
+/* Toast (Dari About Us) */
 .toast {
-    position: fixed;
-    bottom: 90px;
-    left: 50%;
-    transform: translateX(-50%) translateY(100px);
-    background: var(--gold);
-    color: var(--navy);
-    padding: 16px 32px;
-    border-radius: 50px;
-    font-weight: 500;
-    font-size: 14px;
-    opacity: 0;
-    transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-    z-index: 10000;
-    box-shadow: 0 8px 30px rgba(201, 168, 76, 0.4);
-    display: flex;
-    align-items: center;
-    gap: 10px;
+    position: fixed; bottom: 90px; left: 50%; transform: translateX(-50%) translateY(100px);
+    background: var(--gold); color: var(--navy); padding: 16px 32px; border-radius: 50px;
+    font-weight: 500; font-size: 14px; opacity: 0; transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    z-index: 10000; box-shadow: 0 8px 30px rgba(201, 168, 76, 0.4); display: flex; align-items: center; gap: 10px;
 }
-
-.toast.show {
-    opacity: 1;
-    transform: translateX(-50%) translateY(0);
-}
-
+.toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
 .toast i { font-size: 18px; }
 
 /* Animations */
-@keyframes fadeInLeft {
-    from { opacity: 0; transform: translateX(-40px); }
-    to { opacity: 1; transform: translateX(0); }
-}
-
-@keyframes fadeInRight {
-    from { opacity: 0; transform: translateX(40px); }
-    to { opacity: 1; transform: translateX(0); }
-}
-
 @keyframes fadeInUp {
     from { opacity: 0; transform: translateY(30px); }
     to { opacity: 1; transform: translateY(0); }
-}
-
-@keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
 }
 
 /* Responsive */
@@ -1488,24 +884,16 @@ img { max-width: 100%; height: auto; display: block; }
     .jubah-hero-images { order: -1; }
     .footer-content { grid-template-columns: 1fr 1fr; }
     .jubah-hero h1 { font-size: 42px; }
-    body { cursor: auto; }
-    .custom-cursor, .cursor-dot { display: none; }
 }
 
 @media (max-width: 768px) {
-    .navbar { padding: 0 30px; }
+    .navbar { padding: 15px 30px; }
+    .logo-img { height: 30px; }
     .nav-links {
-        position: fixed;
-        top: 0;
-        right: -100%;
-        width: 75%;
-        height: 100vh;
-        background: var(--navy);
-        flex-direction: column;
-        padding: 100px 40px;
+        position: fixed; top: 0; right: -100%; width: 75%; height: 100vh;
+        background: var(--navy); flex-direction: column; padding: 100px 40px;
         transition: right 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-        border-left: 1px solid rgba(201, 168, 76, 0.2);
-        gap: 30px;
+        border-left: 1px solid rgba(201, 168, 76, 0.2); gap: 30px;
     }
     .nav-links.active { right: 0; }
     .mobile-menu-btn { display: flex; }
@@ -1518,9 +906,8 @@ img { max-width: 100%; height: auto; display: block; }
     .filter-sort { width: 100%; justify-content: center; }
     .footer { padding: 35px 30px 25px; }
     .footer-content { grid-template-columns: 1fr; gap: 25px; }
-    .footer-bottom { margin-left: -30px; margin-right: -30px; }
-    .scroll-top { display: none; }
-    .marquee-banner { display: none; }
+    .gold-branch-footer { display: none; }
+    .custom-cursor, .cursor-dot { display: none; }
 }
 
 @media (max-width: 480px) {
@@ -1529,7 +916,6 @@ img { max-width: 100%; height: auto; display: block; }
     .jubah-hero-img { width: 200px; height: 300px; margin: 0 !important; }
 }
     </style>
-<base target="_blank">
 </head>
 
 <body>
@@ -1566,27 +952,25 @@ img { max-width: 100%; height: auto; display: block; }
     <!-- Navbar -->
     <nav class="navbar" id="navbar">
         <div class="logo" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">
-            <img src="Gambarberanda/logo_caymira_modest.png" alt="Caymira Modest" class="logo-img">
+            <!-- Path logo disesuaikan -->
+            <img src="../Beranda/Gambarberanda/logo_caymira_modest.png" alt="Caymira Modest" class="logo-img" onerror="this.src='https://via.placeholder.com/150x50/0a1628/c9a84c?text=Caymira'">
         </div>
 
         <ul class="nav-links" id="navLinks">
             <li><a href="../Beranda/beranda.php">Beranda</a></li>
             <li><a href="../About-us/aboutus.php">About Us</a></li>
-            <li><a href="#bestseller">Best Seller</a></li>
-            <li><a href="../login_register/contact.php">Contact</a></li>
+            <li><a href="../best-seller/best-seller.php">Best Seller</a></li>
+            <li><a href="../contact/contact.php">Contact</a></li>
         </ul>
 
         <div class="nav-icons">
             <i class="fas fa-search" onclick="toggleSearch()"></i>
-            <i class="fas fa-user" onclick="showToast('👤 Menuju halaman akun...')"></i>
+            <i class="fas fa-user" onclick="window.location.href='../login_register/profil.php'"></i>
             <div class="cart-icon">
                 <i class="fas fa-shopping-cart" onclick="showToast('🛒 Menuju keranjang belanja...')"></i>
-                <span class="cart-badge">3</span>
             </div>
             <div class="mobile-menu-btn" id="mobileMenuBtn" onclick="toggleMobileMenu()">
-                <span></span>
-                <span></span>
-                <span></span>
+                <span></span><span></span><span></span>
             </div>
         </div>
     </nav>
@@ -1667,9 +1051,8 @@ img { max-width: 100%; height: auto; display: block; }
         <div class="jubah-grid" id="jubahGrid">
 
             <?php 
-// 2. Mulai perulangan PHP di sini
+// Mulai perulangan PHP
 while($row = mysqli_fetch_assoc($query)) { 
-    // Mengubah format kategori & label menjadi huruf kecil untuk class CSS
     $category_lbl = strtolower($row['label']); 
 ?>
 
@@ -1680,13 +1063,13 @@ while($row = mysqli_fetch_assoc($query)) {
         <?php endif; ?>
 
         <div class="jubah-img-wrapper">
-    <img src="<?php echo $row['gambar']; ?>" alt="<?php echo $row['nama_produk']; ?>" class="jubah-img" style="width: 100%; height: 320px; object-fit: cover; object-position: top; border-radius: 12px;">
-    
-    <div class="jubah-img-overlay">
-        <button class="overlay-btn"><i class="fas fa-eye"></i> Quick View</button>
-        <button class="overlay-btn wishlist"><i class="far fa-heart"></i></button>
-    </div>
-</div>
+            <img src="<?php echo $row['gambar']; ?>" alt="<?php echo $row['nama_produk']; ?>" class="jubah-img" style="width: 100%; height: 320px; object-fit: cover; object-position: top; border-radius: 12px;">
+            
+            <div class="jubah-img-overlay">
+                <button class="overlay-btn"><i class="fas fa-eye"></i> Quick View</button>
+                <button class="overlay-btn wishlist"><i class="far fa-heart"></i></button>
+            </div>
+        </div>
 
         <div class="jubah-info">
             <h3><?php echo $row['nama_produk']; ?></h3>
@@ -1716,137 +1099,131 @@ while($row = mysqli_fetch_assoc($query)) {
     </div>
 
 <?php 
-} // 3. Selesai perulangan PHP (Penutup while)
+} // Selesai perulangan PHP
 ?>
 
-
+        </div>
     </section>
 
     <hr class="section-divider">
 
+    <!-- Footer -->
     <footer class="footer" id="contact">
+        <svg class="gold-branch-footer" viewBox="0 0 200 300" fill="none">
+            <path d="M100 300 Q120 250 100 200 Q80 150 100 100 Q120 50 100 0" stroke="#c9a84c" stroke-width="1" fill="none" opacity="0.4"/>
+            <circle cx="100" cy="30" r="2" fill="#c9a84c" opacity="0.6"/>
+            <circle cx="110" cy="70" r="1.5" fill="#c9a84c" opacity="0.5"/>
+            <circle cx="90" cy="110" r="2" fill="#c9a84c" opacity="0.7"/>
+            <circle cx="105" cy="150" r="1.5" fill="#c9a84c" opacity="0.5"/>
+            <circle cx="95" cy="190" r="2" fill="#c9a84c" opacity="0.6"/>
+            <circle cx="115" cy="230" r="1.5" fill="#c9a84c" opacity="0.5"/>
+            <circle cx="85" cy="270" r="2" fill="#c9a84c" opacity="0.7"/>
+        </svg>
+
         <div class="footer-content">
-            <div class="footer-col footer-brand">
-                <div class="logo-main">Caymira</div>
-                <div class="logo-sub">MODEST</div>
-                <p>Menghadirkan busana muslim pria dengan desain elegan, minimalis, dan material premium untuk kenyamanan beribadah dan gaya sehari-hari.</p>
+            <div class="footer-brand">
+                 <div class="logo" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">
+                   <img src="../Beranda/Gambarberanda/logo_caymira_modest.png" alt="Caymira Modest" class="logo-img" onerror="this.src='https://via.placeholder.com/150x50/0a1628/c9a84c?text=Caymira'">
+                 </div>
+                
+                <p>Fashion muslimah dengan desain modern, bahan berkualitas, dan nyaman dipakai setiap hari.</p>
                 <div class="social-links">
-                    <a href="#"><i class="fab fa-instagram"></i></a>
-                    <a href="#"><i class="fab fa-facebook-f"></i></a>
-                    <a href="#"><i class="fab fa-tiktok"></i></a>
-                    <a href="#"><i class="fab fa-whatsapp"></i></a>
+                    <a href="#" onclick="showToast('📸 Instagram: @caymiramodest')"><i class="fab fa-instagram"></i></a>
+                    <a href="#" onclick="showToast('👥 Facebook: Caymira Modest')"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#" onclick="showToast('💬 WhatsApp: 0895-7042-D0408')"><i class="fab fa-whatsapp"></i></a>
                 </div>
             </div>
 
             <div class="footer-col">
-                <h4 class="footer-title">Tautan Cepat</h4>
+                <h4 class="footer-title">Quick Links</h4>
                 <ul class="footer-links">
-                    <li><a href="../Beranda/beranda.php">Beranda</a></li>
-                    <li><a href="../About-us/aboutus.php">Tentang Kami</a></li>
-                    <li><a href="#collection">Koleksi Jubah</a></li>
-                    <li><a href="#">Panduan Ukuran</a></li>
-                    <li><a href="#">FAQ & Bantuan</a></li>
+                   <li><a href="../Beranda/beranda.php">Beranda</a></li>
+                    <li><a href="../About-us/aboutus.php">About Us</a></li>
+                    <li><a href="../best-seller/best-seller.php">Best Seller</a></li>
+                    <li><a href="../contact/contact.php">Contact</a></li>
                 </ul>
             </div>
 
             <div class="footer-col">
-                <h4 class="footer-title">Hubungi Kami</h4>
-                <div class="contact-item">
-                    <i class="fas fa-map-marker-alt"></i>
-                    <span>Jl. Sudirman No. 123, Purwokerto, Jawa Tengah, Indonesia</span>
+                <h4 class="footer-title">Customer Service</h4>
+                <div class="contact-item" onclick="showToast('🕐 Jam Operasional: Senin-Sabtu')">
+                    <i class="far fa-clock"></i>
+                    <div>
+                        <div>Monday - Saturday</div>
+                        <div>10.00 - 17.00 WIB</div>
+                    </div>
                 </div>
-                <div class="contact-item" onclick="window.location.href='mailto:hello@caymira.com'">
-                    <i class="fas fa-envelope"></i>
-                    <span>hello@caymira.com</span>
+                <div class="contact-item" onclick="showToast('📞 Hubungi: 0895-7042-D0408')">
+                    <i class="fas fa-phone"></i>
+                    <div>0895-7042-D0408</div>
                 </div>
-                <div class="contact-item" onclick="window.location.href='tel:+6281234567890'">
-                    <i class="fas fa-phone-alt"></i>
-                    <span>+62 812 3456 7890</span>
+                <div class="contact-item" onclick="showToast('📧 Email: caymiramodest@gmail.com')">
+                    <i class="far fa-envelope"></i>
+                    <div>caymiramodest@gmail.com</div>
                 </div>
             </div>
 
             <div class="footer-col">
                 <h4 class="footer-title">Newsletter</h4>
-                <p class="newsletter-text">Berlangganan sekarang untuk mendapatkan update produk terbaru dan promo eksklusif.</p>
-                <form class="newsletter-form" onsubmit="event.preventDefault(); showToast('🎉 Terima kasih telah berlangganan!');">
-                    <input type="email" placeholder="Alamat Email Anda" required>
+                <p class="newsletter-text">Dapatkan info terbaru & promo menarik dari Caymira Modest.</p>
+                <form class="newsletter-form" onsubmit="handleSubscribe(event)">
+                    <input type="email" placeholder="Your email" required id="emailInput">
                     <button type="submit"><i class="fas fa-paper-plane"></i></button>
                 </form>
             </div>
         </div>
 
         <div class="footer-bottom">
-            &copy; 2026 Caymira Modest. All Rights Reserved.
+            <p>© Copyright 2025 Caymira Modest. All Rights Reserved.</p>
         </div>
     </footer>
 
-    <button class="scroll-top" id="scrollTop" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">
-        <i class="fas fa-arrow-up"></i>
+    <!-- Scroll to Top -->
+    <button class="scroll-top" id="scrollTop" onclick="scrollToTop()">
+        <i class="fas fa-chevron-up"></i>
     </button>
 
+    <!-- JAVA SCRIPT -->
     <script>
-        // 1. Loading Screen
-        window.addEventListener('load', () => {
+        // 1. Loading Screen (Using DOMContentLoaded as discussed previously for better load times)
+        document.addEventListener('DOMContentLoaded', () => {
             setTimeout(() => {
                 document.getElementById('loader').classList.add('hidden');
-            }, 1800);
+            }, 1000);
         });
 
-        // 2. Custom Cursor - Enhanced
+        // 2. Custom Cursor (Dari About Us)
         const cursor = document.getElementById('cursor');
         const cursorDot = document.getElementById('cursorDot');
+        
+        document.addEventListener('mousemove', (e) => {
+            cursor.style.left = e.clientX - 10 + 'px';
+            cursor.style.top = e.clientY - 10 + 'px';
+            cursorDot.style.left = e.clientX - 3 + 'px';
+            cursorDot.style.top = e.clientY - 3 + 'px';
+        });
 
-        if(window.innerWidth > 768) {
-            let mouseX = 0, mouseY = 0;
-            let cursorX = 0, cursorY = 0;
-            let dotX = 0, dotY = 0;
-
-            document.addEventListener('mousemove', (e) => {
-                mouseX = e.clientX;
-                mouseY = e.clientY;
-            });
-
-            function animateCursor() {
-                cursorX += (mouseX - cursorX) * 0.15;
-                cursorY += (mouseY - cursorY) * 0.15;
-                dotX += (mouseX - dotX) * 0.5;
-                dotY += (mouseY - dotY) * 0.5;
-
-                cursor.style.transform = `translate(${cursorX - 10}px, ${cursorY - 10}px)`;
-                cursorDot.style.transform = `translate(${dotX - 3}px, ${dotY - 3}px)`;
-
-                requestAnimationFrame(animateCursor);
-            }
-            animateCursor();
-
-            // Hover effects
-            document.querySelectorAll('a, button, .jubah-card, .filter-btn, .color-dot, .nav-icons i, .overlay-btn').forEach(el => {
-                el.addEventListener('mouseenter', () => cursor.classList.add('hover'));
-                el.addEventListener('mouseleave', () => cursor.classList.remove('hover'));
-            });
-
-            // Click effect
-            document.addEventListener('mousedown', () => cursor.classList.add('click'));
-            document.addEventListener('mouseup', () => cursor.classList.remove('click'));
-        }
+        document.querySelectorAll('a, button, i, .contact-item, .jubah-card, .filter-btn, .color-dot').forEach(el => {
+            el.addEventListener('mouseenter', () => cursor.classList.add('hover'));
+            el.addEventListener('mouseleave', () => cursor.classList.remove('hover'));
+        });
 
         // 3. Floating Particles Generator
         function createParticles() {
             const particlesContainer = document.getElementById('particles');
-            const particleCount = 25;
-
-            for (let i = 0; i < particleCount; i++) {
-                let particle = document.createElement('div');
+            for (let i = 0; i < 25; i++) {
+                const particle = document.createElement('div');
                 particle.className = 'particle';
-                particle.style.left = Math.random() * 100 + 'vw';
-                particle.style.animationDuration = (Math.random() * 10 + 10) + 's';
-                particle.style.animationDelay = (Math.random() * 5) + 's';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.animationDelay = Math.random() * 12 + 's';
+                particle.style.animationDuration = (10 + Math.random() * 8) + 's';
+                particle.style.width = particle.style.height = (2 + Math.random() * 3) + 'px';
                 particlesContainer.appendChild(particle);
             }
         }
         createParticles();
 
-        // 4. Scroll Events
+        // 4. Scroll Events (Navbar & ScrollTop)
         window.addEventListener('scroll', () => {
             const navbar = document.getElementById('navbar');
             const scrollTopBtn = document.getElementById('scrollTop');
@@ -1859,6 +1236,10 @@ while($row = mysqli_fetch_assoc($query)) {
                 scrollTopBtn.classList.remove('visible');
             }
         });
+
+        function scrollToTop() {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
 
         // 5. Mobile Menu Toggle
         function toggleMobileMenu() {
@@ -1888,7 +1269,17 @@ while($row = mysqli_fetch_assoc($query)) {
             }, 3000);
         }
 
-        // 8. Filter Produk Jubah
+        // 8. Newsletter Footer (Dari About Us)
+        function handleSubscribe(e) {
+            e.preventDefault();
+            const email = document.getElementById('emailInput').value;
+            if (email) {
+                showToast('✅ Terima kasih telah berlangganan newsletter Caymira!');
+                document.getElementById('emailInput').value = '';
+            }
+        }
+
+        // 9. Filter Produk Jubah (Fungsi Khusus Jubah)
         function filterJubah(category, btnElement) {
             document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
             btnElement.classList.add('active');
@@ -1911,7 +1302,7 @@ while($row = mysqli_fetch_assoc($query)) {
             showToast(`Menampilkan kategori: ${btnElement.innerText}`);
         }
 
-        // 9. Sort Produk
+        // 10. Sort Produk Jubah (Fungsi Khusus Jubah)
         function sortJubah(sortType) {
             const grid = document.getElementById('jubahGrid');
             const items = Array.from(grid.querySelectorAll('.jubah-card'));
@@ -1932,7 +1323,7 @@ while($row = mysqli_fetch_assoc($query)) {
             showToast(`Diurutkan: ${sortType}`);
         }
 
-        // 10. Intersection Observer
+        // 11. Intersection Observer untuk Animasi
         const observerOptions = {
             threshold: 0.1,
             rootMargin: "0px 0px -50px 0px"
@@ -1951,7 +1342,7 @@ while($row = mysqli_fetch_assoc($query)) {
             observer.observe(el);
         });
 
-        // 11. Color Dots Interaction
+        // 12. Color Dots Interaction
         document.querySelectorAll('.jubah-colors').forEach(container => {
             const dots = container.querySelectorAll('.color-dot');
 
@@ -1964,7 +1355,7 @@ while($row = mysqli_fetch_assoc($query)) {
             });
         });
 
-        // 12. Wishlist Button
+        // 13. Wishlist Button
         document.querySelectorAll('.overlay-btn.wishlist').forEach(btn => {
             btn.addEventListener('click', (e) => {
                 e.stopPropagation();
