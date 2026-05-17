@@ -6,7 +6,7 @@ $filter = isset($_GET['filter']) ? $_GET['filter'] : 'all';
 $sort = isset($_GET['sort']) ? $_GET['sort'] : 'newest';
 
 // Build query
-$sql = "SELECT * FROM produk WHERE 1=1";
+$sql = "SELECT * FROM gamis WHERE 1=1";
 
 // Filter
 if ($filter == 'new') {
@@ -31,7 +31,7 @@ if ($sort == 'price-low') {
 $result = mysqli_query($conn, $sql);
 
 // Hitung total produk
-$count_sql = "SELECT COUNT(*) as total FROM produk";
+$count_sql = "SELECT COUNT(*) as total FROM gamis";
 $count_result = mysqli_query($conn, $count_sql);
 $count_row = mysqli_fetch_assoc($count_result);
 $total_produk = $count_row['total'];
@@ -1210,7 +1210,7 @@ $total_produk = $count_row['total'];
 
         <ul class="nav-links" id="navLinks">
             <li><a href="../Beranda/beranda.php">Beranda</a></li>
-            <li><a href="../About/about.php">About Us</a></li>
+            <li><a href="../About-us/about.php">About Us</a></li>
             <li><a href="../best-seller/best-seller.php">Best Seller</a></li>
             <li><a href="../contact/contact.php">Contact</a></li>
         </ul>

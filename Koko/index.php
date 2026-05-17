@@ -1,6 +1,6 @@
 <?php 
 include 'koneksi.php'; 
-$query = mysqli_query($koneksi, "SELECT * FROM produk");
+$query = mysqli_query($koneksi, "SELECT * FROM koko");
 ?>
 <!DOCTYPE html>
 <html lang="id">
@@ -1515,7 +1515,7 @@ img { max-width: 100%; height: auto; }
         <ul class="nav-links" id="navLinks">
             <li><a href="../Beranda/beranda.php">Beranda</a></li>
             <li><a href="../About-us/aboutus.php">About Us</a></li>
-            <li><a href="#bestseller">Best Seller</a></li>
+            <li><a href="../best-seller/best-seller.php">Best Seller</a></li>
             <li><a href="../login_register/contact.php">Contact</a></li>
         </ul>
 
@@ -1601,7 +1601,7 @@ img { max-width: 100%; height: auto; }
     <!-- Koko Collection -->
     <section class="container koko-collection" id="collection">
         <div class="section-header">
-            <h2>KOKO LAKI-LAKI</h2>
+            <h2>BAJU KOKO</h2>
             <p>Koleksi koko stylish dan elegan untuk laki-laki dewasa</p>
         </div>
 

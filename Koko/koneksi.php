@@ -2,7 +2,7 @@
 $host     = "localhost";
 $username = "root";      
 $password = "";          
-$database = "mbuh"; // Pastikan nama database-mu sama dengan yang di phpMyAdmin
+$database = "caymira_modest";
 
 $koneksi = mysqli_connect($host, $username, $password, $database);
 
