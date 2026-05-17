@@ -744,7 +744,7 @@ img { max-width: 100%; height: auto; display: block; }
     <!-- Navbar -->
     <nav class="navbar" id="navbar">
         <div class="logo" onclick="window.location.href='../Beranda/beranda.html'">
-            <img src="Gambarberanda/logo_caymira_modest.png" alt="Caymira Modest" class="logo-img">
+            <img src="../Beranda/Gambarberanda/logo_caymira_modest.png" alt="Caymira Modest" class="logo-img">
         </div>
         <ul class="nav-links" id="navLinks">
             <li><a href="../Beranda/beranda.html">Beranda</a></li>
@@ -867,7 +867,9 @@ img { max-width: 100%; height: auto; display: block; }
                     <!-- Total Transfer -->
                     <div style="background: rgba(201,168,76,0.1); border: 1.5px solid rgba(201,168,76,0.3); border-radius: 14px; padding: 20px; text-align: center; margin-top: 10px; position: relative; z-index: 1;">
                         <div style="font-size: 13px; color: var(--text-muted); margin-bottom: 8px; text-transform: uppercase; letter-spacing: 1.5px;">Total yang Harus Ditransfer</div>
-                        <div style="font-family: var(--font-heading); font-size: 32px; color: var(--gold); font-weight: 700; letter-spacing: 1px;" id="transferTotal">Rp 440.000</div>
+<h2 style="color: #d4af37; font-size: 32px; margin: 10px 0;">
+    Rp <?php echo number_format($total, 0, ',', '.'); ?>
+</h2>
                         <div style="font-size: 12px; color: var(--text-muted); margin-top: 6px;">Pastikan nominal sesuai hingga digit terakhir</div>
                     </div>
                 </div>
@@ -882,7 +884,7 @@ img { max-width: 100%; height: auto; display: block; }
                         <img class="upload-preview" id="uploadPreview" alt="Preview">
                     </div>
                     <input type="file" id="fileInput" accept="image/*,.pdf" style="display:none;" onchange="handleFileSelect(event)">
-                    <button class="btn-primary" id="btnConfirm" onclick="confirmPayment()">
+                    <button class="btn-primary" id="btnConfirm" onclick="kirimBuktiPembayaran()">
                         <i class="fas fa-check-circle"></i> Saya Sudah Bayar
                     </button>
                     <button class="btn-secondary" onclick="cancelOrder()">
@@ -896,22 +898,33 @@ img { max-width: 100%; height: auto; display: block; }
                 <div class="payment-card" style="position: sticky; top: 90px;">
                     <h2 class="card-title"><i class="fas fa-shopping-bag"></i> Ringkasan Pesanan</h2>
 
-                    <div class="order-item">
-                        <img src="Gambarberanda/gamis ruffel .jpeg" alt="Gamis" class="order-img">
-                        <div class="order-details">
-                            <div class="order-name">Gamis Ruffle Premium</div>
-                            <div class="order-variant">Navy, M x1</div>
-                            <div class="order-price">Rp 299.000</div>
-                        </div>
-                    </div>
-                    <div class="order-item">
-                        <img src="Gambarberanda/gamis miryam.jpeg" alt="Jilbab" class="order-img">
-                        <div class="order-details">
-                            <div class="order-name">Jilbab Maryam</div>
-                            <div class="order-variant">Black x1</div>
-                            <div class="order-price">Rp 109.000</div>
-                        </div>
-                    </div>
+                    <?php 
+// Semak jika ada data barang dalam sesi (session)
+if (isset($_SESSION['checkout_cart']) && !empty($_SESSION['checkout_cart'])): 
+    foreach ($_SESSION['checkout_cart'] as $item): 
+?>
+    <div class="order-item" style="display: flex; align-items: center; margin-bottom: 15px;">
+        <img src="<?php echo htmlspecialchars($item['gambar']); ?>" alt="<?php echo htmlspecialchars($item['nama']); ?>" class="order-img" style="width: 60px; height: 60px; border-radius: 8px; margin-right: 15px; object-fit: cover;">
+        
+        <div class="order-details">
+            <div class="order-name" style="font-weight: bold; color: #fff;"><?php echo htmlspecialchars($item['nama']); ?></div>
+            
+            <div class="order-variant" style="color: #bbb; font-size: 14px;">
+                <?php echo htmlspecialchars($item['varian']); ?> 
+                <strong style="color: #d4af37;">(Kuantiti: x<?php echo $item['jumlah']; ?>)</strong>
+            </div>
+            
+            <div class="order-price" style="color: #d4af37; font-weight: bold;">
+                Rp <?php echo number_format($item['harga'], 0, ',', '.'); ?>
+            </div>
+        </div>
+    </div>
+<?php 
+    endforeach; 
+else: 
+?>
+    <p style="color: #888; text-align: center;">Tiada butiran produk dijumpai.</p>
+<?php endif; ?>
 
                     <div class="pricing-divider"></div>
 
@@ -974,7 +987,7 @@ img { max-width: 100%; height: auto; display: block; }
         <div class="footer-content">
             <div class="footer-brand">
                 <div class="logo" onclick="window.scrollTo({top:0,behavior:'smooth'})">
-                    <img src="Gambarberanda/logo_caymira_modest.png" alt="Caymira Modest" class="logo-img" style="height:60px;margin-top:0;">
+                    <img src="../Beranda/Gambarberanda/logo_caymira_modest.png" alt="Caymira Modest" class="logo-img" style="height:60px;margin-top:0;">
                 </div>
                 <p>Fashion muslimah dengan desain modern, bahan berkualitas, dan nyaman dipakai setiap hari.</p>
                 <div class="social-links">
@@ -1248,35 +1261,31 @@ img { max-width: 100%; height: auto; display: block; }
             showToast('✅ File berhasil dipilih');
         }
 
-// =======================================================
+
         // UPDATE FUNGSI: Langsung Meluncur ke selesai.php
         // =======================================================
         async function kirimBuktiPembayaran() {
-            const btn = document.getElementById('btnSudahBayar'); // Pastikan tombolmu punya id ini
-            
-            // Ambil order_id dari URL halaman
+            const fileInput = document.getElementById('fileInput'); 
+            const btn = document.getElementById('btnConfirm');      
+
             const urlParams = new URLSearchParams(window.location.search);
             const orderId = urlParams.get('order_id');
 
-            // Cek apakah ada file yang sudah nempel di input file kamu
             if (!fileInput || fileInput.files.length === 0) {
                 alert('⚠️ Silakan pilih atau seret foto bukti pembayaran terlebih dahulu!');
                 return;
             }
 
-            // Ubah tombol jadi status loading biar kelihatan responsif
             if (btn) {
                 btn.disabled = true;
                 btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Mengunggah...';
             }
 
-            // Ambil file yang terdeteksi di input file asli kamu
             const formData = new FormData();
             formData.append('bukti', fileInput.files[0]);
             formData.append('order_id', orderId);
 
             try {
-                // Tembak data ke file PHP (upload_bukti.php)
                 const response = await fetch('upload_bukti.php', {
                     method: 'POST',
                     body: formData
@@ -1284,9 +1293,30 @@ img { max-width: 100%; height: auto; display: block; }
 
                 const result = await response.json();
 
-                if (result.success) {
-                    // KUNCI PERUBAHAN: Tanpa alert, langsung gas ke selesai.php membawa order_id
-                    window.location.href = 'selesai.php?order_id=' + orderId;
+              if (result.success) {
+                    // 1. Ubah tampilan tombol jadi sukses & warna hijau murni
+                    btn.disabled = false; // Kita hidupkan lagi biar bisa diklik buat halaman selanjutnya
+                    btn.innerHTML = '<i class="fas fa-check"></i> Bukti Terkirim!';
+                    btn.style.background = 'linear-gradient(135deg, #27ae60, #2ecc71)';
+                    btn.style.color = '#ffffff';
+
+                    // 2. Munculkan Toast sukses biar keren
+                    showToast('🎉 Bukti transfer berhasil diunggah!');
+
+                    // 3. Jalankan efek confetti (kalau fungsi launchConfetti-mu ada di bawah)
+                    if (typeof launchConfetti === 'function') {
+                        launchConfetti();
+                    }
+
+                    // 4. UBAH AKSI KLIK TOMBOL: Pas diklik lagi, baru jalan ke selesai.php
+                    btn.onclick = function() {
+                        window.location.href = 'selesai.php?order_id=' + orderId;
+                    };
+                    
+                    // Atau kalau mau teks tombolnya berubah otomatis jadi "Halaman Selanjutnya" setelah 2 detik:
+                    setTimeout(() => {
+                        btn.innerHTML = 'Halaman Selanjutnya <i class="fas fa-arrow-right"></i>';
+                    }, 2000);
                 } else {
                     alert('❌ Gagal: ' + result.message);
                     if (btn) {
@@ -1303,7 +1333,6 @@ img { max-width: 100%; height: auto; display: block; }
                 }
             }
         }
-
         // ===== CONFIRM PAYMENT =====
         function confirmPayment() {
             const btn = document.getElementById('btnConfirm');
@@ -1375,53 +1404,7 @@ function previewFile() {
 }
 
 // Fungsi utama saat tombol "SAYA SUDAH BAYAR" diklik
-async function kirimBuktiPembayaran() {
-    const fileInput = document.getElementById('fileBukti');
-    const btn = document.getElementById('btnSudahBayar');
-    
-    // Ambil order_id dari URL halaman saat ini
-    const urlParams = new URLSearchParams(window.location.search);
-    const orderId = urlParams.get('order_id');
 
-    // Validasi apakah user sudah memilih file
-    if (fileInput.files.length === 0) {
-        alert('⚠️ Silakan pilih atau unggah foto bukti pembayaran terlebih dahulu!');
-        return;
-    }
-
-    // Mengubah tombol jadi status loading
-    btn.disabled = true;
-    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Mengunggah...';
-
-    // Bungkus file dan data menggunakan FormData (wajib untuk upload file)
-    const formData = new FormData();
-    formData.append('bukti', fileInput.files[0]);
-    formData.append('order_id', orderId);
-
-    try {
-        const response = await fetch('upload_bukti.php', {
-            method: 'POST',
-            body: formData // Kirim data form beserta filenya
-        });
-
-        const result = await response.json();
-
-        if (result.success) {
-            alert('🎉 Bukti berhasil dikirim! Pesanan Anda akan segera diproses.');
-            // REQUEST KAMU: Sukses langsung meluncur ke selesai.php bawa order_id
-            window.location.href = 'selesai.php?order_id=' + orderId;
-        } else {
-            alert('❌ Gagal: ' + result.message);
-            btn.disabled = false;
-            btn.innerHTML = '<i class="fas fa-check-circle"></i> SAYA SUDAH BAYAR';
-        }
-    } catch (error) {
-        console.error(error);
-        alert('❌ Terjadi kesalahan jaringan server.');
-        btn.disabled = false;
-        btn.innerHTML = '<i class="fas fa-check-circle"></i> SAYA SUDAH BAYAR';
-    }
-}
 
         // ===== CONFETTI =====
         function launchConfetti() {

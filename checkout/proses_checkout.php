@@ -1,4 +1,5 @@
 <?php
+session_start();
 error_reporting(0);
 // Izinkan akses dari frontend
 header('Content-Type: application/json');
@@ -13,7 +14,7 @@ $db_user = 'root';
 $db_pass = '';     
 $db_name = 'mbuh'; // Pastikan nama database-nya benar
 
-// Masukkan SERVER KEY dari Midtrans Sandbox kamu di sini!
+// SERVER KEY Midtrans Sandbox
 $server_key = 'Mid-server--5pWdULYOML7ZVMv597RI_q8'; 
 
 $conn = new mysqli($db_host, $db_user, $db_pass, $db_name);
@@ -33,18 +34,12 @@ if (!$data) {
     exit;
 }
 
-// ==========================================
-// 2. TANGKAP DATA DARI HTML (VERSI KEBAL ERROR)
-// ==========================================
-$json_input = file_get_contents('php://input');
-$data = json_decode($json_input, true);
-
-if (!$data) {
-    echo json_encode(['error' => 'Data kosong']);
-    exit;
+// SIMPAN DATA BARANG KE SESSION (Biar gambar & nama di halaman selanjutnya bisa muncul)
+if (isset($data['cart_items'])) {
+    $_SESSION['checkout_cart'] = $data['cart_items']; 
 }
 
-// Tambahkan isset() supaya kalau data kosong, PHP nggak ngeluarin tulisan Warning
+// Validasi data
 $nama     = isset($data['nama']) ? $conn->real_escape_string($data['nama']) : '';
 $telepon  = isset($data['wa']) ? $conn->real_escape_string($data['wa']) : '';
 $email    = isset($data['email']) ? $conn->real_escape_string($data['email']) : '';
@@ -52,12 +47,14 @@ $alamat   = isset($data['alamat']) ? $conn->real_escape_string($data['alamat']) 
 $kota     = isset($data['kota']) ? $conn->real_escape_string($data['kota']) : '';
 $kode_pos = isset($data['kodepos']) ? $conn->real_escape_string($data['kodepos']) : '';
 
-$order_id_midtrans = 'CM-' . time(); 
-// Ambil total harga yang dikirim dari JavaScript. Kalau tidak ada, default ke 0
+// ==========================================
+// KUNCI PERBAIKANNYA DI SINI: NAMA VARIABEL DISAMAKAN
+// ==========================================
+$order_id_midtrans = 'CM-' . time() . '-' . rand(1000, 9999);
 $total = isset($data['total']) ? intval($data['total']) : 0;
 
 // ==========================================
-// 3. SIMPAN KE TABEL "orders" (Tabel Barumu)
+// 3. SIMPAN KE TABEL "orders"
 // ==========================================
 $sql = "INSERT INTO orders 
         (nama, email, telepon, alamat, kota, kode_pos, total, status_pembayaran, order_id_midtrans, transaction_status) 
@@ -74,7 +71,7 @@ if (!$conn->query($sql)) {
 // ==========================================
 $payload = [
     'transaction_details' => [
-        'order_id'     => $order_id_midtrans,
+        'order_id'     => $order_id_midtrans, // Sekarang ini sudah ada isinya!
         'gross_amount' => $total,
     ],
     'customer_details' => [
