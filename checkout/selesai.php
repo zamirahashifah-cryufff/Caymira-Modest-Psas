@@ -1,3 +1,49 @@
+<?php
+// 1. Koneksi ke Database (Gunakan nama $conn seperti di pembayaran.php)
+$conn = new mysqli('localhost', 'root', '', 'mbuh'); // Sesuaikan nama DB-mu
+if ($conn->connect_error) {
+    die("Koneksi gagal: " . $conn->connect_error);
+}
+
+// 2. Ambil order_id dari URL (Menangkap kode dari Midtrans)
+$order_id = isset($_GET['order_id']) ? $conn->real_escape_string($_GET['order_id']) : '';
+
+// 3. Siapkan variabel kosong agar HTML tidak error kosongan
+$tanggal_pesanan = date('d M Y');
+$nama = '-';
+$alamat = '-';
+$kota = '-';
+$kode_pos = '-';
+$produk = '-';
+$jumlah = 1;
+$total = 0;
+$metode_pembayaran = 'Midtrans';
+
+// 4. Tarik data dari database berdasarkan order_id_midtrans
+if (!empty($order_id)) {
+    // Sesuaikan 'orders' dengan nama tabel aslimu
+    $result = $conn->query("SELECT * FROM orders WHERE order_id_midtrans = '$order_id'");
+    
+    if ($result && $result->num_rows > 0) {
+        $row = $result->fetch_assoc();
+        
+        // Ambil data asli dari kolom database Midtrans-mu
+        $nama    = $row['nama'];
+        $alamat  = $row['alamat'];
+        $kota    = $row['kota'];
+        $kode_pos = $row['kode_pos'];
+        $produk  = $row['produk'];
+        $jumlah  = $row['jumlah'];
+        $total   = $row['total'];
+        $metode_pembayaran = isset($row['payment_type']) ? $row['payment_type'] : $row['metode_pembayaran'];
+        
+        // Memformat tanggal dari created_at database biar rapi
+        if (!empty($row['created_at'])) {
+            $tanggal_pesanan = date('d M Y', strtotime($row['created_at']));
+        }
+    }
+}
+?>
 <!DOCTYPE html>
 <html lang="id">
 <head>
@@ -693,7 +739,7 @@ img { max-width: 100%; height: auto; display: block; }
     <!-- Navbar -->
     <nav class="navbar" id="navbar">
         <div class="logo" onclick="window.location.href='../Beranda/beranda.html'">
-            <img src="Gambarberanda/logo_caymira_modest.png" alt="Caymira Modest" class="logo-img">
+            <img src="../Beranda/Gambarberanda/logo_caymira_modest.png" alt="Caymira Modest" class="logo-img">
         </div>
         <ul class="nav-links" id="navLinks">
             <li><a href="../Beranda/beranda.html">Beranda</a></li>
@@ -800,31 +846,53 @@ img { max-width: 100%; height: auto; display: block; }
                 </div>
 
                 <!-- Order Details -->
-                <div class="success-card">
-                    <h2 class="card-title"><i class="fas fa-receipt"></i> Detail Pesanan</h2>
-                    <div class="detail-row">
-                        <span class="detail-label"><i class="fas fa-calendar"></i> Tanggal Pesanan</span>
-                        <span class="detail-value">16 Mei 2026</span>
-                    </div>
-                    <div class="detail-row">
-                        <span class="detail-label"><i class="fas fa-credit-card"></i> Metode Pembayaran</span>
-                        <span class="detail-value">Transfer Bank - BCA</span>
-                    </div>
-                    <div class="detail-row">
-                        <span class="detail-label"><i class="fas fa-truck"></i> Kurir Pengiriman</span>
-                        <span class="detail-value">JNE Reguler</span>
-                    </div>
-                    <div class="detail-row">
-                        <span class="detail-label"><i class="fas fa-barcode"></i> No. Resi</span>
-                        <span class="detail-value gold" style="cursor:pointer;" onclick="copyResi()">
-                            JNE2505168842 <i class="fas fa-copy" style="font-size:12px;margin-left:4px;"></i>
-                        </span>
-                    </div>
-                    <div class="detail-row">
-                        <span class="detail-label"><i class="fas fa-money-bill-wave"></i> Total Pembayaran</span>
-                        <span class="detail-value gold">Rp 440.000</span>
-                    </div>
-                </div>
+<div class="success-card">
+    <h2 class="card-title"><i class="fas fa-receipt"></i> Detail Pesanan</h2>
+    
+    <div class="detail-row">
+        <span class="detail-label"><i class="fas fa-hashtag"></i> No. Pesanan</span>
+        <span class="detail-value gold" style="font-weight: bold;"><?php echo htmlspecialchars($order_id); ?></span>
+    </div>
+
+    <div class="detail-row">
+        <span class="detail-label"><i class="fas fa-user"></i> Nama Pemesan</span>
+        <span class="detail-value"><?php echo htmlspecialchars($nama); ?></span>
+    </div>
+
+    <div class="detail-row">
+        <span class="detail-label"><i class="fas fa-map-marker-alt"></i> Alamat</span>
+        <span class="detail-value"><?php echo htmlspecialchars($alamat) . ', ' . htmlspecialchars($kota) . ' ' . htmlspecialchars($kode_pos); ?></span>
+    </div>
+
+    <div class="detail-row">
+        <span class="detail-label"><i class="fas fa-calendar"></i> Tanggal Pesanan</span>
+        <span class="detail-value"><?php echo htmlspecialchars($tanggal_pesanan); ?></span>
+    </div>
+
+    <div class="detail-row">
+        <span class="detail-label"><i class="fas fa-box"></i> Produk & Jumlah</span>
+        <span class="detail-value"><?php echo htmlspecialchars($produk); ?> (x<?php echo htmlspecialchars($jumlah); ?>)</span>
+    </div>
+
+    <div class="detail-row">
+        <span class="detail-label"><i class="fas fa-credit-card"></i> Metode Pembayaran</span>
+        <span class="detail-value" style="text-transform: uppercase;"><?php echo htmlspecialchars($metode_pembayaran); ?></span>
+    </div>
+
+    <div class="detail-row">
+        <span class="detail-label"><i class="fas fa-barcode"></i> No. Resi</span>
+        <span class="detail-value" style="color: #888; font-style: italic;">Menunggu Verifikasi Admin</span>
+    </div>
+
+    <hr style="border-top: 1px dashed #ddd; margin: 15px 0;">
+
+    <div class="detail-row">
+        <span class="detail-label"><i class="fas fa-money-bill-wave"></i> Total Pembayaran</span>
+        <span class="detail-value gold" style="font-weight: bold; font-size: 1.2rem;">
+            Rp <?php echo number_format($total, 0, ',', '.'); ?>
+        </span>
+    </div>
+</div>
 
                 <!-- WhatsApp Support -->
                 <div class="success-card" style="border: 1.5px solid rgba(39,174,96,0.2);">
@@ -886,8 +954,6 @@ img { max-width: 100%; height: auto; display: block; }
                     <!-- Shipping Address -->
                     <div style="margin-top: 25px; padding-top: 20px; border-top: 1px solid rgba(201,168,76,0.15);">
                         <h3 style="font-family: var(--font-heading); font-size: 16px; color: var(--gold); margin-bottom: 15px; display: flex; align-items: center; gap: 8px;">
-                            <i class="fas fa-map-marker-alt" style="font-size: 14px;"></i> Alamat Pengiriman
-                        </h3>
                         <div class="shipping-info">
                             <div class="shipping-row">
                                 <i class="fas fa-user"></i>
@@ -929,7 +995,7 @@ img { max-width: 100%; height: auto; display: block; }
         <div class="footer-content">
             <div class="footer-brand">
                 <div class="logo" onclick="window.scrollTo({top:0,behavior:'smooth'})">
-                    <img src="Gambarberanda/logo_caymira_modest.png" alt="Caymira Modest" class="logo-img" style="height:60px;margin-top:0;">
+                    <img src="../Beranda/SGambarberanda/logo_caymira_modest.png" alt="Caymira Modest" class="logo-img" style="height:60px;margin-top:0;">
                 </div>
                 <p>Fashion muslimah dengan desain modern, bahan berkualitas, dan nyaman dipakai setiap hari.</p>
                 <div class="social-links">

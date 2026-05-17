@@ -1122,7 +1122,7 @@ select.form-input {
     <!-- Navbar -->
     <nav class="navbar" id="navbar">
         <div class="logo" onclick="window.location.href='../Beranda/beranda.php'">
-            <img src="Gambarberanda/logo_caymira_modest.png" alt="Caymira Modest" class="logo-img">
+            <img src="../Beranda/Gambarberanda/logo_caymira_modest.png" alt="Caymira Modest" class="logo-img">
         </div>
         <ul class="nav-links" id="navLinks">
             <li><a href="../Beranda/beranda.php">Beranda</a></li>
@@ -1287,7 +1287,7 @@ select.form-input {
 
 
 <div class="order-item">
-    <img src="Gambarberanda/gamis ruffel .jpeg" alt="Gamis" class="order-img">
+    <img src="../Gambarberanda/gamis ruffel .jpeg" alt="Gamis" class="order-img">
     <div class="order-details">
         <div class="order-name">Gamis Ruffle Premium</div>
         <div class="order-variant">Navy, M</div>
@@ -1364,7 +1364,7 @@ select.form-input {
         <div class="footer-content">
             <div class="footer-brand">
                 <div class="logo" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">
-                    <img src="Gambarberanda/logo_caymira_modest.png" alt="Caymira Modest" class="logo-img" style="height: 60px; margin-top: 0;">
+                    <img src="../Beranda/Gambarberanda/logo_caymira_modest.png" alt="Caymira Modest" class="logo-img" style="height: 60px; margin-top: 0;">
                 </div>
                 <p>Fashion muslimah dengan desain modern, bahan berkualitas, dan nyaman dipakai setiap hari.</p>
                 <div class="social-links">
