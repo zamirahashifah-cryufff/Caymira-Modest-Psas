@@ -1,3 +1,7 @@
+<?php
+// Memanggil koneksi database
+include 'koneksi.php'; 
+?>
 <!DOCTYPE html>
 <html lang="id">
 <head>
@@ -463,10 +467,13 @@
         <div class="nav-icons">
             <i class="fas fa-search" onclick="toggleSearch()"></i>
             <i class="fas fa-user" onclick="showToast('👤 Menuju halaman akun...')"></i>
+            
+            <!-- Icon Keranjang Diperbarui -->
             <div class="cart-icon">
-                <i class="fas fa-shopping-cart" onclick="showToast('🛒 Menuju keranjang belanja...')"></i>
-                <span class="cart-badge">3</span>
+                <i class="fas fa-shopping-cart" onclick="window.location.href='../keranjang/keranjang.php'"></i>
+                <span class="cart-badge" id="cartBadge" style="display: none;">0</span>
             </div>
+            
             <div class="mobile-menu-btn" id="mobileMenuBtn" onclick="toggleMobileMenu()">
                 <span></span><span></span><span></span>
             </div>
@@ -495,165 +502,50 @@
         <p>Beragam model kerudung terbaru dengan kualitas terbaik, siap melengkapi gaya muslimah yang modis dan elegan.</p>
     </section>
 
-    <!-- Grid Produk (HTML Murni) -->
+    <!-- Grid Produk (Dinamis dari Database) -->
     <section class="container product-grid">
-        <!-- Produk 1 -->
+        
+        <?php
+        // Mengambil data dari tabel hijab yang ada di database
+        $query = "SELECT * FROM hijab";
+        $result = mysqli_query($koneksi, $query);
+
+        // Mengecek apakah ada data di dalam tabel
+        if (mysqli_num_rows($result) > 0) {
+            
+            // Melakukan perulangan untuk menampilkan semua produk
+            while ($row = mysqli_fetch_assoc($result)) {
+                
+                // Format harga agar rapi, contoh: Rp 229.000
+                $harga_format = "Rp " . number_format($row['harga'], 0, ',', '.');
+        ?>
+        
         <div class="product-card">
             <div class="img-wrapper">
-                <!-- Ubah link src gambar ini dengan path gambar hijab Anda -->
-                <img src="https://via.placeholder.com/300x400/141e2a/c9a84c?text=Ameera" alt="Jilbab Ameera">
+                <img src="<?= $row['gambar'] ?>" alt="<?= $row['nama_produk'] ?>">
+                
+                <!-- Action Overlay & Tombol Tambah ke Keranjang Diperbarui -->
                 <div class="action-overlay">
-                    <button class="btn-action" onclick="showToast('🛒 Jilbab Ameera ditambahkan!')"><i class="fas fa-cart-plus"></i> Tambah</button>
+                    <button class="btn-action" onclick="addToCart('<?= $row['id'] ?>', '<?= htmlspecialchars($row['nama_produk'], ENT_QUOTES) ?>', <?= $row['harga'] ?>, '<?= $row['gambar'] ?>'); event.stopPropagation();">
+                        <i class="fas fa-cart-plus"></i> Tambah
+                    </button>
                 </div>
+                
             </div>
             <div class="product-info">
-                <h3>Jilbab Ameera</h3>
-                <p>Rp 229.000</p>
+                <h3><?= $row['nama_produk'] ?></h3>
+                <p><?= $harga_format ?></p>
             </div>
         </div>
-        <!-- Produk 2 -->
-        <div class="product-card">
-            <div class="img-wrapper">
-                <img src="https://via.placeholder.com/300x400/141e2a/c9a84c?text=Mayra" alt="Jilbab Mayra">
-                <div class="action-overlay">
-                    <button class="btn-action" onclick="showToast('🛒 Jilbab Mayra ditambahkan!')"><i class="fas fa-cart-plus"></i> Tambah</button>
-                </div>
-            </div>
-            <div class="product-info">
-                <h3>Jilbab Mayra</h3>
-                <p>Rp 229.000</p>
-            </div>
-        </div>
-        <!-- Produk 3 -->
-        <div class="product-card">
-            <div class="img-wrapper">
-                <img src="https://via.placeholder.com/300x400/141e2a/c9a84c?text=Zavira" alt="Jilbab Zavira">
-                <div class="action-overlay">
-                    <button class="btn-action" onclick="showToast('🛒 Jilbab Zavira ditambahkan!')"><i class="fas fa-cart-plus"></i> Tambah</button>
-                </div>
-            </div>
-            <div class="product-info">
-                <h3>Jilbab Zavira</h3>
-                <p>Rp 229.000</p>
-            </div>
-        </div>
-        <!-- Produk 4 -->
-        <div class="product-card">
-            <div class="img-wrapper">
-                <img src="https://via.placeholder.com/300x400/141e2a/c9a84c?text=Safia" alt="Jilbab Safia">
-                <div class="action-overlay">
-                    <button class="btn-action" onclick="showToast('🛒 Jilbab Safia ditambahkan!')"><i class="fas fa-cart-plus"></i> Tambah</button>
-                </div>
-            </div>
-            <div class="product-info">
-                <h3>Jilbab Safia</h3>
-                <p>Rp 229.000</p>
-            </div>
-        </div>
-        <!-- Produk 5 -->
-        <div class="product-card">
-            <div class="img-wrapper">
-                <img src="https://via.placeholder.com/300x400/141e2a/c9a84c?text=Liora" alt="Jilbab Liora">
-                <div class="action-overlay">
-                    <button class="btn-action" onclick="showToast('🛒 Jilbab Liora ditambahkan!')"><i class="fas fa-cart-plus"></i> Tambah</button>
-                </div>
-            </div>
-            <div class="product-info">
-                <h3>Jilbab Liora</h3>
-                <p>Rp 229.000</p>
-            </div>
-        </div>
-        <!-- Produk 6 -->
-        <div class="product-card">
-            <div class="img-wrapper">
-                <img src="https://via.placeholder.com/300x400/141e2a/c9a84c?text=Ayana" alt="Jilbab Ayana">
-                <div class="action-overlay">
-                    <button class="btn-action" onclick="showToast('🛒 Jilbab Ayana ditambahkan!')"><i class="fas fa-cart-plus"></i> Tambah</button>
-                </div>
-            </div>
-            <div class="product-info">
-                <h3>Jilbab Ayana</h3>
-                <p>Rp 229.000</p>
-            </div>
-        </div>
-        <!-- Produk 7 -->
-        <div class="product-card">
-            <div class="img-wrapper">
-                <img src="https://via.placeholder.com/300x400/141e2a/c9a84c?text=Rhea" alt="Jilbab Rhea">
-                <div class="action-overlay">
-                    <button class="btn-action" onclick="showToast('🛒 Jilbab Rhea ditambahkan!')"><i class="fas fa-cart-plus"></i> Tambah</button>
-                </div>
-            </div>
-            <div class="product-info">
-                <h3>Jilbab Rhea</h3>
-                <p>Rp 229.000</p>
-            </div>
-        </div>
-        <!-- Produk 8 -->
-        <div class="product-card">
-            <div class="img-wrapper">
-                <img src="https://via.placeholder.com/300x400/141e2a/c9a84c?text=Senja" alt="Jilbab Senja">
-                <div class="action-overlay">
-                    <button class="btn-action" onclick="showToast('🛒 Jilbab Senja ditambahkan!')"><i class="fas fa-cart-plus"></i> Tambah</button>
-                </div>
-            </div>
-            <div class="product-info">
-                <h3>Jilbab Senja</h3>
-                <p>Rp 229.000</p>
-            </div>
-        </div>
-        <!-- Produk 9 -->
-        <div class="product-card">
-            <div class="img-wrapper">
-                <img src="https://via.placeholder.com/300x400/141e2a/c9a84c?text=Kalila" alt="Jilbab Kalila">
-                <div class="action-overlay">
-                    <button class="btn-action" onclick="showToast('🛒 Jilbab Kalila ditambahkan!')"><i class="fas fa-cart-plus"></i> Tambah</button>
-                </div>
-            </div>
-            <div class="product-info">
-                <h3>Jilbab Kalila</h3>
-                <p>Rp 229.000</p>
-            </div>
-        </div>
-        <!-- Produk 10 -->
-        <div class="product-card">
-            <div class="img-wrapper">
-                <img src="https://via.placeholder.com/300x400/141e2a/c9a84c?text=Marwa" alt="Jilbab Marwa">
-                <div class="action-overlay">
-                    <button class="btn-action" onclick="showToast('🛒 Jilbab Marwa ditambahkan!')"><i class="fas fa-cart-plus"></i> Tambah</button>
-                </div>
-            </div>
-            <div class="product-info">
-                <h3>Jilbab Marwa</h3>
-                <p>Rp 229.000</p>
-            </div>
-        </div>
-        <!-- Produk 11 -->
-        <div class="product-card">
-            <div class="img-wrapper">
-                <img src="https://via.placeholder.com/300x400/141e2a/c9a84c?text=Hana" alt="Jilbab Hana">
-                <div class="action-overlay">
-                    <button class="btn-action" onclick="showToast('🛒 Jilbab Hana ditambahkan!')"><i class="fas fa-cart-plus"></i> Tambah</button>
-                </div>
-            </div>
-            <div class="product-info">
-                <h3>Jilbab Hana</h3>
-                <p>Rp 229.000</p>
-            </div>
-        </div>
-        <!-- Produk 12 -->
-        <div class="product-card">
-            <div class="img-wrapper">
-                <img src="https://via.placeholder.com/300x400/141e2a/c9a84c?text=Kyra" alt="Jilbab Kyra">
-                <div class="action-overlay">
-                    <button class="btn-action" onclick="showToast('🛒 Jilbab Kyra ditambahkan!')"><i class="fas fa-cart-plus"></i> Tambah</button>
-                </div>
-            </div>
-            <div class="product-info">
-                <h3>Jilbab Kyra</h3>
-                <p>Rp 229.000</p>
-            </div>
-        </div>
+
+        <?php 
+            } // Penutup while loop
+        } else {
+            // Jika tabel kosong, tampilkan pesan ini
+            echo "<p style='grid-column: 1 / -1; text-align: center; color: var(--gold);'>Belum ada produk yang ditambahkan di database.</p>";
+        }
+        ?>
+
     </section>
 
     <!-- Footer -->
@@ -677,7 +569,6 @@
                 <p>Fashion muslimah dengan desain modern, bahan berkualitas, dan nyaman dipakai setiap hari.</p>
                 <div class="social-links">
                     <a href="#" onclick="showToast('📸 Instagram: @caymiramodest')"><i class="fab fa-instagram"></i></a>
-                    <a href="#" onclick="showToast('👥 Facebook: Caymira Modest')"><i class="fab fa-facebook-f"></i></a>
                     <a href="#" onclick="showToast('💬 WhatsApp: 0895-7042-D0408')"><i class="fab fa-whatsapp"></i></a>
                 </div>
             </div>
@@ -726,6 +617,9 @@
         document.addEventListener("DOMContentLoaded", function () {
             const loader = document.getElementById("loader");
             setTimeout(() => { loader.classList.add("hidden"); }, 1000); 
+            
+            // Update badge keranjang saat pertama kali web dimuat
+            updateCartBadge();
         });
 
         // Custom Cursor
@@ -814,6 +708,49 @@
             card.style.transition = 'all 0.6s cubic-bezier(0.4, 0, 0.2, 1)';
             observer.observe(card);
         });
+
+        // ===================== LOGIKA KERANJANG BELANJA =====================
+        function getCart() {
+            return JSON.parse(localStorage.getItem('caymira_cart')) || [];
+        }
+
+        function saveCart(cart) {
+            localStorage.setItem('caymira_cart', JSON.stringify(cart));
+        }
+
+        function updateCartBadge() {
+            const cart = getCart();
+            const totalItems = cart.reduce((total, item) => total + item.quantity, 0);
+            
+            const badge = document.getElementById('cartBadge');
+            if (badge) {
+                badge.textContent = totalItems;
+                // Sembunyikan badge jika keranjang kosong
+                badge.style.display = totalItems > 0 ? 'flex' : 'none';
+            }
+        }
+
+        function addToCart(id, name, price, image) {
+            let cart = getCart();
+            let existingItem = cart.find(item => item.id === id);
+            
+            if (existingItem) {
+                  existingItem.quantity += 1; 
+            } else {
+                cart.push({
+                    id: id,
+                    name: name,
+                    price: price,
+                    image: image,
+                    quantity: 1
+                });
+            }
+
+            saveCart(cart); 
+            updateCartBadge(); 
+            
+            showToast('🛒 ' + name + ' berhasil ditambahkan!');
+        }
     </script>
 </body>
 </html>

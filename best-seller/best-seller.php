@@ -425,6 +425,48 @@ if(!$query){
             border-radius: 0 4px 4px 0; letter-spacing: 1px; z-index: 2;
         }
 
+        /* === TOMBOL ADD TO CART (TAMPIL SAAT HOVER) === */
+        .action-overlay {
+           position: absolute; 
+           bottom: -50px; 
+           left: 0; 
+           width: 100%; 
+           height: 100%;
+           background: linear-gradient(to top, rgba(10,22,40,0.9), transparent);
+           display: flex; 
+           align-items: flex-end; 
+           justify-content: center;
+           padding-bottom: 20px; 
+           opacity: 0; 
+           transition: all 0.4s ease;
+           z-index: 3;
+        }
+
+        .product-card:hover .action-overlay { 
+           bottom: 0; 
+           opacity: 1; 
+        }
+
+        .btn-action {
+          background: var(--gold); 
+          color: var(--navy); 
+          border: none;
+          padding: 10px 20px; 
+          border-radius: 20px; 
+          font-size: 12px; 
+          font-weight: 600;
+          display: flex; 
+          align-items: center; 
+          gap: 8px; 
+          cursor: pointer; 
+          transition: 0.3s;
+        }
+
+        .btn-action:hover { 
+           background: var(--white); 
+           transform: scale(1.05); 
+        }
+
         .product-info { padding: 15px; }
         .product-name {
             font-size: 13px; font-weight: 400; color: var(--text-light);
@@ -608,9 +650,10 @@ if(!$query){
           <i class="fas fa-user"></i>
         </a>
 
+        <!-- Cart Icon Diperbarui -->
         <div class="cart-icon">
-          <i class="fas fa-shopping-cart" onclick="showToast('🛒 Menuju keranjang belanja...', true)"></i>
-          <span class="cart-badge">3</span>
+          <i class="fas fa-shopping-cart" onclick="window.location.href='../keranjang/keranjang.php'"></i>
+          <span class="cart-badge" id="cartBadge" style="display: none;">0</span>
         </div>
 
         <div class="mobile-menu-btn" id="mobileMenuBtn" onclick="toggleMobileMenu()">
@@ -701,7 +744,7 @@ if(!$query){
         </aside>
 
 
-           <!-- PRODUCT GRID -->
+        <!-- PRODUCT GRID -->
         <div class="product-grid" id="productGrid">
 
          <?php while($data = mysqli_fetch_assoc($query)) { ?>
@@ -711,10 +754,16 @@ if(!$query){
              <div class="product-img-wrap">
                  <div class="badge-bestseller">
                  BEST SELLER
-             </div>
+                 </div>
 
-             <img src="<?= $data['gambar'] ?>"
-              alt="<?= $data['nama_produk'] ?>">
+                 <img src="<?= $data['gambar'] ?>" alt="<?= $data['nama_produk'] ?>">
+                 
+                 <!-- ACTION OVERLAY: Tombol Tambah ke Keranjang -->
+                 <div class="action-overlay">
+                    <button class="btn-action" onclick="addToCart('<?= isset($data['id']) ? $data['id'] : rand(100,999) ?>', '<?= htmlspecialchars($data['nama_produk'], ENT_QUOTES) ?>', <?= $data['harga'] ?>, '<?= $data['gambar'] ?>'); event.stopPropagation();">
+                       <i class="fas fa-cart-plus"></i> Tambah
+                    </button>
+                 </div>
             </div>
 
             <div class="product-info">
@@ -737,7 +786,7 @@ if(!$query){
                 </span>
 
               <span class="reviews">
-                (<?= $data['ulasan'] ?>)
+                (<?= isset($data['ulasan']) ? $data['ulasan'] : 0 ?>)
               </span>
             </div>
 
@@ -749,9 +798,6 @@ if(!$query){
 
 </div> 
            
-            
-            
-
         </div> <!-- END OF PRODUCT GRID -->
     </div> <!-- END OF MAIN CONTAINER -->
 
@@ -778,7 +824,6 @@ if(!$query){
           <p>Fashion muslimah dengan desain modern, bahan berkualitas, dan nyaman dipakai setiap hari.</p>
           <div class="social-links">
             <a href="#" onclick="showToast('📸 Instagram: @caymiramodest', true)"><i class="fab fa-instagram"></i></a>
-            <a href="#" onclick="showToast('👥 Facebook: Caymira Modest', true)"><i class="fab fa-facebook-f"></i></a>
             <a href="#" onclick="showToast('💬 WhatsApp: 0895-7042-D0408', true)"><i class="fab fa-whatsapp"></i></a>
           </div>
         </div>
@@ -967,6 +1012,54 @@ if(!$query){
                 toast.classList.remove('show');
             }, 3000);
         }
+
+        // ===================== LOGIKA KERANJANG BELANJA =====================
+        function getCart() {
+            return JSON.parse(localStorage.getItem('caymira_cart')) || [];
+        }
+
+        function saveCart(cart) {
+            localStorage.setItem('caymira_cart', JSON.stringify(cart));
+        }
+
+        function updateCartBadge() {
+            const cart = getCart();
+            const totalItems = cart.reduce((total, item) => total + item.quantity, 0);
+            
+            const badge = document.getElementById('cartBadge');
+            if (badge) {
+                badge.textContent = totalItems;
+                // Sembunyikan badge jika keranjang kosong
+                badge.style.display = totalItems > 0 ? 'flex' : 'none';
+            }
+        }
+
+        function addToCart(id, name, price, image) {
+            let cart = getCart();
+            let existingItem = cart.find(item => item.id === id);
+            
+            if (existingItem) {
+                  existingItem.quantity += 1; 
+            } else {
+                cart.push({
+                    id: id,
+                    name: name,
+                    price: price,
+                    image: image,
+                    quantity: 1
+                });
+            }
+
+            saveCart(cart); 
+            updateCartBadge(); 
+            
+            showToast('🛒 ' + name + ' berhasil ditambahkan!', false);
+        }
+
+        // Panggil fungsi ketika halaman selesai dimuat agar jumlah badge update di awal
+        document.addEventListener("DOMContentLoaded", function () {
+            updateCartBadge();
+        });
     </script>
 </body>
 </html>
