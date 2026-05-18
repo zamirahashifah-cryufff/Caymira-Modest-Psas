@@ -1224,7 +1224,7 @@ $total_produk = $count_row['total'];
             </div>
             <div class="mobile-menu-btn" id="mobileMenuBtn" onclick="toggleMobileMenu()">
                 <span></span>
-                <span></span>
+                <span></span> 
                 <span></span>
             </div>
         </div>
@@ -1306,16 +1306,25 @@ $total_produk = $count_row['total'];
     <section class="products-section" id="products">
         <div class="products-grid" id="productsGrid">
             <?php
+            // --- BAGIAN YANG DIUBAH ---
+            // 1. Tentukan nama folder gambar di sini (akhiri dengan slash '/')
+            // Jika gambar ada di folder utama, biarkan kosong ''
+            $folder_gambar = 'gambargamis/'; 
+
             if (mysqli_num_rows($result) > 0):
                 while($row = mysqli_fetch_assoc($result)):
-                    // Menentukan tipe badge untuk class css (jika ada kolom badge di DB)
                     $badge_class = !empty($row['badge']) ? strtolower(str_replace(' ', '-', $row['badge'])) : '';
+                    
+                    // 2. Gabungkan folder dengan nama file dari DB
+                    // Gunakan trim() untuk membuang spasi tidak sengaja
+                    $path_gambar = $folder_gambar . trim($row['gambar']);
             ?>
             <div class="product-card">
                 <div class="product-image">
-                    <img src="<?php echo !empty($row['gambar']) ? $row['gambar'] : 'https://images.unsplash.com/photo-1558618666-fcd25c85f82e?w=400&h=533&fit=crop'; ?>" 
+                    <!-- 3. Tambahkan versi random (?v=...) agar browser tidak simpan cache gambar lama -->
+                    <img src="<?php echo $path_gambar; ?>?v=<?php echo time(); ?>" 
                          alt="<?php echo htmlspecialchars($row['nama']); ?>"
-                         onerror="this.src='https://images.unsplash.com/photo-1558618666-fcd25c85f82e?w=400&h=533&fit=crop'; this.onerror=null;">
+                         onerror="this.src='https://images.unsplash.com/photo-1558618666-fcd25c85f82e?w=400&h=533&fit=crop';">
                     
                     <?php if(!empty($row['badge'])): ?>
                         <span class="product-badge badge-<?php echo $badge_class; ?>">
@@ -1344,7 +1353,6 @@ $total_produk = $count_row['total'];
                     <div class="product-colors">
                         <?php 
                         if(!empty($row['warna'])):
-                            // Asumsikan di DB tersimpan seperti: "#2c3e50,#8e44ad,#c0392b"
                             $colors = explode(',', $row['warna']);
                             foreach($colors as $i => $color): 
                                 $color = trim($color);
@@ -1356,7 +1364,6 @@ $total_produk = $count_row['total'];
                             endforeach;
                         else: 
                         ?>
-                            <!-- Fallback warna jika kosong -->
                             <span class="color-dot active" style="background: #2c3e50;"></span>
                         <?php endif; ?>
                     </div>
@@ -1468,121 +1475,71 @@ $total_produk = $count_row['total'];
     </footer>
 
     <!-- JavaScript -->
-    <script>
-        // Loading
-        window.addEventListener("load", function () {
-            const loader = document.querySelector(".loader");
-            setTimeout(function () {
-                loader.classList.add("hidden");
-            }, 1000); 
-        });
+   <script>
 
-        // Custom Cursor
-        const cursor = document.getElementById('cursor');
-        const cursorDot = document.getElementById('cursorDot');
+    document.addEventListener("DOMContentLoaded", function () {
+        const loader = document.getElementById("loader");
         
+        // Failsafe: Paksa hilang setelah 3 detik jika tetap macet
+        const forceHide = setTimeout(() => {
+            if (loader) loader.classList.add("hidden");
+        }, 3000);
+
+        setTimeout(function () {
+            if (loader) {
+                loader.classList.add("hidden");
+                clearTimeout(forceHide); // Batalkan failsafe jika berhasil
+            }
+        }, 1000); 
+    });
+
+    const cursor = document.getElementById('cursor');
+    const cursorDot = document.getElementById('cursorDot');
+    
+    if (window.innerWidth > 768) {
         document.addEventListener('mousemove', (e) => {
-            cursor.style.left = e.clientX - 10 + 'px';
-            cursor.style.top = e.clientY - 10 + 'px';
-            cursorDot.style.left = e.clientX - 3 + 'px';
-            cursorDot.style.top = e.clientY - 3 + 'px';
-        });
-
-        document.querySelectorAll('a, button, .product-card').forEach(el => {
-            el.addEventListener('mouseenter', () => cursor.classList.add('hover'));
-            el.addEventListener('mouseleave', () => cursor.classList.remove('hover'));
-        });
-
-        // Particles
-        const particlesContainer = document.getElementById('particles');
-        for(let i = 0; i < 30; i++) {
-            const particle = document.createElement('div');
-            particle.className = 'particle';
-            particle.style.left = Math.random() * 100 + '%';
-            particle.style.animationDelay = Math.random() * 12 + 's';
-            particle.style.animationDuration = (8 + Math.random() * 8) + 's';
-            particlesContainer.appendChild(particle);
-        }
-
-        // Search Overlay
-        function toggleSearch() {
-            document.getElementById('searchOverlay').classList.toggle('active');
-        }
-
-        // Mobile Menu
-        function toggleMobileMenu() {
-            document.getElementById('navLinks').classList.toggle('active');
-            document.getElementById('mobileMenuBtn').classList.toggle('active');
-        }
-
-        // Sort Dropdown
-        function toggleSort() {
-            document.getElementById('sortMenu').classList.toggle('active');
-        }
-
-        // Close sort when clicking outside
-        document.addEventListener('click', (e) => {
-            if(!e.target.closest('.sort-dropdown')) {
-                document.getElementById('sortMenu').classList.remove('active');
+            if (cursor && cursorDot) {
+                cursor.style.left = e.clientX - 10 + 'px';
+                cursor.style.top = e.clientY - 10 + 'px';
+                cursorDot.style.left = e.clientX - 3 + 'px';
+                cursorDot.style.top = e.clientY - 3 + 'px';
             }
         });
+    }
 
-        // Toast
-        function showToast(message) {
-            const toast = document.getElementById('toast');
-            const toastText = document.getElementById('toastText');
+    function toggleSearch() {
+        document.getElementById('searchOverlay').classList.toggle('active');
+    }
+
+    function toggleMobileMenu() {
+        document.getElementById('navLinks').classList.toggle('active');
+        document.getElementById('mobileMenuBtn').classList.toggle('active');
+    }
+
+    function toggleSort() {
+        document.getElementById('sortMenu').classList.toggle('active');
+    }
+
+    document.addEventListener('click', (e) => {
+        if(!e.target.closest('.sort-dropdown')) {
+            const menu = document.getElementById('sortMenu');
+            if(menu) menu.classList.remove('active');
+        }
+    });
+
+    function showToast(message) {
+        const toast = document.getElementById('toast');
+        const toastText = document.getElementById('toastText');
+        if (toast && toastText) {
             toastText.textContent = message;
             toast.classList.add('show');
             setTimeout(() => toast.classList.remove('show'), 3000);
         }
-
-        // Scroll to top
-        const scrollTop = document.createElement('button');
-        scrollTop.className = 'scroll-top';
-        scrollTop.innerHTML = '<i class="fas fa-arrow-up"></i>';
-        document.body.appendChild(scrollTop);
-
-        window.addEventListener('scroll', () => {
-            if(window.scrollY > 500) {
-                scrollTop.classList.add('visible');
-            } else {
-                scrollTop.classList.remove('visible');
-            }
-        });
-
-        scrollTop.addEventListener('click', () => {
-            window.scrollTo({top: 0, behavior: 'smooth'});
-        });
-
-        // Navbar scroll effect
-        window.addEventListener('scroll', () => {
-            const navbar = document.getElementById('navbar');
-            if(window.scrollY > 50) {
-                navbar.classList.add('scrolled');
-            } else {
-                navbar.classList.remove('scrolled');
-            }
-        });
-
-        // Handle newsletter subscribe
-        function handleSubscribe(e) {
-            e.preventDefault();
-            const email = document.getElementById('emailInput').value;
-            showToast('📧 Terima kasih! ' + email + ' telah berlangganan.');
-            document.getElementById('emailInput').value = '';
-        }
-
-        function handleBannerSubscribe(e) {
-            e.preventDefault();
-            const email = e.target.querySelector('input').value;
-            showToast('📧 Terima kasih! ' + email + ' telah berlangganan.');
-            e.target.querySelector('input').value = '';
-        }
-    </script>
+    }
+</script>
 </body>
 </html>
 
 <?php
-// Close database connection
 mysqli_close($conn);
 ?>
