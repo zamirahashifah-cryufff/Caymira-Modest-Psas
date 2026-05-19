@@ -607,7 +607,8 @@ if(!$query){
         <a href="../login_register/profil.php" style="color: inherit">
           <i class="fas fa-user"></i>
         </a>
-
+          <i class="fas fa-user" onclick="window.location.href='../login_register/profil.php'"></i>
+            <div class="cart-icon">
         <div class="cart-icon">
           <i class="fas fa-shopping-cart" onclick="showToast('🛒 Menuju keranjang belanja...', true)"></i>
           <span class="cart-badge">3</span>

@@ -1516,7 +1516,7 @@ img { max-width: 100%; height: auto; }
             <li><a href="../Beranda/beranda.php">Beranda</a></li>
             <li><a href="../About-us/aboutus.php">About Us</a></li>
             <li><a href="../best-seller/best-seller.php">Best Seller</a></li>
-            <li><a href="../login_register/contact.php">Contact</a></li>
+            <li><a href="../contact/contact.php">Contact</a></li>
         </ul>
 
         <div class="nav-icons">
@@ -1605,59 +1605,79 @@ img { max-width: 100%; height: auto; }
             <p>Koleksi koko stylish dan elegan untuk laki-laki dewasa</p>
         </div>
 
-        <div class="koko-grid" id="kokoGrid">
+
+?>
+
+ <div class="koko-grid" id="kokoGrid">
+            <?php 
+            // 2. Mulai perulangan PHP di sini
+            while($row = mysqli_fetch_assoc($query)) { 
+                // --- PENYESUAIAN KOLOM DATABASE ---
+                // Jaga-jaga kalau temenmu belum bikin kolom 'label' (NEW/SALE) dan 'total_ulasan' di database.
+                // Kalau ada, pakai dari DB. Kalau kosong, kita kasih nilai default.
+                $label = isset($row['label']) ? $row['label'] : 'NEW';
+                $category_lbl = strtolower($label); 
+                $ulasan = isset($row['total_ulasan']) ? $row['total_ulasan'] : rand(50, 300);
+
+                // Menyesuaikan dengan nama kolom yang kita buat (harga_asli & harga_diskon)
+                $harga_sekarang = isset($row['harga_diskon']) ? $row['harga_diskon'] : (isset($row['harga']) ? $row['harga'] : 0);
+                $harga_coret = isset($row['harga_asli']) ? $row['harga_asli'] : (isset($row['harga_coret']) ? $row['harga_coret'] : 0);
+            ?>
+
+            <a href="../detailproduk/index.php?id=<?php echo $row['id']; ?>&kategori=koko" style="text-decoration: none; color: inherit; display: block;">
+                
+                <div class="koko-card" data-category="<?php echo $category_lbl; ?>" onclick="showToast('👔 Menuju detail <?php echo addslashes($row['nama_produk']); ?>')">
+                    
+                    <?php if(!empty($label)): ?>
+                        <span class="koko-badge <?php echo $category_lbl; ?>"><?php echo $label; ?></span>
+                    <?php endif; ?>
+
+                    <div class="koko-img-wrapper">
                        <?php 
-// 2. Mulai perulangan PHP di sini
-while($row = mysqli_fetch_assoc($query)) { 
-    // Mengubah format kategori & label menjadi huruf kecil untuk class CSS
-    $category_lbl = strtolower($row['label']); 
+// Ngecek apakah isi database diawali dengan huruf 'http'
+$sumber_gambar = (strpos($row['gambar'], 'http') === 0) ? $row['gambar'] : '../Beranda/Gambarberanda/' . $row['gambar']; 
 ?>
+<img src="<?php echo $sumber_gambar; ?>" alt="<?php echo $row['nama_produk']; ?>" class="koko-img" style="width: 100%; height: 320px; object-fit: cover; object-position: top; border-radius: 12px;">
+                        
+                        <div class="koko-img-overlay">
+                            <button class="overlay-btn" onclick="event.preventDefault(); window.location.href='../detailproduk/index.php?id=<?php echo $row['id']; ?>&kategori=koko';"><i class="fas fa-eye"></i> Quick View</button>
+                            <button class="overlay-btn wishlist" onclick="event.preventDefault();"><i class="far fa-heart"></i></button>
+                        </div>
+                    </div>
 
-    <div class="koko-card" data-category="<?php echo $category_lbl; ?>" onclick="showToast('👔 <?php echo $row['nama_produk']; ?> - Rp <?php echo number_format($row['harga'], 0, ',', '.'); ?>')">
-        
-        <?php if(!empty($row['label'])): ?>
-            <span class="koko-badge <?php echo $category_lbl; ?>"><?php echo $row['label']; ?></span>
-        <?php endif; ?>
+                    <div class="koko-info">
+                        <h3><?php echo $row['nama_produk']; ?></h3>
+                        
+                        <p class="koko-price">
+                            Rp <?php echo number_format($harga_sekarang, 0, ',', '.'); ?>
+                            
+                            <?php if($harga_coret > $harga_sekarang): ?>
+                                <span style="text-decoration: line-through; color: #888; font-size: 14px; margin-left: 5px;">
+                                    Rp <?php echo number_format($harga_coret, 0, ',', '.'); ?>
+                                </span>
+                            <?php endif; ?>
+                        </p>
 
-        <div class="koko-img-wrapper">
-    <img src="<?php echo $row['gambar']; ?>" alt="<?php echo $row['nama_produk']; ?>" class="koko-img" style="width: 100%; height: 320px; object-fit: cover; object-position: top; border-radius: 12px;">
-    
-    <div class="koko-img-overlay">
-        <button class="overlay-btn"><i class="fas fa-eye"></i> Quick View</button>
-        <button class="overlay-btn wishlist"><i class="far fa-heart"></i></button>
-    </div>
-</div>
+                        <div class="koko-rating">
+                            <span class="stars" style="color: #ffcc00;">
+                                <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star-half-alt"></i>
+                            </span>
+                            <span class="review-count">(<?php echo $ulasan; ?>)</span>
+                        </div>
 
-        <div class="koko-info">
-            <h3><?php echo $row['nama_produk']; ?></h3>
-            
-            <p class="koko-price">
-                Rp <?php echo number_format($row['harga'], 0, ',', '.'); ?>
-                <?php if($row['harga_coret'] > 0): ?>
-                    <span style="text-decoration: line-through; color: #888; font-size: 14px; margin-left: 5px;">
-                        Rp <?php echo number_format($row['harga_coret'], 0, ',', '.'); ?>
-                    </span>
-                <?php endif; ?>
-            </p>
+                        <div class="koko-colors">
+                            <span class="color-dot active" style="background: #2c2c54;" onclick="event.preventDefault();"></span>
+                            <span class="color-dot" style="background: #40407a;" onclick="event.preventDefault();"></span>
+                            <span class="color-dot" style="background: #706fd3;" onclick="event.preventDefault();"></span>
+                        </div>
+                    </div>
+                </div>
+            </a>
 
-            <div class="koko-rating">
-                <span class="stars" style="color: #ffcc00;">
-                    <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star-half-alt"></i>
-                </span>
-                <span class="review-count">(<?php echo $row['total_ulasan']; ?>)</span>
-            </div>
-
-            <div class="koko-colors">
-                <span class="color-dot active" style="background: #2c2c54;"></span>
-                <span class="color-dot" style="background: #40407a;"></span>
-                <span class="color-dot" style="background: #706fd3;"></span>
-            </div>
+            <?php 
+            } // 3. Selesai perulangan PHP (Penutup while)
+            ?>
         </div>
-    </div>
-
-<?php 
-} // 3. Selesai perulangan PHP (Penutup while)
-?>
 
     
     </section>
