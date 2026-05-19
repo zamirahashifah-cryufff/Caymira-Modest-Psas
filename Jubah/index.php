@@ -78,52 +78,6 @@ img { max-width: 100%; height: auto; display: block; }
     z-index: 99999;
 }
 
-/* === LOADING SCREEN (Dari About Us) === */
-.loader {
-    position: fixed;
-    top: 0; left: 0;
-    width: 100%; height: 100%;
-    background: var(--navy);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    z-index: 99999;
-    transition: opacity 0.6s, visibility 0.6s;
-}
-.loader.hidden {
-    opacity: 0;
-    visibility: hidden;
-}
-.loader-text {
-    font-family: 'Playfair Display', serif;
-    font-size: 42px;
-    color: var(--gold);
-    animation: loaderPulse 1.5s ease-in-out infinite;
-}
-.loader-bar {
-    width: 200px;
-    height: 2px;
-    background: rgba(201, 168, 76, 0.2);
-    margin-top: 30px;
-    border-radius: 2px;
-    overflow: hidden;
-}
-.loader-progress {
-    height: 100%;
-    background: var(--gold);
-    width: 0%;
-    animation: loadProgress 2s ease forwards;
-}
-@keyframes loaderPulse {
-    0%, 100% { opacity: 0.4; letter-spacing: 2px; }
-    50% { opacity: 1; letter-spacing: 8px; }
-}
-@keyframes loadProgress {
-    0% { width: 0%; }
-    100% { width: 100%; }
-}
-
 /* === PARTICLES === */
 .particles {
     position: fixed;
@@ -924,14 +878,6 @@ img { max-width: 100%; height: auto; display: block; }
     <div class="custom-cursor" id="cursor"></div>
     <div class="cursor-dot" id="cursorDot"></div>
 
-    <!-- Loading Screen -->
-    <div class="loader" id="loader">
-        <div class="loader-text">caymira</div>
-        <div class="loader-bar">
-            <div class="loader-progress"></div>
-        </div>
-    </div>
-
     <!-- Particles -->
     <div class="particles" id="particles"></div>
 
@@ -1187,12 +1133,6 @@ while($row = mysqli_fetch_assoc($query)) {
 
     <!-- JAVA SCRIPT -->
     <script>
-        // 1. Loading Screen
-        document.addEventListener('DOMContentLoaded', () => {
-            setTimeout(() => {
-                document.getElementById('loader').classList.add('hidden');
-            }, 1000);
-        });
 
         // 2. Custom Cursor
         const cursor = document.getElementById('cursor');
@@ -1414,7 +1354,7 @@ while($row = mysqli_fetch_assoc($query)) {
             saveCart(cart); 
             updateCartBadge(); 
             
-            showToast('🛒 ' + name + ' berhasil ditambahkan!');
+            showToast( name + ' berhasil ditambahkan!');
         }
 
         document.addEventListener("DOMContentLoaded", function () {
