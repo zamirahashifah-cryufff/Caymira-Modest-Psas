@@ -2,7 +2,7 @@
 $host     = "localhost";
 $username = "root";      
 $password = "";          
-$database = "caymira_modest"; 
+$database = "mbuh"; 
 
 $koneksi = mysqli_connect($host, $username, $password, $database);
 

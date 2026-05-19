@@ -2,7 +2,7 @@
 $host = "localhost";
 $user = "root";
 $pass = "";
-$db   = "caymira_modest"; // GANTI DENGAN NAMA DATABASE ANDA
+$db   = "caymira_modest"; 
 
 $conn = mysqli_connect($host, $user, $pass, $db);
 

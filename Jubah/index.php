@@ -1049,13 +1049,69 @@ img { max-width: 100%; height: auto; display: block; }
             <p>Koleksi jubah stylish dan elegan untuk laki-laki dewasa</p>
         </div>
 
-        <div class="jubah-grid" id="jubahGrid">
+     <div class="jubah-grid" id="jubahGrid">
 
             <?php 
-// Mulai perulangan PHP
-while($row = mysqli_fetch_assoc($query)) { 
-    $category_lbl = strtolower($row['label']); 
-?>
+            // 1. Mulai perulangan PHP untuk tabel jubah
+            while($row = mysqli_fetch_assoc($query)) { 
+                // --- PENYESUAIAN DATA AMAN (FALLBACK) ---
+                $label = isset($row['label']) ? $row['label'] : 'NEW';
+                $category_lbl = strtolower($label); 
+                $ulasan = isset($row['total_ulasan']) ? $row['total_ulasan'] : rand(40, 150);
+
+                // Menyesuaikan fleksibilitas kolom harga database kelompokmu
+                $harga_sekarang = isset($row['harga_diskon']) ? $row['harga_diskon'] : (isset($row['harga']) ? $row['harga'] : 0);
+                $harga_coret = isset($row['harga_asli']) ? $row['harga_asli'] : (isset($row['harga_coret']) ? $row['harga_coret'] : 0);
+
+                // Trik Gambar Hybrid (Bisa membaca Link Address Internet atau File Lokal Folder)
+                $sumber_gambar = (strpos($row['gambar'], 'http') === 0) ? $row['gambar'] : '../Beranda/Gambarberanda/' . $row['gambar']; 
+            ?>
+
+            <a href="../detailproduk/index.php?id=<?php echo $row['id']; ?>&kategori=jubah" style="text-decoration: none; color: inherit; display: block;" data-price="<?php echo $harga_sekarang; ?>" class="jubah-card-link">
+                
+                <div class="jubah-card" data-category="<?php echo $category_lbl; ?>" data-price="<?php echo $harga_sekarang; ?>" onclick="showToast('👔 Menuju detail <?php echo addslashes($row['nama_produk']); ?>')">
+                    
+                    <?php if(!empty($label)): ?>
+                        <span class="jubah-badge <?php echo $category_lbl; ?>"><?php echo $label; ?></span>
+                    <?php endif; ?>
+
+                    <div class="jubah-img-wrapper">
+                        <img src="<?php echo $sumber_gambar; ?>" alt="<?php echo $row['nama_produk']; ?>" class="jubah-img" style="width: 100%; height: 320px; object-fit: cover; object-position: top; border-radius: 12px;">
+                        
+                        <div class="jubah-img-overlay">
+                            <button class="overlay-btn" onclick="event.preventDefault(); window.location.href='../detailproduk/index.php?id=<?php echo $row['id']; ?>&kategori=jubah';"><i class="fas fa-eye"></i> Quick View</button>
+                            <button class="overlay-btn wishlist" onclick="event.preventDefault();"><i class="far fa-heart"></i></button>
+                        </div>
+                    </div>
+
+
+                    <div class="jubah-info">
+                        <h3><?php echo $row['nama_produk']; ?></h3>
+                        
+                        <p class="jubah-price">
+                            Rp <?php echo number_format($harga_sekarang, 0, ',', '.'); ?>
+                            <?php if($harga_coret > $harga_sekarang): ?>
+                                <span style="text-decoration: line-through; color: #888; font-size: 14px; margin-left: 5px;">
+                                    Rp <?php echo number_format($harga_coret, 0, ',', '.'); ?>
+                                </span>
+                            <?php endif; ?>
+                        </p>
+
+                        <div class="jubah-rating">
+                            <span class="stars" style="color: #ffcc00;">
+                                <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star-half-alt"></i>
+                            </span>
+                            <span class="review-count">(<?php echo $ulasan; ?>)</span>
+                        </div>
+
+                        <div class="jubah-colors">
+                            <span class="color-dot active" style="background: #2c2c54;" onclick="event.preventDefault();"></span>
+                            <span class="color-dot" style="background: #40407a;" onclick="event.preventDefault();"></span>
+                            <span class="color-dot" style="background: #706fd3;" onclick="event.preventDefault();"></span>
+                        </div>
+                    </div>
+                </div>
+            </a>
 
     <div class="jubah-card" data-category="<?php echo $category_lbl; ?>" onclick="showToast('👔 <?php echo $row['nama_produk']; ?> - Rp <?php echo number_format($row['harga'], 0, ',', '.'); ?>')">
         
@@ -1074,36 +1130,14 @@ while($row = mysqli_fetch_assoc($query)) {
             </div>
         </div>
 
-        <div class="jubah-info">
-            <h3><?php echo $row['nama_produk']; ?></h3>
-            
-            <p class="jubah-price">
-                Rp <?php echo number_format($row['harga'], 0, ',', '.'); ?>
-                <?php if($row['harga_coret'] > 0): ?>
-                    <span style="text-decoration: line-through; color: #888; font-size: 14px; margin-left: 5px;">
-                        Rp <?php echo number_format($row['harga_coret'], 0, ',', '.'); ?>
-                    </span>
-                <?php endif; ?>
-            </p>
 
-            <div class="jubah-rating">
-                <span class="stars" style="color: #ffcc00;">
-                    <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star-half-alt"></i>
-                </span>
-                <span class="review-count">(<?php echo $row['total_ulasan']; ?>)</span>
-            </div>
+            <?php 
+            } // 2. Selesai perulangan PHP (Penutup while)
+            ?>
 
-            <div class="jubah-colors">
-                <span class="color-dot active" style="background: #2c2c54;"></span>
-                <span class="color-dot" style="background: #40407a;"></span>
-                <span class="color-dot" style="background: #706fd3;"></span>
-            </div>
         </div>
-    </div>
 
-<?php 
-} // Selesai perulangan PHP
-?>
+
 
         </div>
     </section>
@@ -1304,14 +1338,18 @@ while($row = mysqli_fetch_assoc($query)) {
             showToast(`Menampilkan kategori: ${btnElement.innerText}`);
         }
 
+
+// 10. Sort Produk Jubah (Disesuaikan dengan pembungkus tag Link)
+
         // 10. Sort Produk Jubah
+
         function sortJubah(sortType) {
             const grid = document.getElementById('jubahGrid');
-            const items = Array.from(grid.querySelectorAll('.jubah-card'));
+            const items = Array.from(grid.querySelectorAll('.jubah-card-link')); // Deteksi elemen pembungkus link baru
 
             items.sort((a, b) => {
-                const priceA = parseInt(a.getAttribute('data-price'));
-                const priceB = parseInt(b.getAttribute('data-price'));
+                const priceA = parseInt(a.getAttribute('data-price')) || 0;
+                const priceB = parseInt(b.getAttribute('data-price')) || 0;
 
                 switch(sortType) {
                     case 'price-low': return priceA - priceB;
@@ -1324,7 +1362,6 @@ while($row = mysqli_fetch_assoc($query)) {
             items.forEach(item => grid.appendChild(item));
             showToast(`Diurutkan: ${sortType}`);
         }
-
         // 11. Intersection Observer untuk Animasi
         const observerOptions = {
             threshold: 0.1,

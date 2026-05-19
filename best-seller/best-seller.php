@@ -650,7 +650,12 @@ if(!$query){
           <i class="fas fa-user"></i>
         </a>
 
+          <i class="fas fa-user" onclick="window.location.href='../login_register/profil.php'"></i>
+
+            <div class="cart-icon">
+
         <!-- Cart Icon Diperbarui -->
+
         <div class="cart-icon">
           <i class="fas fa-shopping-cart" onclick="window.location.href='../keranjang/keranjang.php'"></i>
           <span class="cart-badge" id="cartBadge" style="display: none;">0</span>

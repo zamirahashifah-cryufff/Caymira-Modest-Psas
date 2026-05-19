@@ -1,4 +1,33 @@
+<?php
+include '../checkout/koneksi.php'; 
 
+$id_produk = isset($_GET['id_produk']) ? $conn->real_escape_string($_GET['id_produk']) : '';
+$kategori  = isset($_GET['kategori']) ? $conn->real_escape_string($_GET['kategori']) : '';
+$qty       = isset($_GET['qty']) ? (int)$_GET['qty'] : 1;
+$size      = isset($_GET['size']) ? htmlspecialchars($_GET['size']) : 'M';
+$color     = isset($_GET['color']) ? htmlspecialchars($_GET['color']) : '-';
+
+$nama_produk = "Produk Tidak Diketahui";
+$harga_satuan = 0;
+$gambar_produk = "default.png";
+
+$tabel_valid = ['koko', 'gamis', 'hijab', 'jubah', 'bestseller'];
+if (!empty($id_produk) && in_array($kategori, $tabel_valid)) {
+    $query = "SELECT * FROM `$kategori` WHERE id = '$id_produk'";
+    $result = $conn->query($query);
+    
+    if ($result && $result->num_rows > 0) {
+        $row = $result->fetch_assoc();
+        $nama_produk = $row['nama_produk'];
+        $harga_satuan = isset($row['harga_diskon']) ? $row['harga_diskon'] : (isset($row['harga']) ? $row['harga'] : 0);
+        $gambar_produk = (strpos($row['gambar'], 'http') === 0) ? $row['gambar'] : '../Beranda/Gambarberanda/' . $row['gambar'];
+    }
+}
+
+$subtotal = $harga_satuan * $qty;
+$ongkir = 32000; 
+$total_bayar = $subtotal + $ongkir;
+?>
 <!DOCTYPE html>
 <html lang="id">
 <head>
@@ -1286,59 +1315,49 @@ select.form-input {
                     <h2 class="card-title"><i class="fas fa-shopping-bag"></i> Ringkasan Pesanan</h2>
 
 
-<div class="order-item">
-    <img src="../Gambarberanda/gamis ruffel .jpeg" alt="Gamis" class="order-img">
-    <div class="order-details">
-        <div class="order-name">Gamis Ruffle Premium</div>
-        <div class="order-variant">Navy, M</div>
-        <div class="order-price" id="price1">Rp 299.000</div>
-        <div class="qty-control">
-            <button type="button" class="qty-btn" onclick="updateQty(1, -1)"><i class="fas fa-minus"></i></button>
-            <span class="qty-value" id="qty1">1</span>
-            <button type="button" class="qty-btn" onclick="updateQty(1, 1)"><i class="fas fa-plus"></i></button>
-        </div>
+
+    
+    <div class="order-item" style="display: grid; grid-template-columns: 80px 1fr; gap: 20px; align-items: start; margin-bottom: 30px; width: 100%;">
+    
+    <div style="width: 80px; height: 80px; flex-shrink: 0;">
+        <img src="<?php echo $gambar_produk; ?>" alt="<?php echo htmlspecialchars($nama_produk); ?>" 
+             onerror="this.onerror=null; this.src='https://via.placeholder.com/80x80/0a1628/c9a84c?text=Caymira';" 
+             style="width: 100%; height: 100%; object-fit: cover; border-radius: 12px; border: 1px solid rgba(255, 255, 255, 0.1);">
     </div>
+    
+    <div style="display: flex; flex-direction: column; gap: 6px; width: 100%;">
+        <h4 style="margin: 0; font-size: 16px; color: #fff; font-weight: 600; line-height: 1.4;"><?php echo htmlspecialchars($nama_produk); ?></h4>
+        <p style="margin: 0; font-size: 13px; color: #888;"><?php echo htmlspecialchars($color); ?>, Ukuran <?php echo htmlspecialchars($size); ?></p>
+        
+        <div style="display: flex; align-items: center; gap: 10px; margin: 8px 0;">
+            <button type="button" class="qty-btn" onclick="updateQty(1, -1)" style="background: rgba(201, 168, 76, 0.15); border: 1px solid #c9a84c; color: #c9a84c; border-radius: 5px; width: 28px; height: 28px; cursor: pointer; font-weight: bold; display: flex; align-items: center; justify-content: center;">-</button>
+            <input type="text" id="inputQty" value="<?php echo $qty; ?>" readonly style="background: transparent; border: none; color: #fff; text-align: center; width: 25px; font-weight: bold; font-size: 14px; outline: none;">
+            <button type="button" class="qty-btn" onclick="updateQty(1, 1)" style="background: rgba(201, 168, 76, 0.15); border: 1px solid #c9a84c; color: #c9a84c; border-radius: 5px; width: 28px; height: 28px; cursor: pointer; font-weight: bold; display: flex; align-items: center; justify-content: center;">+</button>
+        </div>
+        
+        <p style="margin: 0; font-weight: 700; color: #c9a84c; font-size: 16px;">Rp <?php echo number_format($harga_satuan, 0, ',', '.'); ?></p>
+    </div>
+
 </div>
 
-<div class="order-item">
-    <img src="Gambarberanda/gamis miryam.jpeg" alt="Jilbab" class="order-img">
-    <div class="order-details">
-        <div class="order-name">Jilbab Maryam</div>
-        <div class="order-variant">Black</div>
-        <div class="order-price" id="price2">Rp 109.000</div>
-        <div class="qty-control">
-            <button type="button" class="qty-btn" onclick="updateQty(2, -1)"><i class="fas fa-minus"></i></button>
-            <span class="qty-value" id="qty2">1</span>
-            <button type="button" class="qty-btn" onclick="updateQty(2, 1)"><i class="fas fa-plus"></i></button>
-        </div>
-    </div>
+    <hr style="border: 0; border-top: 1px solid rgba(255,255,255,0.05); margin: 20px 0;">
+
+    <div style="display: flex; justify-content: space-between; margin-bottom: 18px; font-size: 14px;">
+    <span style="color: #888;">Subtotal</span>
+    <span style="color: #fff; font-weight: 600;" id="textSubtotal">Rp <?php echo number_format($subtotal, 0, ',', '.'); ?></span>
 </div>
 
-                    <div class="pricing-divider"></div>
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 35px; margin-top: 40px;">
+    <span style="color: #fff; font-weight: bold; font-size: 16px;">Total Pembayaran</span>
+    <span style="color: #c9a84c; font-weight: bold; font-size: 26px; font-family: 'Playfair Display', serif;" id="textTotal">Rp <?php echo number_format($total_bayar, 0, ',', '.'); ?></span>
+</div>
 
-                    <div class="pricing-row">
-                        <span class="pricing-label">Subtotal</span>
-                        <span class="pricing-value" id="subtotal">Rp 408.000</span>
-                    </div>
-                    <div class="pricing-row">
-                        <span class="pricing-label">Ongkir (JNE Reguler)</span>
-                        <span class="pricing-value gold" id="ongkir">Rp 32.000</span>
-                    </div>
-                    <div class="pricing-row">
-                        <span class="pricing-label">Diskon</span>
-                        <span class="pricing-value" style="color: #27ae60;">- Rp 0</span>
-                    </div>
+<input type="hidden" id="inputTotalBayar" name="total_pembayaran" value="<?php echo $total_bayar; ?>">
 
-                    <div class="pricing-divider"></div>
-
-                    <div class="pricing-total">
-                        <span class="pricing-total-label">Total Pembayaran</span>
-                        <span class="pricing-total-value" id="total">Rp 440.000</span>
-                    </div>
-
-                   <button type="button" class="btn-checkout" id="btnCheckout" onclick="processCheckout()">
-                    Bayar Sekarang <i class="fas fa-arrow-right"></i>
-                </button>
+    <<button type="button" id="btnCheckout" onclick="processCheckout()" style="width: 100%; background: linear-gradient(135deg, #dfba6b, #c9a84c); color: #0a1118; padding: 18px; border: none; border-radius: 12px; font-size: 14px; font-weight: 700; letter-spacing: 1.5px; cursor: pointer; display: flex; justify-content: center; align-items: center; gap: 10px; font-family: 'Poppins', sans-serif;">
+    BAYAR SEKARANG <i class="fas fa-arrow-right"></i>
+</button>
+</div>
 
                     <div class="security-badge">
                         <i class="fas fa-lock"></i>
@@ -1417,38 +1436,43 @@ select.form-input {
         <i class="fas fa-chevron-up"></i>
     </button>
 
-    <script>
+   <script>
         // ===== LOADING SCREEN =====
         window.addEventListener('load', () => {
             setTimeout(() => {
-                document.getElementById('loader').classList.add('hidden');
+                const loader = document.getElementById('loader');
+                if(loader) loader.classList.add('hidden');
             }, 2000);
         });
 
         // ===== CUSTOM CURSOR =====
         const cursor = document.getElementById('cursor');
         const cursorDot = document.getElementById('cursorDot');
-        document.addEventListener('mousemove', (e) => {
-            cursor.style.left = e.clientX - 10 + 'px';
-            cursor.style.top = e.clientY - 10 + 'px';
-            cursorDot.style.left = e.clientX - 3 + 'px';
-            cursorDot.style.top = e.clientY - 3 + 'px';
-        });
-        document.querySelectorAll('a, button, i, .form-input, .payment-option, .qty-btn, .checkout-card, .order-item').forEach(el => {
-            el.addEventListener('mouseenter', () => cursor.classList.add('hover'));
-            el.addEventListener('mouseleave', () => cursor.classList.remove('hover'));
-        });
+        if(cursor && cursorDot) {
+            document.addEventListener('mousemove', (e) => {
+                cursor.style.left = e.clientX - 10 + 'px';
+                cursor.style.top = e.clientY - 10 + 'px';
+                cursorDot.style.left = e.clientX - 3 + 'px';
+                cursorDot.style.top = e.clientY - 3 + 'px';
+            });
+            document.querySelectorAll('a, button, i, .form-input, .payment-option, .qty-btn, .checkout-card, .order-item').forEach(el => {
+                el.addEventListener('mouseenter', () => cursor.classList.add('hover'));
+                el.addEventListener('mouseleave', () => cursor.classList.remove('hover'));
+            });
+        }
 
         // ===== NAVBAR SCROLL =====
         window.addEventListener('scroll', () => {
             const navbar = document.getElementById('navbar');
             const scrollTop = document.getElementById('scrollTop');
-            if (window.scrollY > 50) {
-                navbar.classList.add('scrolled');
-                scrollTop.classList.add('visible');
-            } else {
-                navbar.classList.remove('scrolled');
-                scrollTop.classList.remove('visible');
+            if(navbar && scrollTop) {
+                if (window.scrollY > 50) {
+                    navbar.classList.add('scrolled');
+                    scrollTop.classList.add('visible');
+                } else {
+                    navbar.classList.remove('scrolled');
+                    scrollTop.classList.remove('visible');
+                }
             }
         });
 
@@ -1456,13 +1480,19 @@ select.form-input {
         function toggleMobileMenu() {
             const navLinks = document.getElementById('navLinks');
             const menuBtn = document.getElementById('mobileMenuBtn');
-            navLinks.classList.toggle('active');
-            menuBtn.classList.toggle('active');
+            if(navLinks && menuBtn) {
+                navLinks.classList.toggle('active');
+                menuBtn.classList.toggle('active');
+            }
         }
         document.querySelectorAll('.nav-links a').forEach(link => {
             link.addEventListener('click', () => {
-                document.getElementById('navLinks').classList.remove('active');
-                document.getElementById('mobileMenuBtn').classList.remove('active');
+                const navLinks = document.getElementById('navLinks');
+                const menuBtn = document.getElementById('mobileMenuBtn');
+                if(navLinks && menuBtn) {
+                    navLinks.classList.remove('active');
+                    menuBtn.classList.remove('active');
+                }
             });
         });
 
@@ -1470,18 +1500,20 @@ select.form-input {
         function showToast(message) {
             const toast = document.getElementById('toast');
             const toastText = document.getElementById('toastText');
-            toastText.textContent = message;
-            toast.classList.add('show');
-            setTimeout(() => toast.classList.remove('show'), 3000);
+            if(toast && toastText) {
+                toastText.textContent = message;
+                toast.classList.add('show');
+                setTimeout(() => toast.classList.remove('show'), 3000);
+            }
         }
 
         // ===== NEWSLETTER =====
         function handleSubscribe(e) {
             e.preventDefault();
-            const email = document.getElementById('emailInput').value;
-            if (email) {
+            const emailInput = document.getElementById('emailInput');
+            if (emailInput && emailInput.value) {
                 showToast('✅ Terima kasih telah berlangganan newsletter Caymira!');
-                document.getElementById('emailInput').value = '';
+                emailInput.value = '';
             }
         }
 
@@ -1498,57 +1530,54 @@ select.form-input {
             showToast(`💳 Metode pembayaran: ${name}`);
         }
 
-        // ===== QUANTITY CONTROL =====
-        const prices = { 1: 299000, 2: 109000 };
-        const qtys = { 1: 1, 2: 1 };
-        const ongkir = 32000;
+        // ===== QUANTITY CONTROL (DIPERBAIKI & SINKRON) =====
+        const hargaSatuan = <?php echo (int)$harga_satuan; ?>;
+        const biayaOngkir = <?php echo (int)$ongkir; ?>;
 
         function updateQty(id, change) {
-            const newQty = qtys[id] + change;
+            const inputQty = document.getElementById('inputQty');
+            if (!inputQty) return;
+
+            let qtySekarang = parseInt(inputQty.value) + change;
             
-            // LOGIKA BARU: Jika dikurangin sampai kurang dari 1 (nol)
-            if (newQty < 1) {
-                // Konfirmasi ke user dulu biar gak gak sengaja kehapus
+            if (qtySekarang < 1) {
                 const yakin = confirm("Apakah Anda ingin menghapus produk ini dari keranjang?");
                 if (yakin) {
-                    // 1. Hapus datanya dari object qtys dan harganya
-                    delete qtys[id];
-                    delete prices[id];
+                    const orderItem = inputQty.closest('.order-item');
+                    if (orderItem) orderItem.remove();
+                    showToast('🗑️ Produk berhasil dihapus');
                     
-                    // 2. Hilangkan kotak barangnya dari layar HTML
-                    // Kita cari tombol yang diklik, lalu naik ke atas sampai ketemu div .order-item, lalu hapus
-                    const buttonClicked = event.target.closest('.qty-btn') || event.target;
-                    const orderItem = buttonClicked.closest('.order-item');
-                    if (orderItem) {
-                        orderItem.remove();
-                    }
-                    
-                    showToast('🗑️ Produk berhasil dihapus dari keranjang');
-                    calculateTotal();
+                    if(document.getElementById('textSubtotal')) document.getElementById('textSubtotal').innerText = 'Rp 0';
+                    if(document.getElementById('textTotal')) document.getElementById('textTotal').innerText = 'Rp 0';
+                    if(document.getElementById('total')) document.getElementById('total').textContent = 'Rp 0';
+                    if(document.getElementById('inputTotalBayar')) document.getElementById('inputTotalBayar').value = 0;
                 }
                 return;
             }
             
-            if (newQty > 10) {
+            if (qtySekarang > 10) {
                 showToast('❌ Jumlah maksimal 10');
                 return;
             }
             
-            // Jalankan update seperti biasa kalau jumlahnya 1 - 10
-            qtys[id] = newQty;
-            document.getElementById(`qty${id}`).textContent = newQty;
-            document.getElementById(`price${id}`).textContent = 'Rp ' + (prices[id] * newQty).toLocaleString('id-ID');
-            calculateTotal();
-            showToast(`🛒 Jumlah item ${id} diperbarui: ${newQty}`);
+            inputQty.value = qtySekarang;
+
+            const subtotalBaru = hargaSatuan * qtySekarang;
+            const totalBaru = subtotalBaru + biayaOngkir;
+
+            const textSubtotal = document.getElementById('textSubtotal');
+            const textTotal = document.getElementById('textTotal');
+            const totalBayarDua = document.getElementById('total');
+            const inputTotalBayar = document.getElementById('inputTotalBayar');
+
+            if (textSubtotal) textSubtotal.innerText = 'Rp ' + formatRupiah(subtotalBaru);
+            if (textTotal) textTotal.innerText = 'Rp ' + formatRupiah(totalBaru);
+            if (totalBayarDua) totalBayarDua.textContent = 'Rp ' + formatRupiah(totalBaru);
+            if (inputTotalBayar) inputTotalBayar.value = totalBaru;
         }
-        function calculateTotal() {
-            let subtotal = 0;
-            for (let id in prices) {
-                subtotal += prices[id] * qtys[id];
-            }
-            const total = subtotal + ongkir;
-            document.getElementById('subtotal').textContent = 'Rp ' + subtotal.toLocaleString('id-ID');
-            document.getElementById('total').textContent = 'Rp ' + total.toLocaleString('id-ID');
+
+        function formatRupiah(angka) {
+            return angka.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
         }
 
         // ===== FORM VALIDATION =====
@@ -1559,42 +1588,39 @@ select.form-input {
             const alamat = document.getElementById('alamat');
             const kodepos = document.getElementById('kodepos');
 
-            // Reset errors
             document.querySelectorAll('.form-input').forEach(inp => inp.classList.remove('error'));
             document.querySelectorAll('.error-text').forEach(err => err.classList.remove('show'));
 
-            if (!nama.value.trim()) {
-                nama.classList.add('error');
-                document.getElementById('error-nama').classList.add('show');
+            if (!nama || !nama.value.trim()) {
+                if(nama) nama.classList.add('error');
+                if(document.getElementById('error-nama')) document.getElementById('error-nama').classList.add('show');
                 isValid = false;
             }
 
             const waRegex = /^[0-9]{10,13}$/;
-            if (!waRegex.test(wa.value.replace(/\D/g,''))) {
-                wa.classList.add('error');
-                document.getElementById('error-wa').classList.add('show');
+            if (!wa || !waRegex.test(wa.value.replace(/\D/g,''))) {
+                if(wa) wa.classList.add('error');
+                if(document.getElementById('error-wa')) document.getElementById('error-wa').classList.add('show');
                 isValid = false;
             }
 
-            if (!alamat.value.trim()) {
-                alamat.classList.add('error');
-                document.getElementById('error-alamat').classList.add('show');
+            if (!alamat || !alamat.value.trim()) {
+                if(alamat) alamat.classList.add('error');
+                if(document.getElementById('error-alamat')) document.getElementById('error-alamat').classList.add('show');
                 isValid = false;
             }
 
             const posRegex = /^[0-9]{5}$/;
-            if (!posRegex.test(kodepos.value)) {
-                kodepos.classList.add('error');
-                document.getElementById('error-kodepos').classList.add('show');
+            if (!kodepos || !posRegex.test(kodepos.value)) {
+                if(kodepos) kodepos.classList.add('error');
+                if(document.getElementById('error-kodepos')) document.getElementById('error-kodepos').classList.add('show');
                 isValid = false;
             }
 
             return isValid;
         }
 
- 
-// ===== CHECKOUT PROCESS (VERSI FINAL) =====
-// ===== CHECKOUT PROCESS (VERSI FINAL MIDTRANS) =====
+        // ===== CHECKOUT PROCESS (KEMBALI UTUH & ANTI MACET) =====
         async function processCheckout() {
             if (!validateForm()) {
                 showToast('⚠️ Harap lengkapi data dengan benar');
@@ -1602,12 +1628,19 @@ select.form-input {
             }
 
             const btn = document.getElementById('btnCheckout');
-            btn.disabled = true;
-            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Memproses...';
+            if (btn) {
+                btn.disabled = true;
+                btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Memproses...';
+            }
 
-            // Ambil data form + total harga asli dari halaman
-            const totalElement = document.getElementById('total').textContent;
-            const totalAngka = parseInt(totalElement.replace(/[^0-9]/g, ''));
+            const totalElement = document.getElementById('textTotal');
+            let totalAngka = 0;
+            if (totalElement) {
+                totalAngka = parseInt(totalElement.textContent.replace(/[^0-9]/g, ''));
+            } else {
+                const inputTotalBayar = document.getElementById('inputTotalBayar');
+                totalAngka = inputTotalBayar ? parseInt(inputTotalBayar.value) : 0;
+            }
 
             const dataOrder = {
                 nama: document.getElementById('nama').value,
@@ -1619,8 +1652,8 @@ select.form-input {
                 total: totalAngka
             };
 
+            // --- BAGIAN YANG TADI TERPOTONG SEKARANG DIKEMBALIKAN UTUH ---
             try {
-                // Tembak ke PHP kamu
                 const response = await fetch('proses_checkout.php', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
@@ -1631,33 +1664,40 @@ select.form-input {
                 const result = JSON.parse(textResponse);
 
                 if (result.token) {
-                    // Langsung pindah halaman sambil bawa token & order_id di URL-nya
+                    // Berhasil mendapatkan token midtrans, giring ke pembayaran.php
                     window.location.href = `pembayaran.php?order_id=${result.order_id}&token=${result.token}`;
                 } else {
-                    showToast('❌ Gagal: ' + (result.error || 'Cek Console'));
-                    btn.disabled = false;
-                    btn.innerHTML = 'Bayar Sekarang <i class="fas fa-arrow-right"></i>';
+                    showToast('❌ Gagal: ' + (result.error || 'Cek Server'));
+                    if(btn) {
+                        btn.disabled = false;
+                        btn.innerHTML = 'BAYAR SEKARANG <i class="fas fa-arrow-right"></i>';
+                    }
                 }
-
             } catch (error) {
                 console.error("ERROR JS:", error);
                 showToast('❌ Terjadi kesalahan server');
-                btn.disabled = false;
-                btn.innerHTML = 'Bayar Sekarang <i class="fas fa-arrow-right"></i>';
+                if(btn) {
+                    btn.disabled = false;
+                    btn.innerHTML = 'BAYAR SEKARANG <i class="fas fa-arrow-right"></i>';
+                }
             }
-        } // <-- INI DIA KURUNG YANG TADI HILANG! Sekarang sudah aman.
+        } 
 
         // ===== INPUT FORMATTING =====
-        document.getElementById('wa').addEventListener('input', function(e) {
-            let val = e.target.value.replace(/\D/g, '');
-            if (val.startsWith('0')) val = val.substring(1);
-            if (val.length > 13) val = val.substring(0, 13);
-            e.target.value = val ? '0' + val : '';
-        });
+        if(document.getElementById('wa')) {
+            document.getElementById('wa').addEventListener('input', function(e) {
+                let val = e.target.value.replace(/\D/g, '');
+                if (val.startsWith('0')) val = val.substring(1);
+                if (val.length > 13) val = val.substring(0, 13);
+                e.target.value = val ? '0' + val : '';
+            });
+        }
 
-        document.getElementById('kodepos').addEventListener('input', function(e) {
-            e.target.value = e.target.value.replace(/\D/g, '').substring(0, 5);
-        });
+        if(document.getElementById('kodepos')) {
+            document.getElementById('kodepos').addEventListener('input', function(e) {
+                e.target.value = e.target.value.replace(/\D/g, '').substring(0, 5);
+            });
+        }
 
         // ===== SCROLL REVEAL =====
         const revealObserver = new IntersectionObserver((entries) => {
