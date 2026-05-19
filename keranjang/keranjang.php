@@ -32,13 +32,6 @@
         .custom-cursor { width: 20px; height: 20px; border: 2px solid var(--gold); border-radius: 50%; position: fixed; pointer-events: none; z-index: 99999; transition: transform 0.1s, background 0.3s; mix-blend-mode: difference; }
         .custom-cursor.hover { transform: scale(2); background: rgba(201, 168, 76, 0.2); }
         .cursor-dot { width: 6px; height: 6px; background: var(--gold); border-radius: 50%; position: fixed; pointer-events: none; z-index: 99999; }
-        .loader { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--navy); display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 99999; transition: opacity 0.6s, visibility 0.6s; }
-        .loader.hidden { opacity: 0; visibility: hidden; }
-        .loader-text { font-family: 'Playfair Display', serif; font-size: 42px; color: var(--gold); animation: loaderPulse 1.5s ease-in-out infinite; }
-        .loader-bar { width: 200px; height: 2px; background: rgba(201, 168, 76, 0.2); margin-top: 30px; border-radius: 2px; overflow: hidden; }
-        .loader-progress { height: 100%; background: var(--gold); width: 0%; animation: loadProgress 2s ease forwards; }
-        @keyframes loaderPulse { 0%, 100% { opacity: 0.4; letter-spacing: 2px; } 50% { opacity: 1; letter-spacing: 8px; } }
-        @keyframes loadProgress { 0% { width: 0%; } 100% { width: 100%; } }
         .particles { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 1; overflow: hidden; }
         .particle { position: absolute; width: 3px; height: 3px; background: var(--gold); border-radius: 50%; opacity: 0; animation: float 12s infinite; }
         @keyframes float { 0% { transform: translateY(100vh) rotate(0deg); opacity: 0; } 10% { opacity: 0.4; } 90% { opacity: 0.4; } 100% { transform: translateY(-100vh) rotate(720deg); opacity: 0; } }
@@ -205,13 +198,6 @@
     </style>
 </head>
 <body>
-    <!-- Loading Screen -->
-    <div class="loader" id="loader">
-        <div class="loader-text">caymira</div>
-        <div class="loader-bar">
-            <div class="loader-progress"></div>
-        </div>
-    </div>
 
     <!-- Toast -->
     <div class="toast" id="toast">
@@ -242,7 +228,7 @@
 
         <ul class="nav-links" id="navLinks">
             <li><a href="../Beranda/beranda.php">Beranda</a></li>
-            <li><a href="../About-us/about.php">About Us</a></li>
+            <li><a href="../About-us/aboutus.php">About Us</a></li>
             <li><a href="../best-seller/best-seller.php">Best Seller</a></li>
             <li><a href="../contact/contact.php">Contact</a></li>
         </ul>
@@ -313,7 +299,7 @@
                 <h4 class="footer-title">Quick Links</h4>
                 <ul class="footer-links">
                     <li><a href="../Beranda/beranda.php">Beranda</a></li>
-                    <li><a href="../About-us/about.php">About Us</a></li>
+                    <li><a href="../About-us/aboutus.php">About Us</a></li>
                     <li><a href="../best-seller/best-seller.php">Best Seller</a></li>
                     <li><a href="../contact/contact.php">Contact</a></li>
                 </ul>
@@ -348,11 +334,8 @@
         </div>
     </footer>
 
-    <!-- JavaScript Gabungan -->
     <script>
-        // --- LOGIKA UI (Cursor, Loader, Navbar, Toast) ---
         document.addEventListener("DOMContentLoaded", function () {
-            setTimeout(() => { document.getElementById("loader").classList.add("hidden"); }, 800); 
             renderCart();
             updateCartBadge();
         });
@@ -383,7 +366,6 @@
             setTimeout(() => toast.classList.remove('show'), 3000);
         }
 
-        // --- LOGIKA SHOPPING CART ---
         let discountAmount = 0;
 
         function formatRupiah(angka) {
@@ -413,7 +395,6 @@
             const cart = getCart();
             const container = document.getElementById('cartContainer');
             
-            // Tampilan jika keranjang kosong
             if (cart.length === 0) {
                 container.innerHTML = `
                     <div class="empty-state">
@@ -438,10 +419,9 @@
                 subtotal += itemSubtotal;
                 totalQty += item.quantity;
 
-                // Memperbaiki Path Gambar secara otomatis
                 let imgPath = item.image;
                 if(!imgPath.includes('../')) {
-                    imgPath = '../Gamis/' + imgPath; // Jika item dari Gamis
+                    imgPath = '../Gamis/' + imgPath;
                 }
 
                 itemsHTML += `
@@ -476,7 +456,6 @@
             let grandTotal = subtotal - discountAmount;
             if(grandTotal < 0) grandTotal = 0;
 
-            // Render HTML Kiri
             const leftCol = `
                 <div>
                     <div class="cart-left">
@@ -501,7 +480,6 @@
                 </div>
             `;
 
-            // Render HTML Kanan
             const rightCol = `
                 <div class="cart-right">
                     <div class="summary-title">Order Summary</div>
@@ -535,7 +513,6 @@
             container.innerHTML = leftCol + rightCol;
         }
 
-        // Functions Interaksi
         function changeQty(index, change) {
             let cart = getCart();
             if (cart[index].quantity + change > 0) {
@@ -578,17 +555,68 @@
             }
         }
 
-        function checkout(total) {
+        function checkout(grandTotal) {
             let cart = getCart();
-            let pesan = "Halo Admin Caymira Modest, saya ingin memesan:\n\n";
-            cart.forEach((item, i) => {
-                pesan += `${i+1}. ${item.name} (x${item.quantity})\n`;
-            });
-            pesan += `\n*Total Belanja: ${formatRupiah(total)}*`;
-            if(discountAmount > 0) pesan += `\n(Sudah termasuk potongan voucher)`;
             
-            // Ganti 628... dengan no WhatsApp aslimu
-            window.open(`https://wa.me/62895704200408?text=${encodeURIComponent(pesan)}`, '_blank');
+            if (cart.length === 0) {
+                showToast("❌ Keranjang Anda kosong!");
+                return;
+            }
+
+            let subtotal = 0;
+            cart.forEach(item => {
+                subtotal += (item.price * item.quantity);
+            });
+
+            let dataCheckout = {
+                cart: cart,
+                subtotal: subtotal,
+                diskon: discountAmount,
+                grandTotal: grandTotal
+            };
+
+            const btnCheckout = document.querySelector('.checkout-btn');
+            const originalText = btnCheckout.innerHTML;
+            btnCheckout.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Memproses...';
+            btnCheckout.disabled = true;
+
+            fetch('proses_checkout.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(dataCheckout)
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    showToast("✅ Pesanan berhasil dicatat!");
+
+                    let pesan = "Halo Admin Caymira Modest, saya ingin memesan:\n\n";
+                    cart.forEach((item, i) => {
+                        pesan += `${i+1}. ${item.name} (x${item.quantity})\n`;
+                    });
+                    pesan += `\n*Total Belanja: ${formatRupiah(grandTotal)}*`;
+                    if (discountAmount > 0) pesan += `\n(Sudah termasuk potongan voucher)`;
+                    
+                    window.open(`https://wa.me/62895704200408?text=${encodeURIComponent(pesan)}`, '_blank');
+
+                    localStorage.removeItem('caymira_cart');
+                    discountAmount = 0;
+                    renderCart();
+                    updateCartBadge();
+                } else {
+                    showToast("❌ Gagal: " + data.message);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                showToast("❌ Terjadi kesalahan koneksi ke server.");
+            })
+            .finally(() => {
+                btnCheckout.innerHTML = originalText;
+                btnCheckout.disabled = false;
+            });
         }
     </script>
 </body>

@@ -109,64 +109,6 @@
         z-index: 99999;
       }
 
-      /* === LOADING SCREEN === */
-      .loader {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: var(--navy);
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        z-index: 99999;
-        transition: opacity 0.6s, visibility 0.6s;
-      }
-      .loader.hidden {
-        opacity: 0;
-        visibility: hidden;
-      }
-      .loader-text {
-        font-family: "Playfair Display", serif;
-        font-size: 42px;
-        color: var(--gold);
-        animation: loaderPulse 1.5s ease-in-out infinite;
-      }
-      .loader-bar {
-        width: 200px;
-        height: 2px;
-        background: rgba(201, 168, 76, 0.2);
-        margin-top: 30px;
-        border-radius: 2px;
-        overflow: hidden;
-      }
-      .loader-progress {
-        height: 100%;
-        background: var(--gold);
-        width: 0%;
-        animation: loadProgress 2s ease forwards;
-      }
-      @keyframes loaderPulse {
-        0%, 100% {
-          opacity: 0.4;
-          letter-spacing: 2px;
-        }
-        50% {
-          opacity: 1;
-          letter-spacing: 8px;
-        }
-      }
-      @keyframes loadProgress {
-        0% {
-          width: 0%;
-        }
-        100% {
-          width: 100%;
-        }
-      }
-
       /* === NAVBAR === */
       .navbar {
         position: fixed;
@@ -1066,14 +1008,6 @@
     <div class="custom-cursor" id="cursor"></div>
     <div class="cursor-dot" id="cursorDot"></div>
 
-    <!-- Loading Screen -->
-    <div class="loader" id="loader">
-      <div class="loader-text">caymira</div>
-      <div class="loader-bar">
-        <div class="loader-progress"></div>
-      </div>
-    </div>
-
     <!-- Floating Shapes Background -->
     <div class="floating-shapes">
       <div class="shape shape-1"></div>
@@ -1125,12 +1059,12 @@
           <i class="fas fa-user"></i>
         </a>
 
+        <!-- ======= BAGIAN CART ICON YANG DIPERBARUI ======= -->
         <div class="cart-icon">
-          <i
-            class="fas fa-shopping-cart"
-            onclick="showToast('🛒 Menuju keranjang belanja...')"
-          ></i>
+          <i class="fas fa-shopping-cart" onclick="window.location.href='../keranjang/keranjang.php'"></i>
+          <span class="cart-badge" id="cartBadge" style="display: none;">0</span>
         </div>
+        <!-- ================================================ -->
 
         <div
           class="mobile-menu-btn"
@@ -1180,25 +1114,21 @@
       <form id="contactForm">
        <div class="form-group">
           <label for="name">Name</label>
-          <!-- Tambahkan name="nama" -->
           <input type="text" id="name" name="nama" placeholder="Your name..." required />
         </div>
 
         <div class="form-group">
           <label for="email">Email</label>
-          <!-- Tambahkan name="email" -->
           <input type="email" id="email" name="email" placeholder="example@gmail.com" required />
         </div>
 
         <div class="form-group">
           <label for="subject">Subject</label>
-          <!-- Tambahkan name="subject" -->
           <input type="text" id="subject" name="subject" placeholder="Title..." required />
         </div>
 
         <div class="form-group">
           <label for="message">Message</label>
-          <!-- Tambahkan name="pesan" -->
           <textarea id="message" name="pesan" rows="5" placeholder="Type here..." required></textarea>
         </div>
 
@@ -1320,12 +1250,23 @@
     </button>
 
     <script>
-      // ===== LOADING SCREEN =====
-      window.addEventListener("load", () => {
-        setTimeout(() => {
-          document.getElementById("loader").classList.add("hidden");
-        }, 2000);
-      });
+      // ===================== LOGIKA KERANJANG BELANJA =====================
+      function getCart() {
+          return JSON.parse(localStorage.getItem('caymira_cart')) || [];
+      }
+
+      function updateCartBadge() {
+          const cart = getCart();
+          const totalItems = cart.reduce((total, item) => total + item.quantity, 0);
+          
+          const badge = document.getElementById('cartBadge');
+          if (badge) {
+              badge.textContent = totalItems;
+              // Sembunyikan badge jika keranjang kosong
+              badge.style.display = totalItems > 0 ? 'flex' : 'none';
+          }
+      }
+      // ====================================================================
 
       // ===== CUSTOM CURSOR =====
       const cursor = document.getElementById("cursor");
@@ -1463,8 +1404,13 @@
         });
       });
 
-      // ===== CONTACT FORM DENGAN AJAX =====
+      // ===== CONTACT FORM DENGAN AJAX & DOMContentLoaded =====
       document.addEventListener("DOMContentLoaded", () => {
+        
+        // --- Memanggil logic update badge keranjang saat load ---
+        updateCartBadge();
+        // --------------------------------------------------------
+
         const contactForm = document.getElementById("contactForm");
 
         if (contactForm) {
