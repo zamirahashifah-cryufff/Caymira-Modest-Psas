@@ -1173,7 +1173,8 @@ $total_produk = $count_row['total'];
 </head>
 <body>
     <!-- Loading Screen -->
-    <div class="loader" id="loader">
+    <?php $is_filtering = isset($_GET['filter']) || isset($_GET['sort']); ?>
+    <div class="loader <?php echo $is_filtering ? 'hidden' : ''; ?>" id="loader" <?php echo $is_filtering ? 'style="display: none;"' : ''; ?>>
         <div class="loader-text">caymira</div>
         <div class="loader-bar">
             <div class="loader-progress"></div>
@@ -1216,7 +1217,7 @@ $total_produk = $count_row['total'];
 
         <div class="nav-icons">
             <i class="fas fa-search" onclick="toggleSearch()"></i>
-            <i class="fas fa-user" onclick="showToast('👤 Menuju halaman akun...')"></i>
+             <i class="fas fa-user" onclick="window.location.href='../login_register/profil.php'"></i>
             <div class="cart-icon">
             <i class="fas fa-shopping-cart" onclick="window.location.href='../keranjang/keranjang.php'"></i>
               <span class="cart-badge" id="cartBadge">0</span>
@@ -1469,17 +1470,17 @@ $total_produk = $count_row['total'];
     document.addEventListener("DOMContentLoaded", function () {
         const loader = document.getElementById("loader");
         
-        // Failsafe: Paksa hilang setelah 3 detik jika tetap macet
-        const forceHide = setTimeout(() => {
-            if (loader) loader.classList.add("hidden");
-        }, 3000);
-
-        setTimeout(function () {
-            if (loader) {
+        // Hanya jalankan animasi jika loader tidak disembunyikan oleh filter
+        if (loader && loader.style.display !== 'none') {
+            const forceHide = setTimeout(() => {
                 loader.classList.add("hidden");
-                clearTimeout(forceHide); // Batalkan failsafe jika berhasil
-            }
-        }, 1000); 
+            }, 3000);
+
+            setTimeout(function () {
+                loader.classList.add("hidden");
+                clearTimeout(forceHide); 
+            }, 1000); 
+        }
     });
 
     const cursor = document.getElementById('cursor');

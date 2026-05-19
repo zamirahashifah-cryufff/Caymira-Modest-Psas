@@ -646,10 +646,6 @@ if(!$query){
       <div class="nav-icons">
         <i class="fas fa-search" onclick="toggleSearch()"></i>
 
-        <a href="../login_register/profil.php" style="color: inherit">
-          <i class="fas fa-user"></i>
-        </a>
-
           <i class="fas fa-user" onclick="window.location.href='../login_register/profil.php'"></i>
 
             <div class="cart-icon">

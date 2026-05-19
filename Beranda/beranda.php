@@ -1771,7 +1771,6 @@ img { max-width: 100%; height: auto; }
 
             <i class="fas fa-user" onclick="window.location.href='../login_register/profil.php'"></i>
 
-            <i class="fas fa-user" onclick="showToast('👤 Menuju halaman akun...')"></i>
             
             <!-- Cart Icon Diperbarui -->
 
