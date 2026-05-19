@@ -148,7 +148,7 @@ img { max-width: 100%; height: auto; display: block; }
     100% { transform: translateY(-100vh) rotate(720deg); opacity: 0; }
 }
 
-/* === NAVBAR (Dari About Us) === */
+/* === NAVBAR === */
 .navbar {
     position: fixed;
     top: 0;
@@ -720,7 +720,7 @@ img { max-width: 100%; height: auto; display: block; }
     font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px;
     border: none; cursor: pointer; transition: all 0.3s; display: flex; align-items: center; gap: 6px;
 }
-.overlay-btn:hover { background: var(--gold-light); transform: scale(1.05); }
+.overlay-btn:hover { background: var(--white); transform: scale(1.05); }
 .overlay-btn.wishlist {
     background: rgba(255, 255, 255, 0.15); color: var(--white); width: 40px; height: 40px;
     padding: 0; border-radius: 50%; justify-content: center;
@@ -967,7 +967,8 @@ img { max-width: 100%; height: auto; display: block; }
             <i class="fas fa-search" onclick="toggleSearch()"></i>
             <i class="fas fa-user" onclick="window.location.href='../login_register/profil.php'"></i>
             <div class="cart-icon">
-                <i class="fas fa-shopping-cart" onclick="showToast('🛒 Menuju keranjang belanja...')"></i>
+                <i class="fas fa-shopping-cart" onclick="window.location.href='../keranjang/keranjang.php'"></i>
+                <span class="cart-badge" id="cartBadge" style="display: none;">0</span>
             </div>
             <div class="mobile-menu-btn" id="mobileMenuBtn" onclick="toggleMobileMenu()">
                 <span></span><span></span><span></span>
@@ -1083,6 +1084,7 @@ img { max-width: 100%; height: auto; display: block; }
                         </div>
                     </div>
 
+
                     <div class="jubah-info">
                         <h3><?php echo $row['nama_produk']; ?></h3>
                         
@@ -1110,6 +1112,24 @@ img { max-width: 100%; height: auto; display: block; }
                     </div>
                 </div>
             </a>
+
+    <div class="jubah-card" data-category="<?php echo $category_lbl; ?>" onclick="showToast('👔 <?php echo $row['nama_produk']; ?> - Rp <?php echo number_format($row['harga'], 0, ',', '.'); ?>')">
+        
+        <?php if(!empty($row['label'])): ?>
+            <span class="jubah-badge <?php echo $category_lbl; ?>"><?php echo $row['label']; ?></span>
+        <?php endif; ?>
+
+        <div class="jubah-img-wrapper">
+            <img src="<?php echo $row['gambar']; ?>" alt="<?php echo $row['nama_produk']; ?>" class="jubah-img" style="width: 100%; height: 320px; object-fit: cover; object-position: top; border-radius: 12px;">
+            
+            <div class="jubah-img-overlay">
+                <button class="overlay-btn" onclick="addToCart('<?php echo $row['id']; ?>', '<?php echo htmlspecialchars($row['nama_produk'], ENT_QUOTES); ?>', <?php echo $row['harga']; ?>, '<?php echo $row['gambar']; ?>'); event.stopPropagation();">
+                    <i class="fas fa-cart-plus"></i> Tambah
+                </button>
+                <button class="overlay-btn wishlist"><i class="far fa-heart"></i></button>
+            </div>
+        </div>
+
 
             <?php 
             } // 2. Selesai perulangan PHP (Penutup while)
@@ -1146,7 +1166,6 @@ img { max-width: 100%; height: auto; display: block; }
                 <p>Fashion muslimah dengan desain modern, bahan berkualitas, dan nyaman dipakai setiap hari.</p>
                 <div class="social-links">
                     <a href="#" onclick="showToast('📸 Instagram: @caymiramodest')"><i class="fab fa-instagram"></i></a>
-                    <a href="#" onclick="showToast('👥 Facebook: Caymira Modest')"><i class="fab fa-facebook-f"></i></a>
                     <a href="#" onclick="showToast('💬 WhatsApp: 0895-7042-D0408')"><i class="fab fa-whatsapp"></i></a>
                 </div>
             </div>
@@ -1202,14 +1221,14 @@ img { max-width: 100%; height: auto; display: block; }
 
     <!-- JAVA SCRIPT -->
     <script>
-        // 1. Loading Screen (Using DOMContentLoaded as discussed previously for better load times)
+        // 1. Loading Screen
         document.addEventListener('DOMContentLoaded', () => {
             setTimeout(() => {
                 document.getElementById('loader').classList.add('hidden');
             }, 1000);
         });
 
-        // 2. Custom Cursor (Dari About Us)
+        // 2. Custom Cursor
         const cursor = document.getElementById('cursor');
         const cursorDot = document.getElementById('cursorDot');
         
@@ -1240,7 +1259,7 @@ img { max-width: 100%; height: auto; display: block; }
         }
         createParticles();
 
-        // 4. Scroll Events (Navbar & ScrollTop)
+        // 4. Scroll Events
         window.addEventListener('scroll', () => {
             const navbar = document.getElementById('navbar');
             const scrollTopBtn = document.getElementById('scrollTop');
@@ -1286,7 +1305,7 @@ img { max-width: 100%; height: auto; display: block; }
             }, 3000);
         }
 
-        // 8. Newsletter Footer (Dari About Us)
+        // 8. Newsletter Footer
         function handleSubscribe(e) {
             e.preventDefault();
             const email = document.getElementById('emailInput').value;
@@ -1296,7 +1315,7 @@ img { max-width: 100%; height: auto; display: block; }
             }
         }
 
-        // 9. Filter Produk Jubah (Fungsi Khusus Jubah)
+        // 9. Filter Produk Jubah
         function filterJubah(category, btnElement) {
             document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
             btnElement.classList.add('active');
@@ -1318,7 +1337,12 @@ img { max-width: 100%; height: auto; display: block; }
 
             showToast(`Menampilkan kategori: ${btnElement.innerText}`);
         }
+
+
 // 10. Sort Produk Jubah (Disesuaikan dengan pembungkus tag Link)
+
+        // 10. Sort Produk Jubah
+
         function sortJubah(sortType) {
             const grid = document.getElementById('jubahGrid');
             const items = Array.from(grid.querySelectorAll('.jubah-card-link')); // Deteksi elemen pembungkus link baru
@@ -1385,6 +1409,53 @@ img { max-width: 100%; height: auto; display: block; }
                     showToast('🤍 Dihapus dari Wishlist');
                 }
             });
+        });
+
+        // ===================== LOGIKA KERANJANG BELANJA =====================
+        function getCart() {
+            return JSON.parse(localStorage.getItem('caymira_cart')) || [];
+        }
+
+        function saveCart(cart) {
+            localStorage.setItem('caymira_cart', JSON.stringify(cart));
+        }
+
+        function updateCartBadge() {
+            const cart = getCart();
+            const totalItems = cart.reduce((total, item) => total + item.quantity, 0);
+            
+            const badge = document.getElementById('cartBadge');
+            if (badge) {
+                badge.textContent = totalItems;
+                // Sembunyikan badge jika keranjang kosong
+                badge.style.display = totalItems > 0 ? 'flex' : 'none';
+            }
+        }
+
+        function addToCart(id, name, price, image) {
+            let cart = getCart();
+            let existingItem = cart.find(item => item.id === id);
+            
+            if (existingItem) {
+                  existingItem.quantity += 1; 
+            } else {
+                cart.push({
+                    id: id,
+                    name: name,
+                    price: price,
+                    image: image,
+                    quantity: 1
+                });
+            }
+
+            saveCart(cart); 
+            updateCartBadge(); 
+            
+            showToast('🛒 ' + name + ' berhasil ditambahkan!');
+        }
+
+        document.addEventListener("DOMContentLoaded", function () {
+            updateCartBadge();
         });
     </script>
 </body>

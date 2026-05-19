@@ -910,9 +910,12 @@ img { max-width: 100%; height: auto; }
     border: none;
     cursor: pointer;
     transition: all 0.3s;
+    display: flex;
+    align-items: center;
+    gap: 8px;
 }
 .quick-view-btn:hover {
-    background: var(--gold-light);
+    background: var(--white);
     transform: scale(1.05);
 }
 .product-info h4 {
@@ -1765,10 +1768,18 @@ img { max-width: 100%; height: auto; }
 
         <div class="nav-icons">
             <i class="fas fa-search" onclick="toggleSearch()"></i>
+
             <i class="fas fa-user" onclick="window.location.href='../login_register/profil.php'"></i>
+
+            <i class="fas fa-user" onclick="showToast('👤 Menuju halaman akun...')"></i>
+            
+            <!-- Cart Icon Diperbarui -->
+
             <div class="cart-icon">
-                <i class="fas fa-shopping-cart" onclick="showToast('🛒 Menuju keranjang belanja...')"></i>
+                <i class="fas fa-shopping-cart" onclick="window.location.href='../keranjang/keranjang.php'"></i>
+                <span class="cart-badge" id="cartBadge" style="display: none;">0</span>
             </div>
+            
             <div class="mobile-menu-btn" id="mobileMenuBtn" onclick="toggleMobileMenu()">
             </div>
         </div>
@@ -1856,13 +1867,19 @@ img { max-width: 100%; height: auto; }
            <a href="../best-seller/best-seller.php" class="view-all">Lihat Semua <i class="fas fa-arrow-right"></i></a>
         </div>
         <div class="product-grid">
-            <div class="product-card" onclick="showToast('👗 Lunara Gamis - Rp 198.000')">
+            <!-- Kartu Produk 1 -->
+            <div class="product-card">
                 <span class="badge-new">NEW</span>
                 <div class="product-img-wrapper">
                     <img src="../best-seller/gambar all product/lunara gamis.png" class="product-img">
+                    
                     <div class="product-img-overlay">
-                        <button class="quick-view-btn">Quick View</button>
+                        <!-- Tombol Tambah Ke Keranjang -->
+                        <button class="quick-view-btn" onclick="addToCart('bp1', 'Lunara Gamis', 198000, '../best-seller/gambar all product/lunara gamis.png'); event.stopPropagation();">
+                            <i class="fas fa-cart-plus"></i> Tambah
+                        </button>
                     </div>
+                    
                 </div>
                 <div class="product-info">
                     <h4>Lunara Gamis</h4>
@@ -1874,12 +1891,16 @@ img { max-width: 100%; height: auto; }
                 </div>
             </div>
 
-            <div class="product-card" onclick="showToast('🧕 seliana hijab - Rp 45.000')">
+            <!-- Kartu Produk 2 -->
+            <div class="product-card">
                 <span class="badge-new">NEW</span>
                 <div class="product-img-wrapper">
                     <img src="../best-seller/gambar all product/seliana hijab.png" class="product-img">
                     <div class="product-img-overlay">
-                        <button class="quick-view-btn">Quick View</button>
+                        <!-- Tombol Tambah Ke Keranjang -->
+                        <button class="quick-view-btn" onclick="addToCart('bp2', 'Seliana Hijab', 45000, '../best-seller/gambar all product/seliana hijab.png'); event.stopPropagation();">
+                            <i class="fas fa-cart-plus"></i> Tambah
+                        </button>
                     </div>
                 </div>
                 <div class="product-info">
@@ -1891,12 +1912,17 @@ img { max-width: 100%; height: auto; }
                     </div>
                 </div>
             </div>
-            <div class="product-card" onclick="showToast('👔 Raell Koko - Rp 156.000')">
+
+            <!-- Kartu Produk 3 -->
+            <div class="product-card">
                 <span class="badge-new">NEW</span>
                 <div class="product-img-wrapper">
                     <img src="../best-seller/gambar all product/raell koko.png" alt="Raell Koko" class="product-img">
                     <div class="product-img-overlay">
-                        <button class="quick-view-btn">Quick View</button>
+                        <!-- Tombol Tambah Ke Keranjang -->
+                        <button class="quick-view-btn" onclick="addToCart('bp3', 'Raell Koko', 156000, '../best-seller/gambar all product/raell koko.png'); event.stopPropagation();">
+                            <i class="fas fa-cart-plus"></i> Tambah
+                        </button>
                     </div>
                 </div>
                 <div class="product-info">
@@ -1985,7 +2011,6 @@ img { max-width: 100%; height: auto; }
                 <p>Fashion muslimah dengan desain modern, bahan berkualitas, dan nyaman dipakai setiap hari.</p>
                 <div class="social-links">
                     <a href="#" onclick="showToast('📸 Instagram: @caymiramodest')"><i class="fab fa-instagram"></i></a>
-                    <a href="#" onclick="showToast('👥 Facebook: Caymira Modest')"><i class="fab fa-facebook-f"></i></a>
                     <a href="#" onclick="showToast('💬 WhatsApp: 0895-7042-D0408')"><i class="fab fa-whatsapp"></i></a>
                 </div>
             </div>
@@ -2263,6 +2288,54 @@ img { max-width: 100%; height: auto; }
                 }
             });
         }
+
+        // ===================== LOGIKA KERANJANG BELANJA =====================
+        function getCart() {
+            return JSON.parse(localStorage.getItem('caymira_cart')) || [];
+        }
+
+        function saveCart(cart) {
+            localStorage.setItem('caymira_cart', JSON.stringify(cart));
+        }
+
+        function updateCartBadge() {
+            const cart = getCart();
+            const totalItems = cart.reduce((total, item) => total + item.quantity, 0);
+            
+            const badge = document.getElementById('cartBadge');
+            if (badge) {
+                badge.textContent = totalItems;
+                // Sembunyikan badge jika keranjang kosong
+                badge.style.display = totalItems > 0 ? 'flex' : 'none';
+            }
+        }
+
+        function addToCart(id, name, price, image) {
+            let cart = getCart();
+            let existingItem = cart.find(item => item.id === id);
+            
+            if (existingItem) {
+                  existingItem.quantity += 1; 
+            } else {
+                cart.push({
+                    id: id,
+                    name: name,
+                    price: price,
+                    image: image,
+                    quantity: 1
+                });
+            }
+
+            saveCart(cart); 
+            updateCartBadge(); 
+            
+            showToast('🛒 ' + name + ' berhasil ditambahkan!');
+        }
+
+        // Perbarui badge angka keranjang belanja setiap kali halaman dimuat pertama kali
+        document.addEventListener("DOMContentLoaded", function () {
+            updateCartBadge();
+        });
     </script>
 </body>
 </html>

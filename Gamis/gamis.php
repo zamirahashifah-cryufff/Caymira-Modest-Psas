@@ -13,8 +13,6 @@ if ($filter == 'new') {
     $sql .= " AND is_new = 1";
 } elseif ($filter == 'bestseller') {
     $sql .= " AND is_bestseller = 1";
-} elseif ($filter == 'sale') {
-    $sql .= " AND is_sale = 1";
 }
 
 // Sort
@@ -678,44 +676,45 @@ $total_produk = $count_row['total'];
         .badge-sale { background: #e74c3c; color: var(--white); }
         .badge-bestseller { background: #27ae60; color: var(--white); }
         
-        .product-overlay {
-            position: absolute;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background: rgba(10, 22, 40, 0.7);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 15px;
-            opacity: 0;
-            transition: all 0.4s ease;
+      
+        .action-overlay {
+           position: absolute; 
+           bottom: -50px; 
+           left: 0; 
+           width: 100%; 
+           height: 100%;
+           background: linear-gradient(to top, rgba(10,22,40,0.9), transparent); /* Efek gradasi gelap di bawah */
+           display: flex; 
+           align-items: flex-end; 
+           justify-content: center;
+           padding-bottom: 20px; 
+           opacity: 0; 
+           transition: all 0.4s ease;
         }
-        .product-card:hover .product-overlay {
-            opacity: 1;
+
+        .product-card:hover .action-overlay { 
+           bottom: 0; 
+           opacity: 1; 
         }
-        .overlay-btn {
-            width: 45px;
-            height: 45px;
-            border-radius: 50%;
-            background: var(--gold);
-            color: var(--navy);
-            border: none;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            transition: all 0.3s;
-            transform: translateY(20px);
-            opacity: 0;
+
+        .btn-action {
+          background: var(--gold); 
+          color: var(--navy); 
+          border: none;
+          padding: 10px 20px; 
+          border-radius: 20px; 
+          font-size: 12px; 
+          font-weight: 600;
+          display: flex; 
+          align-items: center; 
+          gap: 8px; 
+          cursor: pointer; 
+          transition: 0.3s;
         }
-        .product-card:hover .overlay-btn {
-            transform: translateY(0);
-            opacity: 1;
-        }
-        .product-card:hover .overlay-btn:nth-child(2) { transition-delay: 0.1s; }
-        .product-card:hover .overlay-btn:nth-child(3) { transition-delay: 0.2s; }
-        .overlay-btn:hover {
-            background: var(--gold-light);
-            transform: scale(1.15);
+
+        .btn-action:hover { 
+           background: var(--white); 
+           transform: scale(1.05); 
         }
         .product-info {
             padding: 20px;
@@ -1219,12 +1218,12 @@ $total_produk = $count_row['total'];
             <i class="fas fa-search" onclick="toggleSearch()"></i>
             <i class="fas fa-user" onclick="showToast('👤 Menuju halaman akun...')"></i>
             <div class="cart-icon">
-                <i class="fas fa-shopping-cart" onclick="showToast('🛒 Menuju keranjang belanja...')"></i>
-                <span class="cart-badge">3</span>
+            <i class="fas fa-shopping-cart" onclick="window.location.href='../keranjang/keranjang.php'"></i>
+              <span class="cart-badge" id="cartBadge">0</span>
             </div>
             <div class="mobile-menu-btn" id="mobileMenuBtn" onclick="toggleMobileMenu()">
                 <span></span>
-                <span></span>
+                <span></span> 
                 <span></span>
             </div>
         </div>
@@ -1285,7 +1284,6 @@ $total_produk = $count_row['total'];
                 <a href="?filter=all&sort=<?php echo $sort; ?>" class="filter-btn <?php echo $filter == 'all' ? 'active' : ''; ?>">Semua</a>
                 <a href="?filter=new&sort=<?php echo $sort; ?>" class="filter-btn <?php echo $filter == 'new' ? 'active' : ''; ?>">Terbaru</a>
                 <a href="?filter=bestseller&sort=<?php echo $sort; ?>" class="filter-btn <?php echo $filter == 'bestseller' ? 'active' : ''; ?>">Best Seller</a>
-                <a href="?filter=sale&sort=<?php echo $sort; ?>" class="filter-btn <?php echo $filter == 'sale' ? 'active' : ''; ?>">Diskon</a>
             </div>
 
             <div class="sort-dropdown">
@@ -1306,16 +1304,18 @@ $total_produk = $count_row['total'];
     <section class="products-section" id="products">
         <div class="products-grid" id="productsGrid">
             <?php
+            $folder_gambar = 'gambargamis/'; 
+
             if (mysqli_num_rows($result) > 0):
                 while($row = mysqli_fetch_assoc($result)):
-                    // Menentukan tipe badge untuk class css (jika ada kolom badge di DB)
                     $badge_class = !empty($row['badge']) ? strtolower(str_replace(' ', '-', $row['badge'])) : '';
+                    $path_gambar = $folder_gambar . trim($row['gambar']);
             ?>
             <div class="product-card">
                 <div class="product-image">
-                    <img src="<?php echo !empty($row['gambar']) ? $row['gambar'] : 'https://images.unsplash.com/photo-1558618666-fcd25c85f82e?w=400&h=533&fit=crop'; ?>" 
+                    <img src="<?php echo $path_gambar; ?>?v=<?php echo time(); ?>" 
                          alt="<?php echo htmlspecialchars($row['nama']); ?>"
-                         onerror="this.src='https://images.unsplash.com/photo-1558618666-fcd25c85f82e?w=400&h=533&fit=crop'; this.onerror=null;">
+                         onerror="this.src='https://images.unsplash.com/photo-1558618666-fcd25c85f82e?w=400&h=533&fit=crop';">
                     
                     <?php if(!empty($row['badge'])): ?>
                         <span class="product-badge badge-<?php echo $badge_class; ?>">
@@ -1323,10 +1323,13 @@ $total_produk = $count_row['total'];
                         </span>
                     <?php endif; ?>
                     
-                    <div class="product-overlay">
-                        <button class="overlay-btn" onclick="showToast('❤️ Ditambahkan ke wishlist')"><i class="far fa-heart"></i></button>
-                        <button class="overlay-btn" onclick="showToast('👁️ Melihat detail produk')"><i class="far fa-eye"></i></button>
-                        <button class="overlay-btn" onclick="showToast('🛒 Ditambahkan ke keranjang')"><i class="fas fa-shopping-bag"></i></button>
+                    <div class="action-overlay">
+                      <?php 
+                         $harga_fix = (!empty($row['harga_diskon']) && $row['harga_diskon'] < $row['harga']) ? $row['harga_diskon'] : $row['harga']; 
+                        ?>
+                      <button class="btn-action" onclick="addToCart('<?php echo $row['id']; ?>', '<?php echo htmlspecialchars($row['nama'], ENT_QUOTES); ?>', <?php echo $harga_fix; ?>, '<?php echo $path_gambar; ?>')">
+                         <i class="fas fa-cart-plus"></i> Tambah
+                      </button>
                     </div>
                 </div>
 
@@ -1344,7 +1347,6 @@ $total_produk = $count_row['total'];
                     <div class="product-colors">
                         <?php 
                         if(!empty($row['warna'])):
-                            // Asumsikan di DB tersimpan seperti: "#2c3e50,#8e44ad,#c0392b"
                             $colors = explode(',', $row['warna']);
                             foreach($colors as $i => $color): 
                                 $color = trim($color);
@@ -1356,7 +1358,6 @@ $total_produk = $count_row['total'];
                             endforeach;
                         else: 
                         ?>
-                            <!-- Fallback warna jika kosong -->
                             <span class="color-dot active" style="background: #2c3e50;"></span>
                         <?php endif; ?>
                     </div>
@@ -1386,10 +1387,6 @@ $total_produk = $count_row['total'];
                 Dapatkan info koleksi terbaru, promo eksklusif, dan diskon spesial
                 langsung ke inbox Anda.
             </p>
-            <form class="newsletter-form-banner" onsubmit="handleBannerSubscribe(event)">
-                <input type="email" placeholder="Masukkan email Anda..." required>
-                <button type="submit"><i class="fas fa-paper-plane"></i></button>
-            </form>
         </div>
     </section>
 
@@ -1415,7 +1412,6 @@ $total_produk = $count_row['total'];
                 <p>Fashion muslimah dengan desain modern, bahan berkualitas, dan nyaman dipakai setiap hari.</p>
                 <div class="social-links">
                     <a href="#" onclick="showToast('📸 Instagram: @caymiramodest')"><i class="fab fa-instagram"></i></a>
-                    <a href="#" onclick="showToast('👥 Facebook: Caymira Modest')"><i class="fab fa-facebook-f"></i></a>
                     <a href="#" onclick="showToast('💬 WhatsApp: 0895-7042-D0408')"><i class="fab fa-whatsapp"></i></a>
                 </div>
             </div>
@@ -1468,121 +1464,118 @@ $total_produk = $count_row['total'];
     </footer>
 
     <!-- JavaScript -->
-    <script>
-        // Loading
-        window.addEventListener("load", function () {
-            const loader = document.querySelector(".loader");
-            setTimeout(function () {
-                loader.classList.add("hidden");
-            }, 1000); 
-        });
+   <script>
 
-        // Custom Cursor
-        const cursor = document.getElementById('cursor');
-        const cursorDot = document.getElementById('cursorDot');
+    document.addEventListener("DOMContentLoaded", function () {
+        const loader = document.getElementById("loader");
         
+        // Failsafe: Paksa hilang setelah 3 detik jika tetap macet
+        const forceHide = setTimeout(() => {
+            if (loader) loader.classList.add("hidden");
+        }, 3000);
+
+        setTimeout(function () {
+            if (loader) {
+                loader.classList.add("hidden");
+                clearTimeout(forceHide); // Batalkan failsafe jika berhasil
+            }
+        }, 1000); 
+    });
+
+    const cursor = document.getElementById('cursor');
+    const cursorDot = document.getElementById('cursorDot');
+    
+    if (window.innerWidth > 768) {
         document.addEventListener('mousemove', (e) => {
-            cursor.style.left = e.clientX - 10 + 'px';
-            cursor.style.top = e.clientY - 10 + 'px';
-            cursorDot.style.left = e.clientX - 3 + 'px';
-            cursorDot.style.top = e.clientY - 3 + 'px';
-        });
-
-        document.querySelectorAll('a, button, .product-card').forEach(el => {
-            el.addEventListener('mouseenter', () => cursor.classList.add('hover'));
-            el.addEventListener('mouseleave', () => cursor.classList.remove('hover'));
-        });
-
-        // Particles
-        const particlesContainer = document.getElementById('particles');
-        for(let i = 0; i < 30; i++) {
-            const particle = document.createElement('div');
-            particle.className = 'particle';
-            particle.style.left = Math.random() * 100 + '%';
-            particle.style.animationDelay = Math.random() * 12 + 's';
-            particle.style.animationDuration = (8 + Math.random() * 8) + 's';
-            particlesContainer.appendChild(particle);
-        }
-
-        // Search Overlay
-        function toggleSearch() {
-            document.getElementById('searchOverlay').classList.toggle('active');
-        }
-
-        // Mobile Menu
-        function toggleMobileMenu() {
-            document.getElementById('navLinks').classList.toggle('active');
-            document.getElementById('mobileMenuBtn').classList.toggle('active');
-        }
-
-        // Sort Dropdown
-        function toggleSort() {
-            document.getElementById('sortMenu').classList.toggle('active');
-        }
-
-        // Close sort when clicking outside
-        document.addEventListener('click', (e) => {
-            if(!e.target.closest('.sort-dropdown')) {
-                document.getElementById('sortMenu').classList.remove('active');
+            if (cursor && cursorDot) {
+                cursor.style.left = e.clientX - 10 + 'px';
+                cursor.style.top = e.clientY - 10 + 'px';
+                cursorDot.style.left = e.clientX - 3 + 'px';
+                cursorDot.style.top = e.clientY - 3 + 'px';
             }
         });
+    }
 
-        // Toast
-        function showToast(message) {
-            const toast = document.getElementById('toast');
-            const toastText = document.getElementById('toastText');
+    function toggleSearch() {
+        document.getElementById('searchOverlay').classList.toggle('active');
+    }
+
+    function toggleMobileMenu() {
+        document.getElementById('navLinks').classList.toggle('active');
+        document.getElementById('mobileMenuBtn').classList.toggle('active');
+    }
+
+    function toggleSort() {
+        document.getElementById('sortMenu').classList.toggle('active');
+    }
+
+    document.addEventListener('click', (e) => {
+        if(!e.target.closest('.sort-dropdown')) {
+            const menu = document.getElementById('sortMenu');
+            if(menu) menu.classList.remove('active');
+        }
+    });
+
+    function showToast(message) {
+        const toast = document.getElementById('toast');
+        const toastText = document.getElementById('toastText');
+        if (toast && toastText) {
             toastText.textContent = message;
             toast.classList.add('show');
             setTimeout(() => toast.classList.remove('show'), 3000);
         }
+    }
 
-        // Scroll to top
-        const scrollTop = document.createElement('button');
-        scrollTop.className = 'scroll-top';
-        scrollTop.innerHTML = '<i class="fas fa-arrow-up"></i>';
-        document.body.appendChild(scrollTop);
+    // ===================== LOGIKA KERANJANG BELANJA =====================
+    
+    function getCart() {
+        return JSON.parse(localStorage.getItem('caymira_cart')) || [];
+    }
 
-        window.addEventListener('scroll', () => {
-            if(window.scrollY > 500) {
-                scrollTop.classList.add('visible');
-            } else {
-                scrollTop.classList.remove('visible');
-            }
-        });
+    function saveCart(cart) {
+        localStorage.setItem('caymira_cart', JSON.stringify(cart));
+    }
 
-        scrollTop.addEventListener('click', () => {
-            window.scrollTo({top: 0, behavior: 'smooth'});
-        });
+    function updateCartBadge() {
+        const cart = getCart();
+        const totalItems = cart.reduce((total, item) => total + item.quantity, 0);
+        
+        const badge = document.getElementById('cartBadge');
+        if (badge) {
+            badge.textContent = totalItems;
+            // Sembunyikan badge jika keranjang kosong
+            badge.style.display = totalItems > 0 ? 'flex' : 'none';
+        }
+    }
 
-        // Navbar scroll effect
-        window.addEventListener('scroll', () => {
-            const navbar = document.getElementById('navbar');
-            if(window.scrollY > 50) {
-                navbar.classList.add('scrolled');
-            } else {
-                navbar.classList.remove('scrolled');
-            }
-        });
-
-        // Handle newsletter subscribe
-        function handleSubscribe(e) {
-            e.preventDefault();
-            const email = document.getElementById('emailInput').value;
-            showToast('📧 Terima kasih! ' + email + ' telah berlangganan.');
-            document.getElementById('emailInput').value = '';
+    function addToCart(id, name, price, image) {
+        let cart = getCart();
+        let existingItem = cart.find(item => item.id === id);
+        if (existingItem) {
+              existingItem.quantity += 1; 
+        } else {
+            cart.push({
+                id: id,
+                name: name,
+                price: price,
+                image: image,
+                quantity: 1
+            });
         }
 
-        function handleBannerSubscribe(e) {
-            e.preventDefault();
-            const email = e.target.querySelector('input').value;
-            showToast('📧 Terima kasih! ' + email + ' telah berlangganan.');
-            e.target.querySelector('input').value = '';
-        }
-    </script>
+        saveCart(cart); 
+        updateCartBadge(); 
+        
+        showToast('🛒 ' + name + ' berhasil ditambahkan!');
+    }
+
+    document.addEventListener("DOMContentLoaded", function () {
+        updateCartBadge();
+    });
+</script>
 </body>
 </html>
 
 <?php
-// Close database connection
 mysqli_close($conn);
 ?>

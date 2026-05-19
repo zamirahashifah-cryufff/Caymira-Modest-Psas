@@ -11,7 +11,7 @@ if (!isset($_SESSION['user_id'])) {
 $host = "localhost";
 $user = "root";
 $pass = "";
-$db   = "mbuh"; // Pastikan nama database benar
+$db   = "caymira_modest"; 
 $conn = new mysqli($host, $user, $pass, $db);
 
 // 3. AMBIL DATA USER DARI DATABASE
