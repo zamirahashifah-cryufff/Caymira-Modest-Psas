@@ -1194,9 +1194,9 @@ $total_produk = $count_row['total'];
 
         <div class="hero-gamis-image">
             <div class="hero-gamis-image-inner">
-                <img src="gambarabout/gambar baju.png"
+                <img src="gambargamis/gamis%20hero.png" 
                     alt="Caymira Modest Gamis Collection"
-                    onerror="this.src='https://images.unsplash.com/photo-1558618666-fcd25c85f82e?w=600&h=700&fit=crop'; this.onerror=null;">
+                    onerror="this.src='gambargamis/gamis-hero.jpg'">
                 <div class="hero-gamis-tag">NEW ARRIVAL</div>
             </div>
         </div>
