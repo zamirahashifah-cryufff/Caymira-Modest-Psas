@@ -1,6 +1,6 @@
 <?php
 // 1. Koneksi ke Database
-$conn = new mysqli('localhost', 'root', '', 'mbuh'); // Sesuaikan nama DB-mu
+$conn = new mysqli('localhost', 'root', '', 'caymira_modest'); // Sesuaikan nama DB-mu
 if ($conn->connect_error) {
     die("Koneksi gagal: " . $conn->connect_error);
 }
@@ -729,12 +729,7 @@ img { max-width: 100%; height: auto; display: block; }
     <!-- Confetti -->
     <div class="confetti-container" id="confetti"></div>
 
-    <!-- Loading Screen -->
-    <div class="loader" id="loader">
-        <div class="loader-text">caymira</div>
-        <div class="loader-bar"><div class="loader-progress"></div></div>
-    </div>
-
+    
     <!-- Toast -->
     <div class="toast" id="toast">
         <i class="fas fa-check-circle"></i>
@@ -747,17 +742,17 @@ img { max-width: 100%; height: auto; display: block; }
             <img src="../Beranda/Gambarberanda/logo_caymira_modest.png" alt="Caymira Modest" class="logo-img">
         </div>
         <ul class="nav-links" id="navLinks">
-            <li><a href="../Beranda/beranda.html">Beranda</a></li>
-            <li><a href="../About-us/aboutus.html">About Us</a></li>
-            <li><a href="../Beranda/beranda.html#bestseller">Best Seller</a></li>
-            <li><a href="#contact">Contact</a></li>
+            <li><a href="../Beranda/beranda.php">Beranda</a></li>
+            <li><a href="../About-us/aboutus.php">About Us</a></li>
+            <li><a href="../best-seller/best-seller.php">Best Seller</a></li>
+            <li><a href="../contact/contact.php">Contact</a></li>
         </ul>
         <div class="nav-icons">
             <i class="fas fa-search" onclick="showToast('🔍 Fitur pencarian segera hadir')"></i>
             <i class="fas fa-user" onclick="window.location.href='../login_register/profil.php'"></i>
-            <div class="cart-icon">
-                <i class="fas fa-shopping-cart" onclick="showToast('🛒 3 item di keranjang')"></i>
-                <span class="cart-badge">3</span>
+             <div class="cart-icon">
+                <i class="fas fa-shopping-cart" onclick="window.location.href='../keranjang/keranjang.php'"></i>
+                <span class="cart-badge" id="cartBadge" style="display: none;">0</span>
             </div>
             <div class="mobile-menu-btn" id="mobileMenuBtn" onclick="toggleMobileMenu()">
                 <span></span><span></span><span></span>
@@ -898,79 +893,48 @@ img { max-width: 100%; height: auto; display: block; }
                 <div class="payment-card" style="position: sticky; top: 90px;">
                     <h2 class="card-title"><i class="fas fa-shopping-bag"></i> Ringkasan Pesanan</h2>
 
-                    <?php 
-// Semak jika ada data barang dalam sesi (session)
-if (isset($_SESSION['checkout_cart']) && !empty($_SESSION['checkout_cart'])): 
-    foreach ($_SESSION['checkout_cart'] as $item): 
-?>
-    <div class="order-item" style="display: flex; align-items: center; margin-bottom: 15px;">
-        <img src="<?php echo htmlspecialchars($item['gambar']); ?>" alt="<?php echo htmlspecialchars($item['nama']); ?>" class="order-img" style="width: 60px; height: 60px; border-radius: 8px; margin-right: 15px; object-fit: cover;">
-        
-        <div class="order-details">
-            <div class="order-name" style="font-weight: bold; color: #fff;"><?php echo htmlspecialchars($item['nama']); ?></div>
-            
-            <div class="order-variant" style="color: #bbb; font-size: 14px;">
-                <?php echo htmlspecialchars($item['varian']); ?> 
-                <strong style="color: #d4af37;">(Kuantiti: x<?php echo $item['jumlah']; ?>)</strong>
-            </div>
-            
-            <div class="order-price" style="color: #d4af37; font-weight: bold;">
-                Rp <?php echo number_format($item['harga'], 0, ',', '.'); ?>
-            </div>
-        </div>
-    </div>
-<?php 
-    endforeach; 
-else: 
-?>
-    <p style="color: #888; text-align: center;">Tiada butiran produk dijumpai.</p>
-<?php endif; ?>
+                    <div id="paymentItemsList" style="max-height: 350px; overflow-y: auto; padding-right: 5px;"></div>
 
-                    <div class="pricing-divider"></div>
+                    <div class="pricing-divider" style="margin: 15px 0; border-top: 1px dashed rgba(255,255,255,0.1);"></div>
 
-                    <div class="pricing-row">
-                        <span class="pricing-label">Subtotal</span>
-                        Rp <?php echo number_format($total - 32000, 0, ',', '.'); ?>
+                    <div class="pricing-row" style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+                        <span class="pricing-label" style="color: #888;">Subtotal</span>
+                        <span id="textSubtotal" style="color: #fff; font-weight: bold;">Rp 0</span>
                     </div>
-                    <div class="pricing-row">
-                        <span class="pricing-label">Ongkir (JNE Reguler)</span>
-                        <span class="pricing-value gold">Rp 32.000</span>
+                    <div class="pricing-row" style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+                        <span class="pricing-label" style="color: #888;">Ongkir (JNE Reguler)</span>
+                        <span class="pricing-value gold" style="color: #c9a84c; font-weight: bold;">Rp 32.000</span>
                     </div>
-                    <div class="pricing-row">
-                        <span class="pricing-label">Diskon</span>
-                        <span class="pricing-value" style="color:#27ae60;">- Rp 0</span>
+                    <div class="pricing-row" style="display: flex; justify-content: space-between; margin-bottom: 15px;">
+                        <span class="pricing-label" style="color: #888;">Diskon</span>
+                        <span id="textDiscount" style="color:#27ae60; font-weight: bold;">- Rp 0</span>
                     </div>
 
-                    <div class="pricing-divider"></div>
+                    <div class="pricing-divider" style="margin: 15px 0; border-top: 1px solid rgba(255,255,255,0.1);"></div>
 
-                    <div class="pricing-total">
-                        <span class="pricing-total-label">Total</span>
-                        <h3 class="total-price">Rp <?php echo number_format($total, 0, ',', '.'); ?></h3>
+                    <div class="pricing-total" style="display: flex; justify-content: space-between; align-items: center;">
+                        <span class="pricing-total-label" style="font-size: 16px; font-weight: bold;">Total Akhir</span>
+                        <h3 class="total-price" id="textTotal" style="color: #c9a84c; margin: 0; font-size: 22px;">Rp 0</h3>
                     </div>
 
-                    <!-- Shipping Info -->
                     <div style="margin-top: 25px; padding-top: 20px; border-top: 1px solid rgba(201,168,76,0.15);">
                         <h3 style="font-family: var(--font-heading); font-size: 16px; color: var(--gold); margin-bottom: 15px; display: flex; align-items: center; gap: 8px;">
                             <i class="fas fa-truck" style="font-size: 14px;"></i> Pengiriman
                         </h3>
                         <div class="shipping-info">
-                            <div class="shipping-row">
-                                <i class="fas fa-user"></i>
-                                <?php echo htmlspecialchars($nama); ?>
+                            <div class="shipping-row" style="display: flex; gap: 10px; margin-bottom: 10px; color: #ddd;">
+                                <i class="fas fa-user" style="color: #c9a84c; margin-top: 4px;"></i>
+                                <span id="textNamaPenerima">Memuat...</span>
                             </div>
-                            <div class="shipping-row">
-                                <i class="fas fa-map-marker-alt"></i>
-                                <?php echo htmlspecialchars($alamat . ', ' . $kota . ' ' . $kode_pos); ?>
-                            <div class="shipping-row">
-                                <i class="fas fa-box"></i>
-                                <div><strong>JNE Reguler</strong><br>Estimasi 2-3 hari kerja</div>
+                            <div class="shipping-row" style="display: flex; gap: 10px; color: #ddd;">
+                                <i class="fas fa-map-marker-alt" style="color: #c9a84c; margin-top: 4px;"></i>
+                                <span id="textAlamatPenerima">Memuat alamat...</span>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-    </main>
+</main>
 
     <!-- Footer -->
     <footer class="footer" id="contact">
@@ -1333,6 +1297,27 @@ else:
                 }
             }
         }
+        // ===== SINKRONISASI ANGKA KERANJANG DI NAVBAR =====
+        function updateCartBadgeGlobal() {
+            // Buka brankas keranjang utama
+            let cart = JSON.parse(localStorage.getItem('caymira_cart')) || [];
+            
+            // Hitung total semua barang (qty)
+            let totalItems = cart.reduce((total, item) => total + item.quantity, 0);
+            
+            // Cari elemen bulatan merah di navbar
+            let badge = document.getElementById('cartBadge');
+            if (badge) {
+                badge.textContent = totalItems;
+                // Sembunyikan kalau 0, munculkan kalau ada isinya
+                badge.style.display = totalItems > 0 ? 'flex' : 'none';
+            }
+        }
+
+        // Jalankan otomatis setiap kali halaman ini dibuka
+        document.addEventListener('DOMContentLoaded', () => {
+            updateCartBadgeGlobal();
+        });
         // ===== CONFIRM PAYMENT =====
         function confirmPayment() {
             const btn = document.getElementById('btnConfirm');
@@ -1445,6 +1430,85 @@ function previewFile() {
             card.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
             card.style.transitionDelay = (index * 0.15) + 's';
             revealObserver.observe(card);
+        });
+        // ===== BACA DATA DARI INFORMASI.PHP (SINKRONISASI MUTLAK) =====
+        function renderPaymentSummary() {
+            const container = document.getElementById('paymentItemsList');
+            if (!container) return;
+
+            // 1. Ambil data dari Meja Kasir (Jalur apapun yang masuk dari informasi.php)
+            let checkoutItems = JSON.parse(sessionStorage.getItem('caymira_checkout_data')) || [];
+            
+            if (checkoutItems.length === 0) {
+                container.innerHTML = '<p style="color:#888; text-align:center; padding: 20px 0;">Tidak ada data pesanan.</p>';
+                return;
+            }
+
+            let subtotal = 0;
+            let itemsHTML = '';
+
+            checkoutItems.forEach((item) => {
+                let itemPrice = parseInt(item.price) || 0;
+                let itemQty = parseInt(item.quantity) || 1;
+                subtotal += (itemPrice * itemQty);
+
+                let imgPath = item.image || '';
+                if(imgPath !== '' && !imgPath.includes('http') && !imgPath.includes('../')) {
+                    imgPath = '../Gamis/' + imgPath; 
+                } else if (imgPath === '') {
+                    imgPath = 'https://via.placeholder.com/60x60/0a1628/c9a84c?text=Foto'; 
+                }
+
+                itemsHTML += `
+                    <div class="order-item" style="display: flex; align-items: center; margin-bottom: 15px; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 15px;">
+                        <img src="${imgPath}" alt="${item.name}" onerror="this.onerror=null; this.src='https://via.placeholder.com/60x60/0a1628/c9a84c?text=Foto';" style="width: 60px; height: 60px; border-radius: 8px; margin-right: 15px; object-fit: cover;">
+                        <div class="order-details" style="flex: 1;">
+                            <div style="font-weight: bold; color: #fff; font-size: 14px;">${item.name}</div>
+                            <div style="color: #bbb; font-size: 13px; margin-top: 4px;">
+                                Qty: <strong style="color: #d4af37;">x${itemQty}</strong>
+                            </div>
+                            <div style="color: #d4af37; font-weight: bold; margin-top: 4px; font-size: 13px;">
+                                Rp ${itemPrice.toLocaleString('id-ID')}
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+
+            container.innerHTML = itemsHTML;
+
+            // 2. Hitung Total & Ongkir persis seperti di informasi.php
+            const ongkir = 32000;
+            let voucherDiscount = 0;
+            if (sessionStorage.getItem('caymira_checkout_jalur') === 'dari_keranjang') {
+                voucherDiscount = parseInt(localStorage.getItem('caymira_discount')) || 0;
+            }
+
+            const totalAkhir = (subtotal - voucherDiscount) + ongkir;
+            
+            document.getElementById('textSubtotal').innerText = 'Rp ' + subtotal.toLocaleString('id-ID');
+            document.getElementById('textDiscount').innerText = '- Rp ' + voucherDiscount.toLocaleString('id-ID');
+            document.getElementById('textTotal').innerText = 'Rp ' + totalAkhir.toLocaleString('id-ID');
+
+            // Sinkronkan juga nominal raksasa "Total yang Harus Ditransfer" di kolom kiri!
+            const h2TotalTransfer = document.querySelector('.payment-left h2');
+            if (h2TotalTransfer) {
+                h2TotalTransfer.innerText = 'Rp ' + totalAkhir.toLocaleString('id-ID');
+            }
+
+            // 3. Tampilkan Nama & Alamat Pengiriman dari form informasi.php
+            const namaPenerima = localStorage.getItem('caymira_cust_nama') || 'Aisyah Putri';
+            const alamatPenerima = localStorage.getItem('caymira_cust_alamat') || '';
+            const kotaPenerima = localStorage.getItem('caymira_cust_kota') || '';
+            const kodeposPenerima = localStorage.getItem('caymira_cust_kodepos') || '';
+            
+            document.getElementById('textNamaPenerima').innerText = namaPenerima;
+            document.getElementById('textAlamatPenerima').innerText = alamatPenerima + ', ' + kotaPenerima + ' ' + kodeposPenerima;
+        }
+
+        // Jalankan fungsi ini otomatis pas halaman dibuka
+        document.addEventListener('DOMContentLoaded', () => {
+            renderPaymentSummary();
         });
     </script>
 </body>

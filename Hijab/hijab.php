@@ -419,7 +419,7 @@ include 'koneksi.php';
 
         <div class="nav-icons">
             <i class="fas fa-search" onclick="toggleSearch()"></i>
-            <i class="fas fa-user" onclick="showToast('👤 Menuju halaman akun...')"></i>
+            <i class="fas fa-user" onclick="window.location.href='../login_register/profil.php'"></i>
             
             <!-- Icon Keranjang Diperbarui -->
             <div class="cart-icon">

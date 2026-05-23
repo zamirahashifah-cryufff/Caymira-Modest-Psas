@@ -1,18 +1,16 @@
 <?php
 include '../detailproduk/koneksi.php'; 
 
-// JURUS SAKTI: Ngecek file koneksi.php kamu pakainya $koneksi atau $conn
 $db_koneksi = isset($koneksi) ? $koneksi : (isset($conn) ? $conn : null);
 
 if (!$db_koneksi) {
-    die("Waduh, file koneksi.php ketemu, tapi variabelnya bukan \$koneksi atau \$conn. Coba cek isi file koneksi.php kamu!");
+    die("Waduh, koneksi database gagal!");
 }
 
-// Tangkap ID dan Kategori dari URL
 $id_produk = isset($_GET['id']) ? mysqli_real_escape_string($db_koneksi, $_GET['id']) : '';
 $kategori  = isset($_GET['kategori']) ? mysqli_real_escape_string($db_koneksi, $_GET['kategori']) : '';
 
-// Data default
+// Data default jika gagal
 $nama_produk = "Produk Tidak Ditemukan";
 $harga_asli = 0;
 $harga_diskon = 0;
@@ -20,23 +18,58 @@ $deskripsi = "Detail produk belum tersedia.";
 $gambar_utama = "default.png";
 $ulasan = rand(50, 200);
 
-// Tabel yang diizinkan
-$tabel_valid = ['koko', 'gamis', 'hijab', 'jubah', 'bestseller'];
+// Tambahkan semua kemungkinan nama tabel
+$tabel_valid = ['koko', 'gamis', 'hijab', 'jubah', 'bestseller', 'best-seller', 'best_seller'];
 
 if (!empty($id_produk) && in_array($kategori, $tabel_valid)) {
-    $query = "SELECT * FROM `$kategori` WHERE id = '$id_produk'";
-    $result = mysqli_query($db_koneksi, $query);
+    
+    $result = false;
+    
+    // HELM PELINDUNG (TRY-CATCH)
+    try {
+        // PLAN A: Cari pakai kolom 'id_produk' (Tabel Best Seller biasanya pakai ini)
+        $query = "SELECT * FROM `$kategori` WHERE id_produk = '$id_produk'";
+        $result = mysqli_query($db_koneksi, $query);
+    } catch (Exception $e) {
+        // Kalau PLAN A bikin PHP ngambek (error), tangkap error-nya dan jalankan PLAN B!
+        try {
+            // PLAN B: Cari pakai kolom 'id' (Tabel Koko/Jubah biasanya pakai ini)
+            $query = "SELECT * FROM `$kategori` WHERE id = '$id_produk'";
+            $result = mysqli_query($db_koneksi, $query);
+        } catch (Exception $e2) {
+            $result = false; // Kalau dua-duanya gagal, yaudah pasrah aja
+        }
+    }
     
     if ($result && mysqli_num_rows($result) > 0) {
         $row = mysqli_fetch_assoc($result);
-        $nama_produk = $row['nama_produk'];
+        
+        $nama_produk = isset($row['nama_produk']) ? $row['nama_produk'] : 'Produk Caymira';
         $harga_asli = isset($row['harga_asli']) ? $row['harga_asli'] : (isset($row['harga_coret']) ? $row['harga_coret'] : 0);
         $harga_diskon = isset($row['harga_diskon']) ? $row['harga_diskon'] : (isset($row['harga']) ? $row['harga'] : 0);
-        $deskripsi = $row['deskripsi'];
+        $deskripsi = isset($row['deskripsi']) ? $row['deskripsi'] : "Koleksi terbaik dengan desain elegan dan bahan premium.";
         
-        // Trik Gambar Hybrid
-        $gambar_utama = (strpos($row['gambar'], 'http') === 0) ? $row['gambar'] : '../Beranda/Gambarberanda/' . $row['gambar'];
+     // JURUS hybrid gambar anti-salah folder
+        // JURUS RADAR GAMBAR OTOMATIS (PHP NYARI SENDIRI)
+        // JURUS PENCERAHAN (LANGSUNG TEMBAK KE RUMAH TETANGGA)
+        if (isset($row['gambar'])) {
+            $db_gambar = $row['gambar'];
+            
+            if (strpos($db_gambar, 'http') === 0) {
+                // Kalau link internet luar
+                $gambar_utama = $db_gambar;
+            } elseif (strpos($db_gambar, 'gambar ') === 0) {
+                // Nah ini dia! Karena foldernya ada di best-seller, kita suruh dia keluar dulu (../) 
+                // trus masuk ke folder best-seller!
+                $gambar_utama = '../best-seller/' . $db_gambar;
+            } else {
+                // Default kalau cuma tulisan nama gambarnya doang
+                $gambar_utama = '../Beranda/Gambarberanda/' . $db_gambar;
+            }
+        }
+        
         if(isset($row['total_ulasan'])) $ulasan = $row['total_ulasan'];
+        if(isset($row['ulasan'])) $ulasan = $row['ulasan'];
     }
 }
 ?>
@@ -45,7 +78,7 @@ if (!empty($id_produk) && in_array($kategori, $tabel_valid)) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Jubah Hasan - Detail Produk | Caymira Modest</title>
+    <title>Detail Produk | Caymira Modest</title>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <style>
@@ -1441,13 +1474,7 @@ img { max-width: 100%; height: auto; }
     <div class="custom-cursor" id="cursor"></div>
     <div class="cursor-dot" id="cursorDot"></div>
 
-    <!-- Loading Screen -->
-    <div class="loader" id="loader">
-        <div class="loader-text">caymira</div>
-        <div class="loader-bar">
-            <div class="loader-progress"></div>
-        </div>
-    </div>
+    
 
     <!-- Toast -->
     <div class="toast" id="toast">
@@ -1472,16 +1499,16 @@ img { max-width: 100%; height: auto; }
         <ul class="nav-links" id="navLinks">
             <li><a href="../Beranda/beranda.php">Beranda</a></li>
             <li><a href="../About-us/aboutus.php">About Us</a></li>
-            <li><a href="../Bestseller/bestseller.php">Best Seller</a></li>
+            <li><a href="../best-seller/best-seller.php">Best Seller</a></li>
             <li><a href="../Contact/contact.php">Contact</a></li>
         </ul>
 
         <div class="nav-icons">
             <i class="fas fa-search" onclick="toggleSearch()"></i>
            <i class="fas fa-user" onclick="window.location.href='../login_register/profil.php'"></i>
-            <div class="cart-icon">
-                <i class="fas fa-shopping-cart" onclick="showToast('🛒 Menuju keranjang belanja...')"></i>
-                <span class="cart-badge">2</span>
+           <div class="cart-icon">
+                <i class="fas fa-shopping-cart" onclick="window.location.href='../keranjang/keranjang.php'"></i>
+                <span class="cart-badge" id="cartBadge" style="display: none;">0</span>
             </div>
             <div class="mobile-menu-btn" id="mobileMenuBtn" onclick="toggleMobileMenu()">
                 <span></span>
@@ -1506,7 +1533,7 @@ img { max-width: 100%; height: auto; }
     <section class="container product-detail">
        <div class="main-image-wrapper">
                 <span class="image-badge">Caymira</span>
-                <img src="<?php echo $gambar_utama; ?>" alt="<?php echo htmlspecialchars($nama_produk); ?>" class="main-image" id="mainImage" style="object-fit: cover;">
+               <img src="<?php echo $gambar_utama; ?>" id="mainImage" alt="<?php echo $nama_produk; ?>" style="width: 100%; height: auto; object-fit: cover;">
             </div>
             
           <div class="product-info">
@@ -1539,17 +1566,7 @@ img { max-width: 100%; height: auto; }
                     <?php endif; ?>
                 </div>
             </div>
-            <div class="rating-row">
-                <div class="stars">
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                </div>
-                <span class="rating-count"><span>5.0</span> (128 Ulasan)</span>
-                <a href="#" class="review-link">Lihat Ulasan</a>
-            </div>
+           
 
            
 
@@ -1626,15 +1643,21 @@ img { max-width: 100%; height: auto; }
             </div>
 
             <!-- Action Buttons -->
-            <div class="action-buttons">
-                <button class="btn-cart" onclick="addToCart()">
-                    <i class="fas fa-shopping-bag"></i>
-                    Masukkan Keranjang
-                </button>
-                <button class="btn-buy" onclick="buyNow()">
-                    <i class="fas fa-bolt"></i>
-                    Beli Sekarang
-                </button>
+    <?php 
+    // Kita cek semua kemungkinan nama variabel harganya biar gak lolos!
+    $harga_valid = 0;
+    if (isset($row['harga_diskon']) && $row['harga_diskon'] > 0) {
+        $harga_valid = $row['harga_diskon'];
+    } elseif (isset($row['harga']) && $row['harga'] > 0) {
+        $harga_valid = $row['harga'];
+    } elseif (isset($harga_sekarang) && $harga_sekarang > 0) {
+        $harga_valid = $harga_sekarang;
+    }
+?>
+
+<button type="button" class="btn-buy" onclick="buyNow('<?php echo isset($row['id']) ? $row['id'] : (isset($id_produk) ? $id_produk : ''); ?>', '<?php echo isset($row['nama_produk']) ? addslashes($row['nama_produk']) : 'Produk Caymira'; ?>', <?php echo $harga_valid; ?>, '<?php echo isset($sumber_gambar) ? addslashes($sumber_gambar) : ''; ?>')">
+    <i class=""></i> Beli Sekarang
+</button>
             </div>
 
             <!-- Wishlist & Share -->
@@ -1692,73 +1715,11 @@ img { max-width: 100%; height: auto; }
     </section>
 
     <!-- Related Products -->
-    <section class="container related-products">
-        <div class="section-header">
-            <h3>Produk Serupa</h3>
-            <a href="../Koko/index.php" class="view-all">Lihat Semua <i class="fas fa-arrow-right"></i></a>
-        </div>
-        
-        <div class="product-grid">
+    
+           
+
+           
             
-            <a href="../detailproduk/index.php?id=1&kategori=koko" style="text-decoration: none; color: inherit;">
-                <div class="product-card" onclick="showToast('👔 Menuju Koko Bordir Premium')">
-                    <span class="badge-new">NEW</span>
-                    <div class="product-img-wrapper">
-                        <img src="../Beranda/Gambarberanda/koko_premium.png" alt="Koko Bordir Premium" class="product-img" style="object-fit: cover;">
-                        <div class="product-img-overlay">
-                            <button class="quick-view-btn" onclick="event.preventDefault(); window.location.href='../detailproduk/index.php?id=1&kategori=koko';">Quick View</button>
-                        </div>
-                    </div>
-                    <div class="product-info">
-                        <h4>Koko Bordir Premium</h4>
-                        <p class="product-price">Rp 199.000</p>
-                        <div class="stars">
-                            <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star-half-alt"></i>
-                            <span>(89)</span>
-                        </div>
-                    </div>
-                </div>
-            </a>
-
-            <a href="../detailproduk/index.php?id=2&kategori=jubah" style="text-decoration: none; color: inherit;">
-                <div class="product-card" onclick="showToast('👔 Menuju Jubah Classic')">
-                    <span class="badge-new">HOT</span>
-                    <div class="product-img-wrapper">
-                        <img src="../Beranda/Gambarberanda/jubah_classic.png" alt="Jubah Classic" class="product-img" style="object-fit: cover;">
-                        <div class="product-img-overlay">
-                            <button class="quick-view-btn" onclick="event.preventDefault(); window.location.href='../detailproduk/index.php?id=2&kategori=jubah';">Quick View</button>
-                        </div>
-                    </div>
-                    <div class="product-info">
-                        <h4>Jubah Classic</h4>
-                        <p class="product-price">Rp 249.000</p>
-                        <div class="stars">
-                            <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
-                            <span>(156)</span>
-                        </div>
-                    </div>
-                </div>
-            </a>
-
-            <a href="../detailproduk/index.php?id=3&kategori=koko" style="text-decoration: none; color: inherit;">
-                <div class="product-card" onclick="showToast('👔 Menuju Koko Modern Slim')">
-                    <span class="badge-new">NEW</span>
-                    <div class="product-img-wrapper">
-                        <img src="../Beranda/Gambarberanda/koko_modern.png" alt="Koko Modern Slim" class="product-img" style="object-fit: cover;">
-                        <div class="product-img-overlay">
-                            <button class="quick-view-btn" onclick="event.preventDefault(); window.location.href='../detailproduk/index.php?id=3&kategori=koko';">Quick View</button>
-                        </div>
-                    </div>
-                    <div class="product-info">
-                        <h4>Koko Modern Slim</h4>
-                        <p class="product-price">Rp 179.000</p>
-                        <div class="stars">
-                            <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
-                            <span>(203)</span>
-                        </div>
-                    </div>
-                </div>
-            </a>
 
         </div>
     </section>
@@ -2002,59 +1963,109 @@ img { max-width: 100%; height: auto; }
             if (val > 10) val = 10;
             input.value = val;
         }
-
-       // ===== ADD TO CART (MASUKKAN KERANJANG) =====
-        function addToCart() {
-            const productId = "<?php echo htmlspecialchars($id_produk); ?>";
-            const kategori = "<?php echo htmlspecialchars($kategori); ?>";
-            const qty = document.getElementById('qtyInput').value;
+        // ===== SINKRONISASI ANGKA KERANJANG DI NAVBAR =====
+        function updateCartBadgeGlobal() {
+            // Buka brankas keranjang utama
+            let cart = JSON.parse(localStorage.getItem('caymira_cart')) || [];
             
-            const sizeBtn = document.querySelector('.size-btn.active');
-            const size = sizeBtn ? sizeBtn.textContent.trim() : 'M';
+            // Hitung total semua barang (qty)
+            let totalItems = cart.reduce((total, item) => total + item.quantity, 0);
             
-            const colorLabel = document.querySelector('.color-section .section-label span');
-            let color = 'Default';
-            if (colorLabel) {
-                color = colorLabel.textContent.replace('- ', '').trim();
+            // Cari elemen bulatan merah di navbar
+            let badge = document.getElementById('cartBadge');
+            if (badge) {
+                badge.textContent = totalItems;
+                // Sembunyikan kalau 0, munculkan kalau ada isinya
+                badge.style.display = totalItems > 0 ? 'flex' : 'none';
             }
-
-            if (!productId || !kategori) {
-                showToast('❌ Produk tidak valid!');
-                return;
-            }
-
-            showToast('🛒 Memasukkan ke keranjang...');
-            
-            // Arahkan ke halaman keranjang untuk disimpan
-            setTimeout(() => {
-                window.location.href = `../keranjang/index.php?action=add&id_produk=${productId}&kategori=${kategori}&qty=${qty}&size=${size}&color=${color}`;
-            }, 1000);
         }
 
+        // Jalankan otomatis setiap kali halaman ini dibuka
+        document.addEventListener('DOMContentLoaded', () => {
+            updateCartBadgeGlobal();
+        });
+
+       // ===== ADD TO CART (MASUKKAN KERANJANG) =====
+       function addToCart(id, nama, harga, gambar) {
+    // 1. Ambil keranjang lama
+    let cart = JSON.parse(localStorage.getItem('caymira_cart')) || [];
+    
+    // 2. Cek apakah barang sudah ada
+    let existingItem = cart.find(item => item.id === id);
+    
+    if (existingItem) {
+        existingItem.quantity += 1;
+    } else {
+        // 3. Kalau belum ada, tambahkan sebagai barang baru
+        cart.push({
+            id: id,
+            name: nama,
+            price: parseInt(harga),
+            quantity: 1,
+            image: gambar
+        });
+    }
+    
+    // 4. Simpan kembali ke brankas
+    localStorage.setItem('caymira_cart', JSON.stringify(cart));
+    
+    // 5. Update badge navbar (jika ada fungsinya)
+    if (typeof updateCartBadge === 'function') {
+        updateCartBadge();
+    }
+    
+    // 6. Tampilkan notifikasi
+    if (typeof showToast === 'function') {
+        showToast('🛒 ' + nama + ' berhasil ditambahkan!');
+    } else {
+        alert('🛒 ' + nama + ' berhasil ditambahkan!');
+    }
+}
+ 
+
        // ===== BUY NOW (CHECKOUT) =====
-        function buyNow() {
-            const productId = "<?php echo htmlspecialchars($id_produk); ?>";
-            const kategori = "<?php echo htmlspecialchars($kategori); ?>";
-            const qty = document.getElementById('qtyInput').value;
-            
-            const sizeBtn = document.querySelector('.size-btn.active');
-            const size = sizeBtn ? sizeBtn.textContent.trim() : 'M';
-            
-            const colorLabel = document.querySelector('.color-section .section-label span');
-            let color = 'Default';
-            if (colorLabel) {
-                color = colorLabel.textContent.replace('- ', '').trim();
-            }
+       // ===== DETEKTIF CHECKOUT LANGSUNG =====
+       // ===== FUNGSI BUY NOW (KHUSUS JALUR DETAIL PRODUK - TIDAK NYAMPUR KERANJANG) =====
+      // ===== FUNGSI BUY NOW FINAL =====
+        function buyNow(id, nama, harga, gambar) {
+            try {
+                if (!id || id === '') {
+                    alert("Waduh, ID Produk kosong! Cek variabel PHP-nya Bos.");
+                    return;
+                }
 
-            if (!productId || !kategori) {
-                showToast('❌ Produk tidak valid!');
-                return;
-            }
+                // Ambil qty
+                let qtyVal = 1;
+                const inputQty = document.getElementById('qtyInput');
+                if (inputQty) {
+                    qtyVal = parseInt(inputQty.value) || 1;
+                }
 
-            showToast('⚡ Mengarahkan ke halaman checkout...');
-            setTimeout(() => {
-                window.location.href = `../checkout/informasi.php?id_produk=${productId}&kategori=${kategori}&qty=${qty}&size=${size}&color=${color}`;
-            }, 1000);
+                // Bungkus item
+                let checkoutItems = [{
+                    id: id,
+                    name: nama,
+                    price: parseInt(harga) || 0,
+                    quantity: qtyVal,
+                    image: gambar
+                }];
+
+                // Masuk ke laci Kasir Sementara
+                sessionStorage.setItem('caymira_checkout_data', JSON.stringify(checkoutItems));
+                sessionStorage.setItem('caymira_checkout_jalur', 'beli_langsung');
+
+                if (typeof showToast === 'function') {
+                    showToast('⚡ Meluncur ke kasir...');
+                }
+
+                // Pindah ke informasi.php
+                setTimeout(() => {
+                    window.location.href = '../checkout/informasi.php';
+                }, 800);
+
+            } catch (error) {
+                alert("JavaScript Crash: " + error.message);
+            }
         }
           
 
@@ -2100,6 +2111,8 @@ img { max-width: 100%; height: auto; }
                 toggleSearch();
             }
         });
+        // ===== BUY NOW (LANGSUNG CHECKOUT PAKAI BRANKAS) =====
+       
     </script>
 </body>
 </html>

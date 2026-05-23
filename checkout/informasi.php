@@ -1134,14 +1134,7 @@ select.form-input {
     <div class="custom-cursor" id="cursor"></div>
     <div class="cursor-dot" id="cursorDot"></div>
 
-    <!-- Loading Screen -->
-    <div class="loader" id="loader">
-        <div class="loader-text">caymira</div>
-        <div class="loader-bar">
-            <div class="loader-progress"></div>
-        </div>
-    </div>
-
+    
     <!-- Toast -->
     <div class="toast" id="toast">
         <i class="fas fa-check-circle"></i>
@@ -1154,17 +1147,17 @@ select.form-input {
             <img src="../Beranda/Gambarberanda/logo_caymira_modest.png" alt="Caymira Modest" class="logo-img">
         </div>
         <ul class="nav-links" id="navLinks">
-            <li><a href="../Beranda/beranda.php">Beranda</a></li>
+             <li><a href="../Beranda/beranda.php">Beranda</a></li>
             <li><a href="../About-us/aboutus.php">About Us</a></li>
-            <li><a href="../Beranda/beranda.php#bestseller">Best Seller</a></li>
-            <li><a href="../login_register/contact.php#contact">Contact</a></li>
+            <li><a href="../best-seller/best-seller.php">Best Seller</a></li>
+            <li><a href="../contact/contact.php">Contact</a></li>
         </ul>
         <div class="nav-icons">
             <i class="fas fa-search" onclick="showToast('🔍 Fitur pencarian segera hadir')"></i>
              <i class="fas fa-user" onclick="window.location.href='../login_register/profil.php'"></i>
-            <div class="cart-icon">
-                <i class="fas fa-shopping-cart" onclick="showToast('🛒 3 item di keranjang')"></i>
-                <span class="cart-badge">3</span>
+             <div class="cart-icon">
+                <i class="fas fa-shopping-cart" onclick="window.location.href='../keranjang/keranjang.php'"></i>
+                <span class="cart-badge" id="cartBadge" style="display: none;">0</span>
             </div>
             <div class="mobile-menu-btn" id="mobileMenuBtn" onclick="toggleMobileMenu()">
                 <span></span><span></span><span></span>
@@ -1310,66 +1303,50 @@ select.form-input {
             </div>
 
             <!-- Right Column: Order Summary -->
-            <div class="checkout-right">
-                <div class="checkout-card" style="position: sticky; top: 90px;">
-                    <h2 class="card-title"><i class="fas fa-shopping-bag"></i> Ringkasan Pesanan</h2>
+          <div class="checkout-right" style="width: 100%; box-sizing: border-box; overflow: hidden;">
+                <div class="checkout-card" style="position: sticky; top: 90px; width: 100%;">
+                    <h2 class="card-title" style="margin-top:0;"><i class="fas fa-shopping-bag"></i> Ringkasan Pesanan</h2>
+                    
+                    <div id="checkoutItemsList" style="max-height: 300px; overflow-y: auto; padding-right: 5px;"></div>
 
+                    <div style="border-top: 1px solid rgba(255,255,255,0.05); margin: 20px 0;"></div>
 
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 15px; font-size: 14px;">
+                        <span style="color: #888;">Subtotal</span>
+                        <span id="textSubtotal" style="color: #fff; font-weight: 600;">Rp 0</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 15px; font-size: 14px;">
+                        <span style="color: #888;">Ongkir (JNE Reguler)</span>
+                        <span style="color: #c9a84c; font-weight: 600;">Rp 32.000</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 20px; font-size: 14px;">
+                        <span style="color: #888;">Diskon Voucher</span>
+                        <span id="textDiscount" style="color: #2ecc71; font-weight: 600;">- Rp 0</span>
+                    </div>
 
-    
-    <div class="order-item" style="display: grid; grid-template-columns: 80px 1fr; gap: 20px; align-items: start; margin-bottom: 30px; width: 100%;">
-    
-    <div style="width: 80px; height: 80px; flex-shrink: 0;">
-        <img src="<?php echo $gambar_produk; ?>" alt="<?php echo htmlspecialchars($nama_produk); ?>" 
-             onerror="this.onerror=null; this.src='https://via.placeholder.com/80x80/0a1628/c9a84c?text=Caymira';" 
-             style="width: 100%; height: 100%; object-fit: cover; border-radius: 12px; border: 1px solid rgba(255, 255, 255, 0.1);">
-    </div>
-    
-    <div style="display: flex; flex-direction: column; gap: 6px; width: 100%;">
-        <h4 style="margin: 0; font-size: 16px; color: #fff; font-weight: 600; line-height: 1.4;"><?php echo htmlspecialchars($nama_produk); ?></h4>
-        <p style="margin: 0; font-size: 13px; color: #888;"><?php echo htmlspecialchars($color); ?>, Ukuran <?php echo htmlspecialchars($size); ?></p>
-        
-        <div style="display: flex; align-items: center; gap: 10px; margin: 8px 0;">
-            <button type="button" class="qty-btn" onclick="updateQty(1, -1)" style="background: rgba(201, 168, 76, 0.15); border: 1px solid #c9a84c; color: #c9a84c; border-radius: 5px; width: 28px; height: 28px; cursor: pointer; font-weight: bold; display: flex; align-items: center; justify-content: center;">-</button>
-            <input type="text" id="inputQty" value="<?php echo $qty; ?>" readonly style="background: transparent; border: none; color: #fff; text-align: center; width: 25px; font-weight: bold; font-size: 14px; outline: none;">
-            <button type="button" class="qty-btn" onclick="updateQty(1, 1)" style="background: rgba(201, 168, 76, 0.15); border: 1px solid #c9a84c; color: #c9a84c; border-radius: 5px; width: 28px; height: 28px; cursor: pointer; font-weight: bold; display: flex; align-items: center; justify-content: center;">+</button>
-        </div>
-        
-        <p style="margin: 0; font-weight: 700; color: #c9a84c; font-size: 16px;">Rp <?php echo number_format($harga_satuan, 0, ',', '.'); ?></p>
-    </div>
+                    <div style="border-top: 1px solid rgba(255,255,255,0.05); margin: 20px 0;"></div>
 
-</div>
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                        <span style="color: #fff; font-weight: bold; font-size: 16px;">Total Akhir</span>
+                        <span id="textTotal" style="color: #c9a84c; font-weight: bold; font-size: 24px; font-family: 'Playfair Display', serif;">Rp 0</span>
+                    </div>
 
-    <hr style="border: 0; border-top: 1px solid rgba(255,255,255,0.05); margin: 20px 0;">
+                    <input type="hidden" id="inputTotalBayar" name="total_pembayaran" value="0">
 
-    <div style="display: flex; justify-content: space-between; margin-bottom: 18px; font-size: 14px;">
-    <span style="color: #888;">Subtotal</span>
-    <span style="color: #fff; font-weight: 600;" id="textSubtotal">Rp <?php echo number_format($subtotal, 0, ',', '.'); ?></span>
-</div>
-
-<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 35px; margin-top: 40px;">
-    <span style="color: #fff; font-weight: bold; font-size: 16px;">Total Pembayaran</span>
-    <span style="color: #c9a84c; font-weight: bold; font-size: 26px; font-family: 'Playfair Display', serif;" id="textTotal">Rp <?php echo number_format($total_bayar, 0, ',', '.'); ?></span>
-</div>
-
-<input type="hidden" id="inputTotalBayar" name="total_pembayaran" value="<?php echo $total_bayar; ?>">
-
-    <<button type="button" id="btnCheckout" onclick="processCheckout()" style="width: 100%; background: linear-gradient(135deg, #dfba6b, #c9a84c); color: #0a1118; padding: 18px; border: none; border-radius: 12px; font-size: 14px; font-weight: 700; letter-spacing: 1.5px; cursor: pointer; display: flex; justify-content: center; align-items: center; gap: 10px; font-family: 'Poppins', sans-serif;">
-    BAYAR SEKARANG <i class="fas fa-arrow-right"></i>
-</button>
-</div>
-
-                    <div class="security-badge">
+                    <button type="button" id="btnCheckout" onclick="processCheckout()" style="width: 100%; background: linear-gradient(135deg, #dfba6b, #c9a84c); color: #0a1118; padding: 18px; border: none; border-radius: 12px; font-size: 14px; font-weight: 700; letter-spacing: 1.5px; cursor: pointer; display: flex; justify-content: center; align-items: center; gap: 10px; font-family: 'Poppins', sans-serif;">
+                        BAYAR SEKARANG <i class="fas fa-arrow-right"></i>
+                    </button>
+                    
+                    <div class="security-badge" style="margin-top: 20px;">
                         <i class="fas fa-lock"></i>
                         <span>Transaksi aman dengan enkripsi SSL</span>
                     </div>
                 </div>
             </div>
-        </div>
-    </main>
-
+        </div> </main> 
+       
     <!-- Footer -->
-    <footer class="footer" id="contact">
+  <footer class="footer" id="contact">
         <svg class="gold-branch-footer" viewBox="0 0 200 300" fill="none">
             <path d="M100 300 Q120 250 100 200 Q80 150 100 100 Q120 50 100 0" stroke="#c9a84c" stroke-width="1" fill="none" opacity="0.4"/>
             <circle cx="100" cy="30" r="2" fill="#c9a84c" opacity="0.6"/>
@@ -1380,43 +1357,52 @@ select.form-input {
             <circle cx="115" cy="230" r="1.5" fill="#c9a84c" opacity="0.5"/>
             <circle cx="85" cy="270" r="2" fill="#c9a84c" opacity="0.7"/>
         </svg>
+
         <div class="footer-content">
+            <!-- Brand -->
             <div class="footer-brand">
                 <div class="logo" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">
-                    <img src="../Beranda/Gambarberanda/logo_caymira_modest.png" alt="Caymira Modest" class="logo-img" style="height: 60px; margin-top: 0;">
+                    <img src="../Beranda/Gambarberanda/logo_caymira_modest.png" alt="Caymira Modest" class="logo-img">
                 </div>
                 <p>Fashion muslimah dengan desain modern, bahan berkualitas, dan nyaman dipakai setiap hari.</p>
                 <div class="social-links">
                     <a href="#" onclick="showToast('📸 Instagram: @caymiramodest')"><i class="fab fa-instagram"></i></a>
-                    <a href="#" onclick="showToast('👥 Facebook: Caymira Modest')"><i class="fab fa-facebook-f"></i></a>
-                    <a href="#" onclick="showToast('💬 WhatsApp: 0895-7042-0408')"><i class="fab fa-whatsapp"></i></a>
+                    <a href="#" onclick="showToast('💬 WhatsApp: 0895-7042-D0408')"><i class="fab fa-whatsapp"></i></a>
                 </div>
             </div>
+
+            <!-- Links -->
             <div class="footer-col">
                 <h4 class="footer-title">Quick Links</h4>
                 <ul class="footer-links">
-                    <li><a href="../Beranda/beranda.php">Home</a></li>
+                    <li><a href="../Beranda/beranda.php">Beranda</a></li>
                     <li><a href="../About-us/aboutus.php">About Us</a></li>
-                    <li><a href="../Beranda/beranda.php#collection">Collection</a></li>
-                    <li><a href="../Beranda/beranda.php#bestseller">Best Seller</a></li>
-                    <li><a href="../login_register/contact.php#contact">Contact</a></li>
+                    <li><a href="../best-seller/best-seller.php">Best Seller</a></li>
+                    <li><a href="../contact/contact.php">Contact</a></li>
                 </ul>
             </div>
+
+            <!-- Contact -->
             <div class="footer-col">
                 <h4 class="footer-title">Customer Service</h4>
                 <div class="contact-item" onclick="showToast('🕐 Jam Operasional: Senin-Sabtu')">
                     <i class="far fa-clock"></i>
-                    <div><div>Monday - Saturday</div><div>10.00 - 17.00 WIB</div></div>
+                    <div>
+                        <div>Monday - Saturday</div>
+                        <div>10.00 - 17.00 WIB</div>
+                    </div>
                 </div>
-                <div class="contact-item" onclick="showToast('📞 Hubungi: 0895-7042-0408')">
+                <div class="contact-item" onclick="showToast('📞 Hubungi: 0895-7042-D0408')">
                     <i class="fas fa-phone"></i>
-                    <div>0895-7042-0408</div>
+                    <div>0895-7042-D0408</div>
                 </div>
                 <div class="contact-item" onclick="showToast('📧 Email: caymiramodest@gmail.com')">
                     <i class="far fa-envelope"></i>
                     <div>caymiramodest@gmail.com</div>
                 </div>
             </div>
+
+            <!-- Newsletter -->
             <div class="footer-col">
                 <h4 class="footer-title">Newsletter</h4>
                 <p class="newsletter-text">Dapatkan info terbaru & promo menarik dari Caymira Modest.</p>
@@ -1426,16 +1412,11 @@ select.form-input {
                 </form>
             </div>
         </div>
+
         <div class="footer-bottom">
             <p>© Copyright 2025 Caymira Modest. All Rights Reserved.</p>
         </div>
     </footer>
-
-    <!-- Scroll to Top -->
-    <button class="scroll-top" id="scrollTop" onclick="scrollToTop()">
-        <i class="fas fa-chevron-up"></i>
-    </button>
-
    <script>
         // ===== LOADING SCREEN =====
         window.addEventListener('load', () => {
@@ -1583,11 +1564,11 @@ select.form-input {
         // ===== FORM VALIDATION =====
         function validateForm() {
             let isValid = true;
-            const nama = document.getElementById('nama');
-            const wa = document.getElementById('wa');
-            const alamat = document.getElementById('alamat');
-            const kodepos = document.getElementById('kodepos');
-
+            const namaPeli = document.getElementById('nama').value;
+            const waPeli = document.getElementById('wa').value;
+            const alamatPeli = document.getElementById('alamat').value;
+            const kotaPeli = document.getElementById('kota') ? document.getElementById('kota').value : '';
+            const kodeposPeli = document.getElementById('kodepos').value;
             document.querySelectorAll('.form-input').forEach(inp => inp.classList.remove('error'));
             document.querySelectorAll('.error-text').forEach(err => err.classList.remove('show'));
 
@@ -1619,9 +1600,42 @@ select.form-input {
 
             return isValid;
         }
+        // ===== SINKRONISASI ANGKA KERANJANG DI NAVBAR =====
+        function updateCartBadgeGlobal() {
+            // Buka brankas keranjang utama
+            let cart = JSON.parse(localStorage.getItem('caymira_cart')) || [];
+            
+            // Hitung total semua barang (qty)
+            let totalItems = cart.reduce((total, item) => total + item.quantity, 0);
+            
+            // Cari elemen bulatan merah di navbar
+            let badge = document.getElementById('cartBadge');
+            if (badge) {
+                badge.textContent = totalItems;
+                // Sembunyikan kalau 0, munculkan kalau ada isinya
+                badge.style.display = totalItems > 0 ? 'flex' : 'none';
+            }
+        }
+
+        // Jalankan otomatis setiap kali halaman ini dibuka
+        document.addEventListener('DOMContentLoaded', () => {
+            updateCartBadgeGlobal();
+        });
 
         // ===== CHECKOUT PROCESS (KEMBALI UTUH & ANTI MACET) =====
         async function processCheckout() {
+            // --- TAMBAHKAN BLOK KODE INI UNTUK MENYIMPAN DATA KE BRANKAS ---
+            const namaPeli = document.getElementById('nama').value;
+            const waPeli = document.getElementById('wa').value;
+            const alamatPeli = document.getElementById('alamat').value;
+            const kotaPeli = document.getElementById('kota') ? document.getElementById('kota').value : '';
+            const kodeposPeli = document.getElementById('kodepos').value;
+
+            localStorage.setItem('caymira_cust_nama', namaPeli);
+            localStorage.setItem('caymira_cust_wa', waPeli);
+            localStorage.setItem('caymira_cust_alamat', alamatPeli);
+            localStorage.setItem('caymira_cust_kota', kotaPeli);
+            localStorage.setItem('caymira_cust_kodepos', kodeposPeli);
             if (!validateForm()) {
                 showToast('⚠️ Harap lengkapi data dengan benar');
                 return;
@@ -1647,9 +1661,10 @@ select.form-input {
                 wa: document.getElementById('wa').value,
                 email: document.getElementById('email').value,
                 alamat: document.getElementById('alamat').value,
-                kota: document.getElementById('kota').value,
+                kota: document.getElementById('kota approvals') ? document.getElementById('kota').value : '',
                 kodepos: document.getElementById('kodepos').value,
-                total: totalAngka
+                total: totalAngka,
+                items: JSON.parse(localStorage.getItem('caymira_cart')) || [] // <--- TAMBAHKAN INI
             };
 
             // --- BAGIAN YANG TADI TERPOTONG SEKARANG DIKEMBALIKAN UTUH ---
@@ -1715,6 +1730,111 @@ select.form-input {
             card.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
             card.style.transitionDelay = (index * 0.15) + 's';
             revealObserver.observe(card);
+        });
+        // Fungsi untuk mengambil data keranjang lokal dan mencetaknya di layar informasi
+     // ===== FUNGSI RENDER KERANJANG ANTI-BADAI =====
+        // ===== FUNGSI RENDER KERANJANG & TOMBOL QTY (+ / -) =====
+       // ===== FUNGSI RENDER KERANJANG (DIJAMIN ANTI CACAT) =====
+        // ===== FUNGSI RENDER KERANJANG (ANTI CACAT + AUTO CLEANER) =====
+       // ===== OTAK CHECKOUT: BISA BACA DARI KERANJANG MAUPUN BELI LANGSUNG =====
+       // ===== OTAK PENERIMA CHECKOUT (PENGISOLASI JALUR BELI LANGSUNG VS KERANJANG) =====
+        function renderCheckoutSummary() {
+            const container = document.getElementById('checkoutItemsList');
+            if (!container) return;
+
+            let checkoutItems = [];
+
+            // CEK APAKAH USER DATANG DARI JALUR "BELI SEKARANG" DETAIL PRODUK
+            if (sessionStorage.getItem('caymira_checkout_jalur') === 'beli_langsung') {
+                checkoutItems = JSON.parse(sessionStorage.getItem('caymira_checkout_data')) || [];
+            } else {
+                // JALUR NORMAL: DATANG DARI KERANJANG BELANJA
+                checkoutItems = JSON.parse(localStorage.getItem('caymira_cart')) || [];
+                sessionStorage.setItem('caymira_checkout_data', JSON.stringify(checkoutItems));
+                sessionStorage.setItem('caymira_checkout_jalur', 'dari_keranjang');
+            }
+
+            if (!checkoutItems || checkoutItems.length === 0) {
+                container.innerHTML = '<p style="color:#888; text-align:center; padding: 20px 0;">Belum ada produk untuk di-checkout.</p>';
+                document.getElementById('textSubtotal').innerText = 'Rp 0';
+                document.getElementById('textTotal').innerText = 'Rp 0';
+                return;
+            }
+
+            let subtotal = 0;
+            let itemsHTML = '';
+
+            checkoutItems.forEach((item, index) => {
+                let itemPrice = parseInt(item.price) || 0;
+                let itemQty = parseInt(item.quantity) || 1;
+                subtotal += (itemPrice * itemQty);
+
+                let imgPath = item.image || '';
+                if(imgPath !== '' && !imgPath.includes('http') && !imgPath.includes('../')) {
+                    imgPath = '../Gamis/' + imgPath; 
+                } else if (imgPath === '') {
+                    imgPath = 'https://via.placeholder.com/70x70/0a1628/c9a84c?text=Foto'; 
+                }
+
+                itemsHTML += `
+                    <div class="order-item" style="display: grid; grid-template-columns: 70px 1fr; gap: 15px; align-items: center; margin-bottom: 15px; width: 100%; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 15px;">
+                        <div style="width: 70px; height: 70px;">
+                            <img src="${imgPath}" alt="${item.name}" onerror="this.onerror=null; this.src='https://via.placeholder.com/70x70/0a1628/c9a84c?text=Foto';" style="width: 100%; height: 100%; object-fit: cover; border-radius: 8px;">
+                        </div>
+                        <div style="display: flex; flex-direction: column; gap: 6px;">
+                            <h4 style="margin: 0; font-size: 14px; color: #fff; font-weight: 600;">${item.name}</h4>
+                            <p style="margin: 0; font-weight: 700; color: #c9a84c; font-size: 14px;">Rp ${itemPrice.toLocaleString('id-ID')}</p>
+                            <div style="display: flex; align-items: center; gap: 12px; margin-top: 5px;">
+                                <button type="button" onclick="updateQtyCheckout(${index}, -1)" style="background: rgba(201,168,76,0.2); border:1px solid rgba(201,168,76,0.4); color: #c9a84c; width: 28px; height: 28px; border-radius: 6px; cursor: pointer; display:flex; align-items:center; justify-content:center; font-weight:bold;">-</button>
+                                <span style="color: #fff; font-size: 14px; font-weight: bold; min-width: 15px; text-align:center;">${itemQty}</span>
+                                <button type="button" onclick="updateQtyCheckout(${index}, 1)" style="background: rgba(201,168,76,0.2); border:1px solid rgba(201,168,76,0.4); color: #c9a84c; width: 28px; height: 28px; border-radius: 6px; cursor: pointer; display:flex; align-items:center; justify-content:center; font-weight:bold;">+</button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+
+            container.innerHTML = itemsHTML;
+
+            // Hitung Ongkir & Voucher
+            const ongkir = 32000;
+            let voucherDiscount = 0;
+            if (sessionStorage.getItem('caymira_checkout_jalur') === 'dari_keranjang') {
+                voucherDiscount = parseInt(localStorage.getItem('caymira_discount')) || 0;
+            }
+
+            const totalAkhir = (subtotal - voucherDiscount) + ongkir;
+            document.getElementById('textSubtotal').innerText = 'Rp ' + subtotal.toLocaleString('id-ID');
+            if(document.getElementById('textDiscount')) document.getElementById('textDiscount').innerText = '- Rp ' + voucherDiscount.toLocaleString('id-ID');
+            document.getElementById('textTotal').innerText = 'Rp ' + totalAkhir.toLocaleString('id-ID');
+            if(document.getElementById('inputTotalBayar')) document.getElementById('inputTotalBayar').value = totalAkhir;
+        }
+
+        function updateQtyCheckout(index, change) {
+            let checkoutItems = JSON.parse(sessionStorage.getItem('caymira_checkout_data')) || [];
+            if (!checkoutItems[index]) return;
+
+            checkoutItems[index].quantity += change;
+
+            if (checkoutItems[index].quantity < 1) {
+                if (confirm("Hapus produk ini dari pesanan?")) {
+                    checkoutItems.splice(index, 1);
+                } else {
+                    checkoutItems[index].quantity = 1;
+                }
+            }
+
+            sessionStorage.setItem('caymira_checkout_data', JSON.stringify(checkoutItems));
+            
+            // Sinkronkan ke keranjang asli HANYA jika jalurnya dari keranjang
+            if (sessionStorage.getItem('caymira_checkout_jalur') === 'dari_keranjang') {
+                localStorage.setItem('caymira_cart', JSON.stringify(checkoutItems));
+            }
+            renderCheckoutSummary();
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            renderCheckoutSummary();
         });
     </script>
 </body>

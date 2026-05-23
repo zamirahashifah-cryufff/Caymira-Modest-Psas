@@ -12,7 +12,7 @@ header("Access-Control-Allow-Methods: POST");
 $db_host = 'localhost';
 $db_user = 'root'; 
 $db_pass = '';     
-$db_name = 'mbuh'; // Pastikan nama database-nya benar
+$db_name = 'caymira_modest'; // Pastikan nama database-nya benar
 
 // SERVER KEY Midtrans Sandbox
 $server_key = 'Mid-server--5pWdULYOML7ZVMv597RI_q8'; 

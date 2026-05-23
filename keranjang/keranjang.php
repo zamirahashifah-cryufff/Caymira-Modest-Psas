@@ -115,6 +115,15 @@
 </head>
 <body>
 
+   
+
+    <!-- Toast -->
+    <div class="toast" id="toast">
+        <i class="fas fa-check-circle"></i>
+        <span id="toastText"></span>
+    </div>
+
+
     <!-- Custom Cursor -->
     <div class="custom-cursor" id="cursor"></div>
     <div class="cursor-dot" id="cursorDot"></div>
@@ -135,9 +144,15 @@
         </ul>
 
         <div class="nav-icons">
+
+            <i class="fas fa-search" onclick="toggleSearch()"></i>
+            <i class="fas fa-user" onclick="window.location.href='../login_register/profil.php'"></i>
+            <div class="cart-icon" onclick="window.location.href='keranjang.php'" style="cursor: pointer;">
+
             <i class="fas fa-search"></i>
             <i class="fas fa-user"></i>
             <div class="cart-icon" onclick="location.reload()">
+
                 <i class="fas fa-shopping-cart"></i>
                 <span class="cart-badge" id="cartBadge">0</span>
             </div>
@@ -263,6 +278,13 @@
 
                 // Smart Path Logic (Biar gambar Gamis & Best Seller muncul)
                 let imgPath = item.image;
+
+                if(!imgPath.includes('../')) {
+                    imgPath = '../Gamis/' + imgPath; // Jika item dari Gamis
+                    imgPath = '../Koko/'  + imgPath;
+                    imgPath = '../Jubah/'  + imgPath;
+                    imgPath = '../best-seller/'  + imgPath;
+
                 if (!imgPath.startsWith('../')) {
                     const nameLower = item.name.toLowerCase();
                     if (nameLower.includes('gamis') && !imgPath.toLowerCase().includes('gamis')) {
@@ -270,6 +292,7 @@
                     } else if (!imgPath.toLowerCase().includes('best-seller')) {
                         imgPath = '../best-seller/' + imgPath;
                     } else { imgPath = '../' + imgPath; }
+
                 }
 
                 itemsHTML += `
@@ -342,11 +365,40 @@
             if(confirm("Kosongkan keranjang?")) { localStorage.removeItem('caymira_cart'); currentDiscount = 0; renderCart(); updateCartBadge(); }
         }
 
+        function checkout(total) {
+            let cart = getCart();
+            
+            // 1. Cek dulu apakah keranjang kosong
+            if (cart.length === 0) {
+                showToast("⚠️ Keranjang Anda masih kosong!");
+                return;
+            }
+
+            // 2. Simpan total akhir dan diskon ke LocalStorage biar bisa dibaca di halaman informasi/pembayaran
+            localStorage.setItem('caymira_grand_total', total);
+            localStorage.setItem('caymira_discount', discountAmount);
+
+            // 3. Efek loading sebentar biar elegan, lalu meluncur ke halaman Informasi
+            const btn = document.querySelector('.checkout-btn');
+            if (btn) {
+                btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Memproses...';
+                btn.style.opacity = '0.8';
+                btn.style.cursor = 'wait';
+            }
+            sessionStorage.setItem('caymira_checkout_jalur', 'dari_keranjang');
+    window.location.href = '../checkout/informasi.php';
+            setTimeout(() => {
+                // Arahkan ke halaman form informasi checkout kamu
+                window.location.href = '../checkout/informasi.php';
+            }, 800);
+        }
+
         window.addEventListener("scroll", () => {
             const navbar = document.getElementById("navbar");
             if (window.scrollY > 50) navbar.classList.add("scrolled");
             else navbar.classList.remove("scrolled");
         });
+
     </script>
 </body>
 </html>

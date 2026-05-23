@@ -1,6 +1,6 @@
 <?php
 // 1. Koneksi ke Database (Gunakan nama $conn seperti di pembayaran.php)
-$conn = new mysqli('localhost', 'root', '', 'mbuh'); // Sesuaikan nama DB-mu
+$conn = new mysqli('localhost', 'root', '', 'caymira_modest'); // Sesuaikan nama DB-mu
 if ($conn->connect_error) {
     die("Koneksi gagal: " . $conn->connect_error);
 }
@@ -724,11 +724,7 @@ img { max-width: 100%; height: auto; display: block; }
     <div class="custom-cursor" id="cursor"></div>
     <div class="cursor-dot" id="cursorDot"></div>
 
-    <!-- Loading Screen -->
-    <div class="loader" id="loader">
-        <div class="loader-text">caymira</div>
-        <div class="loader-bar"><div class="loader-progress"></div></div>
-    </div>
+ 
 
     <!-- Toast -->
     <div class="toast" id="toast">
@@ -742,17 +738,17 @@ img { max-width: 100%; height: auto; display: block; }
             <img src="../Beranda/Gambarberanda/logo_caymira_modest.png" alt="Caymira Modest" class="logo-img">
         </div>
         <ul class="nav-links" id="navLinks">
-            <li><a href="../Beranda/beranda.html">Beranda</a></li>
-            <li><a href="../About-us/aboutus.html">About Us</a></li>
-            <li><a href="../Beranda/beranda.html#bestseller">Best Seller</a></li>
-            <li><a href="#contact">Contact</a></li>
+            <li><a href="../Beranda/beranda.php">Beranda</a></li>
+            <li><a href="../About-us/aboutus.php">About Us</a></li>
+            <li><a href="../best-seller/best-seller.php">Best Seller</a></li>
+            <li><a href="../contact/contact.php">Contact</a></li>
         </ul>
         <div class="nav-icons">
             <i class="fas fa-search" onclick="showToast('🔍 Fitur pencarian segera hadir')"></i>
             <i class="fas fa-user" onclick="window.location.href='../login_register/profil.php'"></i>
             <div class="cart-icon">
-                <i class="fas fa-shopping-cart" onclick="showToast('🛒 Keranjang kosong')"></i>
-                <span class="cart-badge" style="display:none;">0</span>
+                <i class="fas fa-shopping-cart" onclick="window.location.href='../keranjang/keranjang.php'"></i>
+                <span class="cart-badge" id="cartBadge" style="display: none;">0</span>
             </div>
             <div class="mobile-menu-btn" id="mobileMenuBtn" onclick="toggleMobileMenu()">
                 <span></span><span></span><span></span>
@@ -909,75 +905,65 @@ img { max-width: 100%; height: auto; display: block; }
 
             <!-- Right Column -->
             <div class="success-right">
+                
+                <div class="success-card" style="margin-bottom: 25px;">
+                    <h2 class="card-title"><i class="fas fa-map-marker-alt"></i> Detail Pengiriman</h2>
+                    <div class="shipping-info">
+                        <div class="shipping-row">
+                            <i class="fas fa-user" style="color: #c9a84c;"></i>
+                            <div>
+                                <strong id="namaPenerima" style="color: #fff;">Memuat...</strong><br>
+                                <span id="waPenerima" style="color: #888; font-size: 13px;">...</span>
+                            </div>
+                        </div>
+                        <div class="shipping-row">
+                            <i class="fas fa-home" style="color: #c9a84c;"></i>
+                            <div id="alamatPenerima" style="color: #ddd;">Memuat detail alamat...</div>
+                        </div>
+                        <div class="shipping-row">
+                            <i class="fas fa-truck" style="color: #c9a84c;"></i>
+                            <div style="color: #ddd;"><strong>JNE Reguler</strong><br>Estimasi 2-3 hari kerja</div>
+                        </div>
+                    </div>
+                </div>
+
                 <div class="success-card" style="position: sticky; top: 90px;">
                     <h2 class="card-title"><i class="fas fa-shopping-bag"></i> Ringkasan Pesanan</h2>
 
-                    <div class="order-item">
-                        <img src="Gambarberanda/gamis ruffel .jpeg" alt="Gamis" class="order-img">
-                        <div class="order-details">
-                            <div class="order-name">Gamis Ruffle Premium</div>
-                            <div class="order-variant">Navy, M x1</div>
-                            <div class="order-price">Rp 299.000</div>
-                        </div>
+                    <div id="finalItemsList" style="max-height: 300px; overflow-y: auto; padding-right: 5px;"></div>
+
+                    <div class="pricing-divider" style="border-top: 1px dashed rgba(255,255,255,0.1); margin: 15px 0;"></div>
+
+                    <div class="pricing-row" style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+                        <span class="pricing-label" style="color: #888;">Subtotal</span>
+                        <span id="textSubtotal" class="pricing-value" style="font-weight: bold; color: #fff;">Rp 0</span>
                     </div>
-                    <div class="order-item">
-                        <img src="Gambarberanda/gamis miryam.jpeg" alt="Jilbab" class="order-img">
-                        <div class="order-details">
-                            <div class="order-name">Jilbab Maryam</div>
-                            <div class="order-variant">Black x1</div>
-                            <div class="order-price">Rp 109.000</div>
-                        </div>
+                    <div class="pricing-row" style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+                        <span class="pricing-label" style="color: #888;">Ongkir (JNE Reguler)</span>
+                        <span class="pricing-value gold" style="color: #c9a84c; font-weight: bold;">Rp 32.000</span>
+                    </div>
+                    <div class="pricing-row" style="display: flex; justify-content: space-between; margin-bottom: 15px;">
+                        <span class="pricing-label" style="color: #888;">Diskon</span>
+                        <span id="textDiscount" class="pricing-value" style="color:#27ae60; font-weight: bold;">- Rp 0</span>
                     </div>
 
-                    <div class="pricing-divider"></div>
+                    <div class="pricing-divider" style="border-top: 1px solid rgba(255,255,255,0.1); margin: 15px 0;"></div>
 
-                    <div class="pricing-row">
-                        <span class="pricing-label">Subtotal</span>
-                        <span class="pricing-value">Rp 408.000</span>
-                    </div>
-                    <div class="pricing-row">
-                        <span class="pricing-label">Ongkir (JNE Reguler)</span>
-                        <span class="pricing-value gold">Rp 32.000</span>
-                    </div>
-                    <div class="pricing-row">
-                        <span class="pricing-label">Diskon</span>
-                        <span class="pricing-value" style="color:#27ae60;">- Rp 0</span>
+                    <div class="pricing-total" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                        <span class="pricing-total-label" style="color: #fff; font-size: 16px; font-weight: bold;">Total Pembayaran</span>
+                        <span id="textTotal" class="pricing-total-value" style="color: #c9a84c; font-size: 24px; font-family: 'Playfair Display', serif; font-weight: bold;">Rp 0</span>
                     </div>
 
-                    <div class="pricing-divider"></div>
-
-                    <div class="pricing-total">
-                        <span class="pricing-total-label">Total</span>
-                        <span class="pricing-total-value">Rp 440.000</span>
-                    </div>
-
-                    <!-- Shipping Address -->
-                    <div style="margin-top: 25px; padding-top: 20px; border-top: 1px solid rgba(201,168,76,0.15);">
-                        <h3 style="font-family: var(--font-heading); font-size: 16px; color: var(--gold); margin-bottom: 15px; display: flex; align-items: center; gap: 8px;">
-                        <div class="shipping-info">
-                            <div class="shipping-row">
-                                <i class="fas fa-user"></i>
-                                <div><strong>Aisyah Putri</strong><br>0812-3456-7890</div>
-                            </div>
-                            <div class="shipping-row">
-                                <i class="fas fa-home"></i>
-                                <div>Jl. Mawar No. 12, RT 02/RW 05<br>Kel. Sukajadi, Kec. Bandung Wetan<br>Bandung, Jawa Barat 40115</div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- CTA Buttons -->
-                    <div class="btn-group">
-                        <button class="btn-primary" onclick="window.location.href='../Pesanan/pesanan.html'">
-                            <i class="fas fa-box-open"></i> Pesanan Saya
+                    <div class="btn-group" style="display: flex; gap: 10px; flex-direction: column;">
+                        <button class="btn-primary" onclick="window.location.href='../Pesanan/pesanan.html'" style="width: 100%; background: #c9a84c; color: #0a1118; padding: 15px; border-radius: 8px; border: none; font-weight: bold; cursor: pointer;">
+                            <i class="fas fa-box-open"></i> Cek Status Pesanan
                         </button>
-                        <button class="btn-secondary" onclick="window.location.href='../Beranda/beranda.html'">
+                        <button class="btn-secondary" onclick="window.location.href='../Beranda/beranda.php'" style="width: 100%; background: transparent; color: #c9a84c; border: 1px solid #c9a84c; padding: 15px; border-radius: 8px; font-weight: bold; cursor: pointer;">
                             <i class="fas fa-shopping-bag"></i> Belanja Lagi
                         </button>
                     </div>
                 </div>
             </div>
-        </div>
     </main>
 
     <!-- Footer -->
@@ -995,7 +981,7 @@ img { max-width: 100%; height: auto; display: block; }
         <div class="footer-content">
             <div class="footer-brand">
                 <div class="logo" onclick="window.scrollTo({top:0,behavior:'smooth'})">
-                    <img src="../Beranda/SGambarberanda/logo_caymira_modest.png" alt="Caymira Modest" class="logo-img" style="height:60px;margin-top:0;">
+                    <img src="../Beranda/Gambarberanda/logo_caymira_modest.png" alt="Caymira Modest" class="logo-img" style="height:60px;margin-top:0;">
                 </div>
                 <p>Fashion muslimah dengan desain modern, bahan berkualitas, dan nyaman dipakai setiap hari.</p>
                 <div class="social-links">
@@ -1010,7 +996,7 @@ img { max-width: 100%; height: auto; display: block; }
                     <li><a href="../Beranda/beranda.php">Home</a></li>
                     <li><a href="../About-us/aboutus.php">About Us</a></li>
                     <li><a href="../Beranda/beranda.php#collection">Collection</a></li>
-                    <li><a href="../Beranda/beranda.php#bestseller">Best Seller</a></li>
+                    <li><a href="../best-seller/best-seller.php">Best Seller</a></li>
                     <li><a href="../login_register/contact.php">Contact</a></li>
                 </ul>
             </div>
@@ -1095,6 +1081,27 @@ img { max-width: 100%; height: auto; display: block; }
                 document.getElementById('navLinks').classList.remove('active');
                 document.getElementById('mobileMenuBtn').classList.remove('active');
             });
+        });
+        // ===== SINKRONISASI ANGKA KERANJANG DI NAVBAR =====
+        function updateCartBadgeGlobal() {
+            // Buka brankas keranjang utama
+            let cart = JSON.parse(localStorage.getItem('caymira_cart')) || [];
+            
+            // Hitung total semua barang (qty)
+            let totalItems = cart.reduce((total, item) => total + item.quantity, 0);
+            
+            // Cari elemen bulatan merah di navbar
+            let badge = document.getElementById('cartBadge');
+            if (badge) {
+                badge.textContent = totalItems;
+                // Sembunyikan kalau 0, munculkan kalau ada isinya
+                badge.style.display = totalItems > 0 ? 'flex' : 'none';
+            }
+        }
+
+        // Jalankan otomatis setiap kali halaman ini dibuka
+        document.addEventListener('DOMContentLoaded', () => {
+            updateCartBadgeGlobal();
         });
 
         // ===== TOAST =====
@@ -1190,6 +1197,98 @@ img { max-width: 100%; height: auto; display: block; }
             card.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
             card.style.transitionDelay = (index * 0.15) + 's';
             revealObserver.observe(card);
+        });
+        // ===== LOGIKA RENDER DATA FINAL (ALAMAT & KERANJANG) =====
+      // ===== RENDER DATA FINAL & BERSIHKAN KERANJANG =====
+        function renderFinalSummary() {
+            // 1. Tampilkan Data Pengiriman dari Brankas
+            const namaPenerima = localStorage.getItem('caymira_cust_nama') || 'Pelanggan Caymira';
+            const waPenerima = localStorage.getItem('caymira_cust_wa') || '';
+            const alamatPenerima = localStorage.getItem('caymira_cust_alamat') || 'Alamat tidak ditemukan';
+            const kotaPenerima = localStorage.getItem('caymira_cust_kota') || '';
+            const kodeposPenerima = localStorage.getItem('caymira_cust_kodepos') || '';
+
+            document.getElementById('namaPenerima').innerText = namaPenerima;
+            document.getElementById('waPenerima').innerText = waPenerima;
+            document.getElementById('alamatPenerima').innerText = `${alamatPenerima}, ${kotaPenerima} ${kodeposPenerima}`;
+
+            // 2. Ambil data barang dari Meja Kasir Sementara (sessionStorage)
+            const container = document.getElementById('finalItemsList');
+            if (!container) return;
+
+            let checkoutItems = JSON.parse(sessionStorage.getItem('caymira_checkout_data')) || [];
+            
+            if (checkoutItems.length === 0) {
+                container.innerHTML = '<p style="color:#888; text-align:center; padding: 20px 0;">Tidak ada data pesanan.</p>';
+                return;
+            }
+
+            let subtotal = 0;
+            let itemsHTML = '';
+
+            checkoutItems.forEach((item) => {
+                let itemPrice = parseInt(item.price) || 0;
+                let itemQty = parseInt(item.quantity) || 1;
+                subtotal += (itemPrice * itemQty);
+
+                let imgPath = item.image || '';
+                if(imgPath !== '' && !imgPath.includes('http') && !imgPath.includes('../')) {
+                    imgPath = '../Gamis/' + imgPath; 
+                } else if (imgPath === '') {
+                    imgPath = 'https://via.placeholder.com/60x60/0a1628/c9a84c?text=Foto'; 
+                }
+
+                itemsHTML += `
+                    <div class="order-item" style="display: flex; align-items: center; margin-bottom: 15px; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 15px;">
+                        <img src="${imgPath}" alt="${item.name}" onerror="this.onerror=null; this.src='https://via.placeholder.com/60x60/0a1628/c9a84c?text=Foto';" style="width: 60px; height: 60px; border-radius: 8px; margin-right: 15px; object-fit: cover;">
+                        <div class="order-details" style="flex: 1;">
+                            <div style="font-weight: bold; color: #fff; font-size: 14px;">${item.name}</div>
+                            <div style="color: #bbb; font-size: 13px; margin-top: 4px;">
+                                Qty: <strong style="color: #d4af37;">x${itemQty}</strong>
+                            </div>
+                            <div style="color: #d4af37; font-weight: bold; margin-top: 4px; font-size: 13px;">
+                                Rp ${itemPrice.toLocaleString('id-ID')}
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+
+            container.innerHTML = itemsHTML;
+
+            // 3. Hitung Total & Ongkir
+            const ongkir = 32000;
+            let voucherDiscount = 0;
+            if (sessionStorage.getItem('caymira_checkout_jalur') === 'dari_keranjang') {
+                voucherDiscount = parseInt(localStorage.getItem('caymira_discount')) || 0;
+            }
+
+            const totalAkhir = (subtotal - voucherDiscount) + ongkir;
+            
+            document.getElementById('textSubtotal').innerText = 'Rp ' + subtotal.toLocaleString('id-ID');
+            document.getElementById('textDiscount').innerText = '- Rp ' + voucherDiscount.toLocaleString('id-ID');
+            document.getElementById('textTotal').innerText = 'Rp ' + totalAkhir.toLocaleString('id-ID');
+
+            // 4. KOSONGKAN KERANJANG UTAMA! (Karena user sudah sukses bayar)
+            // Cuma hapus keranjang utama kalau pesanan ini asalnya dari klik tombol keranjang
+            if (sessionStorage.getItem('caymira_checkout_jalur') === 'dari_keranjang') {
+                localStorage.removeItem('caymira_cart');
+                localStorage.removeItem('caymira_discount');
+            }
+            
+            // Hapus isi laci kasir agar tidak muncul lagi kalau user iseng me-refresh halaman berulang-ulang
+            sessionStorage.removeItem('caymira_checkout_data');
+            sessionStorage.removeItem('caymira_checkout_jalur');
+        }
+
+        // Panggil fungsi secara otomatis
+        document.addEventListener('DOMContentLoaded', () => {
+            renderFinalSummary();
+            
+            // Panggil juga fungsi update angka merah di keranjang (otomatis jadi 0 karena sudah sukses)
+            if (typeof updateCartBadgeGlobal === 'function') {
+                updateCartBadgeGlobal();
+            }
         });
     </script>
 </body>

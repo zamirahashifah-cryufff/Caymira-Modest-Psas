@@ -13,7 +13,7 @@ if (!$data) {
 $db_host = 'localhost';
 $db_user = 'root'; 
 $db_pass = '';     
-$db_name = 'mbuh'; 
+$db_name = 'caymira_modest'; 
 
 // SERVER KEY (Wajib sama dengan yang ada di proses_checkout.php)
 $server_key = 'Mid-server--5pWdULYOML7ZVMv597RI_q8'; 

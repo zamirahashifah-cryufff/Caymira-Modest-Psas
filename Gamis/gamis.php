@@ -1128,6 +1128,16 @@ $total_produk = $count_row['total'];
 </head>
 <body>
 
+    <!-- Loading Screen -->
+    <?php $is_filtering = isset($_GET['filter']) || isset($_GET['sort']); ?>
+    <div class="loader <?php echo $is_filtering ? 'hidden' : ''; ?>" id="loader" <?php echo $is_filtering ? 'style="display: none;"' : ''; ?>>
+        <div class="loader-text">caymira</div>
+        <div class="loader-bar">
+            <div class="loader-progress"></div>
+        </div>
+    </div>
+
+
     <!-- Toast -->
     <div class="toast" id="toast">
         <i class="fas fa-check-circle"></i>
@@ -1164,7 +1174,7 @@ $total_produk = $count_row['total'];
 
         <div class="nav-icons">
             <i class="fas fa-search" onclick="toggleSearch()"></i>
-            <i class="fas fa-user" onclick="showToast('👤 Menuju halaman akun...')"></i>
+             <i class="fas fa-user" onclick="window.location.href='../login_register/profil.php'"></i>
             <div class="cart-icon">
             <i class="fas fa-shopping-cart" onclick="window.location.href='../keranjang/keranjang.php'"></i>
               <span class="cart-badge" id="cartBadge">0</span>
@@ -1249,7 +1259,7 @@ $total_produk = $count_row['total'];
     </section>
 
     <!-- Products Grid (PHP LOOP) -->
-    <section class="products-section" id="products">
+   <section class="products-section" id="products">
         <div class="products-grid" id="productsGrid">
             <?php
             $folder_gambar = 'gambargamis/'; 
@@ -1258,9 +1268,13 @@ $total_produk = $count_row['total'];
                 while($row = mysqli_fetch_assoc($result)):
                     $badge_class = !empty($row['badge']) ? strtolower(str_replace(' ', '-', $row['badge'])) : '';
                     $path_gambar = $folder_gambar . trim($row['gambar']);
+                    $harga_fix = (!empty($row['harga_diskon']) && $row['harga_diskon'] < $row['harga']) ? $row['harga_diskon'] : $row['harga']; 
             ?>
+            
             <div class="product-card">
-                <div class="product-image">
+                
+                <div class="product-image" onclick="window.location.href='../detailproduk/index.php?id=<?php echo $row['id']; ?>&kategori=gamis'" style="cursor: pointer;">
+                    
                     <img src="<?php echo $path_gambar; ?>?v=<?php echo time(); ?>" 
                          alt="<?php echo htmlspecialchars($row['nama']); ?>"
                          onerror="this.src='https://images.unsplash.com/photo-1558618666-fcd25c85f82e?w=400&h=533&fit=crop';">
@@ -1272,17 +1286,18 @@ $total_produk = $count_row['total'];
                     <?php endif; ?>
                     
                     <div class="action-overlay">
-                      <?php 
-                         $harga_fix = (!empty($row['harga_diskon']) && $row['harga_diskon'] < $row['harga']) ? $row['harga_diskon'] : $row['harga']; 
-                        ?>
-                      <button class="btn-action" onclick="addToCart('<?php echo $row['id']; ?>', '<?php echo htmlspecialchars($row['nama'], ENT_QUOTES); ?>', <?php echo $harga_fix; ?>, '<?php echo $path_gambar; ?>')">
-                         <i class="fas fa-cart-plus"></i> Tambah
+                      <button class="btn-action" onclick="event.stopPropagation(); addToCart('<?php echo $row['id']; ?>', '<?php echo htmlspecialchars($row['nama'], ENT_QUOTES); ?>', <?php echo $harga_fix; ?>, '<?php echo $path_gambar; ?>')">
+                         <i class="fas fa-cart-plus" style="pointer-events: none;"></i> Tambah
                       </button>
                     </div>
                 </div>
 
                 <div class="product-info">
-                    <h3 class="product-name"><?php echo htmlspecialchars($row['nama']); ?></h3>
+                    
+                    <h3 class="product-name" onclick="window.location.href='../detailproduk/index.php?id=<?php echo $row['id']; ?>&kategori=gamis'" style="cursor: pointer; transition: color 0.3s;" onmouseover="this.style.color='#c9a84c'" onmouseout="this.style.color='inherit'">
+                        <?php echo htmlspecialchars($row['nama']); ?>
+                    </h3>
+                    
                     <div class="product-price">
                         <?php if(!empty($row['harga_diskon']) && $row['harga_diskon'] < $row['harga']): ?>
                             <span class="price-current">Rp <?php echo number_format($row['harga_diskon'], 0, ',', '.'); ?></span>
@@ -1311,6 +1326,7 @@ $total_produk = $count_row['total'];
                     </div>
                 </div>
             </div>
+            
             <?php 
                 endwhile;
             else:
@@ -1417,17 +1433,17 @@ $total_produk = $count_row['total'];
     document.addEventListener("DOMContentLoaded", function () {
         const loader = document.getElementById("loader");
         
-        // Failsafe: Paksa hilang setelah 3 detik jika tetap macet
-        const forceHide = setTimeout(() => {
-            if (loader) loader.classList.add("hidden");
-        }, 3000);
-
-        setTimeout(function () {
-            if (loader) {
+        // Hanya jalankan animasi jika loader tidak disembunyikan oleh filter
+        if (loader && loader.style.display !== 'none') {
+            const forceHide = setTimeout(() => {
                 loader.classList.add("hidden");
-                clearTimeout(forceHide); // Batalkan failsafe jika berhasil
-            }
-        }, 1000); 
+            }, 3000);
+
+            setTimeout(function () {
+                loader.classList.add("hidden");
+                clearTimeout(forceHide); 
+            }, 1000); 
+        }
     });
 
     const cursor = document.getElementById('cursor');
