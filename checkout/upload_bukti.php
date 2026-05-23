@@ -5,7 +5,7 @@ ini_set('display_errors', 1);
 header('Content-Type: application/json');
 
 // 1. Koneksi Database
-$conn = new mysqli('localhost', 'root', '', 'mbuh');
+$conn = new mysqli('localhost', 'root', '', 'caymira_modest');
 if ($conn->connect_error) {
     echo json_encode(['success' => false, 'message' => 'Koneksi database gagal']);
     exit;

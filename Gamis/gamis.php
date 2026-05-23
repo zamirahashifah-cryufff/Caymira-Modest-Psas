@@ -1302,7 +1302,7 @@ $total_produk = $count_row['total'];
     </section>
 
     <!-- Products Grid (PHP LOOP) -->
-    <section class="products-section" id="products">
+   <section class="products-section" id="products">
         <div class="products-grid" id="productsGrid">
             <?php
             $folder_gambar = 'gambargamis/'; 
@@ -1311,9 +1311,13 @@ $total_produk = $count_row['total'];
                 while($row = mysqli_fetch_assoc($result)):
                     $badge_class = !empty($row['badge']) ? strtolower(str_replace(' ', '-', $row['badge'])) : '';
                     $path_gambar = $folder_gambar . trim($row['gambar']);
+                    $harga_fix = (!empty($row['harga_diskon']) && $row['harga_diskon'] < $row['harga']) ? $row['harga_diskon'] : $row['harga']; 
             ?>
+            
             <div class="product-card">
-                <div class="product-image">
+                
+                <div class="product-image" onclick="window.location.href='../detailproduk/index.php?id=<?php echo $row['id']; ?>&kategori=gamis'" style="cursor: pointer;">
+                    
                     <img src="<?php echo $path_gambar; ?>?v=<?php echo time(); ?>" 
                          alt="<?php echo htmlspecialchars($row['nama']); ?>"
                          onerror="this.src='https://images.unsplash.com/photo-1558618666-fcd25c85f82e?w=400&h=533&fit=crop';">
@@ -1325,17 +1329,18 @@ $total_produk = $count_row['total'];
                     <?php endif; ?>
                     
                     <div class="action-overlay">
-                      <?php 
-                         $harga_fix = (!empty($row['harga_diskon']) && $row['harga_diskon'] < $row['harga']) ? $row['harga_diskon'] : $row['harga']; 
-                        ?>
-                      <button class="btn-action" onclick="addToCart('<?php echo $row['id']; ?>', '<?php echo htmlspecialchars($row['nama'], ENT_QUOTES); ?>', <?php echo $harga_fix; ?>, '<?php echo $path_gambar; ?>')">
-                         <i class="fas fa-cart-plus"></i> Tambah
+                      <button class="btn-action" onclick="event.stopPropagation(); addToCart('<?php echo $row['id']; ?>', '<?php echo htmlspecialchars($row['nama'], ENT_QUOTES); ?>', <?php echo $harga_fix; ?>, '<?php echo $path_gambar; ?>')">
+                         <i class="fas fa-cart-plus" style="pointer-events: none;"></i> Tambah
                       </button>
                     </div>
                 </div>
 
                 <div class="product-info">
-                    <h3 class="product-name"><?php echo htmlspecialchars($row['nama']); ?></h3>
+                    
+                    <h3 class="product-name" onclick="window.location.href='../detailproduk/index.php?id=<?php echo $row['id']; ?>&kategori=gamis'" style="cursor: pointer; transition: color 0.3s;" onmouseover="this.style.color='#c9a84c'" onmouseout="this.style.color='inherit'">
+                        <?php echo htmlspecialchars($row['nama']); ?>
+                    </h3>
+                    
                     <div class="product-price">
                         <?php if(!empty($row['harga_diskon']) && $row['harga_diskon'] < $row['harga']): ?>
                             <span class="price-current">Rp <?php echo number_format($row['harga_diskon'], 0, ',', '.'); ?></span>
@@ -1364,6 +1369,7 @@ $total_produk = $count_row['total'];
                     </div>
                 </div>
             </div>
+            
             <?php 
                 endwhile;
             else:

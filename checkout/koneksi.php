@@ -3,7 +3,7 @@
 $host = "localhost";
 $user = "root";
 $pass = "";
-$db   = "mbuh";
+$db   = "caymira_modest";
 
 $conn = mysqli_connect($host, $user, $pass, $db);
 

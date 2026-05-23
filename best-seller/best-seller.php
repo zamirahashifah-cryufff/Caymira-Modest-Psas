@@ -746,58 +746,57 @@ if(!$query){
 
 
         <!-- PRODUCT GRID -->
-        <div class="product-grid" id="productGrid">
+     <div class="product-grid" id="productGrid">
 
          <?php while($data = mysqli_fetch_assoc($query)) { ?>
 
             <div class="product-card" data-category="<?= $data['kategori'] ?>">
+                
+<a href="../detailproduk/index.php?id=<?= $data['id_produk'] ?>&kategori=best_seller&nama=<?= urlencode($data['nama_produk']) ?>&harga=<?= $data['harga'] ?>&gambar=<?= urlencode($data['gambar']) ?>" style="text-decoration: none; color: inherit; display: block;">
+                    <div class="product-img-wrap">
+                        <div class="badge-bestseller">
+                        BEST SELLER
+                        </div>
 
-             <div class="product-img-wrap">
-                 <div class="badge-bestseller">
-                 BEST SELLER
-                 </div>
+                        <img src="<?= $data['gambar'] ?>" alt="<?= $data['nama_produk'] ?>">
+                        
+                        <div class="action-overlay">
+                            <button type="button" class="btn-action" onclick="event.preventDefault(); event.stopPropagation(); addToCart('<?= $data['id_produk'] ?>', '<?= htmlspecialchars($data['nama_produk'], ENT_QUOTES) ?>', <?= $data['harga'] ?>, '<?= $data['gambar'] ?>');">
+                               <i class="fas fa-cart-plus"></i> Tambah
+                            </button>
+                        </div>
+                    </div>
 
-                 <img src="<?= $data['gambar'] ?>" alt="<?= $data['nama_produk'] ?>">
-                 
-                 <!-- ACTION OVERLAY: Tombol Tambah ke Keranjang -->
-                 <div class="action-overlay">
-                    <button class="btn-action" onclick="addToCart('<?= isset($data['id']) ? $data['id'] : rand(100,999) ?>', '<?= htmlspecialchars($data['nama_produk'], ENT_QUOTES) ?>', <?= $data['harga'] ?>, '<?= $data['gambar'] ?>'); event.stopPropagation();">
-                       <i class="fas fa-cart-plus"></i> Tambah
-                    </button>
-                 </div>
-            </div>
+                    <div class="product-info">
+                        <div class="product-name">
+                            <?= $data['nama_produk'] ?>
+                        </div>
 
-            <div class="product-info">
+                        <div class="product-price">
+                            Rp. <?= number_format($data['harga'],0,',','.') ?>
+                        </div>
 
-              <div class="product-name">
-              <?= $data['nama_produk'] ?>
-            </div>
+                        <div class="product-rating">
+                            <span class="stars">
+                               <i class="fas fa-star"></i>
+                               <i class="fas fa-star"></i>
+                               <i class="fas fa-star"></i>
+                               <i class="fas fa-star"></i>
+                               <i class="fas fa-star"></i>
+                            </span>
+                            <span class="reviews">
+                                (<?= $data['ulasan'] ?>)
+                            </span>
+                        </div>
+                    </div>
+                    
+                </a> </div>
 
-            <div class="product-price">
-              Rp. <?= number_format($data['harga'],0,',','.') ?>
-            </div>
+         <?php } ?>
 
-            <div class="product-rating">
-              <span class="stars">
-                 <i class="fas fa-star"></i>
-                 <i class="fas fa-star"></i>
-                 <i class="fas fa-star"></i>
-                 <i class="fas fa-star"></i>
-                 <i class="fas fa-star"></i>
-                </span>
+        </div> ```
 
-              <span class="reviews">
-                (<?= isset($data['ulasan']) ? $data['ulasan'] : 0 ?>)
-              </span>
-            </div>
 
-        </div>
-
-    </div>
-
-  <?php } ?>
-
-</div> 
            
         </div> <!-- END OF PRODUCT GRID -->
     </div> <!-- END OF MAIN CONTAINER -->

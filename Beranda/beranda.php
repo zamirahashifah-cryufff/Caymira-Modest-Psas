@@ -1866,73 +1866,74 @@ img { max-width: 100%; height: auto; }
            <a href="../best-seller/best-seller.php" class="view-all">Lihat Semua <i class="fas fa-arrow-right"></i></a>
         </div>
         <div class="product-grid">
-            <!-- Kartu Produk 1 -->
+            
             <div class="product-card">
-                <span class="badge-new">NEW</span>
-                <div class="product-img-wrapper">
-                    <img src="../best-seller/gambar all product/lunara gamis.png" class="product-img">
-                    
-                    <div class="product-img-overlay">
-                        <!-- Tombol Tambah Ke Keranjang -->
-                        <button class="quick-view-btn" onclick="addToCart('bp1', 'Lunara Gamis', 198000, '../best-seller/gambar all product/lunara gamis.png'); event.stopPropagation();">
-                            <i class="fas fa-cart-plus"></i> Tambah
-                        </button>
+                <a href="../detailproduk/index.php?id=3&kategori=best_seller" style="text-decoration: none; color: inherit; display: block;">
+                    <span class="badge-new">NEW</span>
+                    <div class="product-img-wrapper">
+                        <img src="../best-seller/gambar all product/Lunara Gamis.png" class="product-img">
+                        
+                        <div class="product-img-overlay">
+                            <button type="button" class="quick-view-btn" onclick="event.preventDefault(); event.stopPropagation(); addToCart('3', 'Lunara Gamis', 198000, '../best-seller/gambar all product/Lunara Gamis.png');">
+                                <i class="fas fa-cart-plus"></i> Tambah
+                            </button>
+                        </div>
                     </div>
-                    
-                </div>
-                <div class="product-info">
-                    <h4>Lunara Gamis</h4>
-                    <p class="product-price">Rp 198.000</p>
-                    <div class="stars">
-                        <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
-                        <span>(126)</span>
+                    <div class="product-info">
+                        <h4>Lunara Gamis</h4>
+                        <p class="product-price">Rp 198.000</p>
+                        <div class="stars">
+                            <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                            <span>(126)</span>
+                        </div>
                     </div>
-                </div>
+                </a>
             </div>
 
-            <!-- Kartu Produk 2 -->
             <div class="product-card">
-                <span class="badge-new">NEW</span>
-                <div class="product-img-wrapper">
-                    <img src="../best-seller/gambar all product/seliana hijab.png" class="product-img">
-                    <div class="product-img-overlay">
-                        <!-- Tombol Tambah Ke Keranjang -->
-                        <button class="quick-view-btn" onclick="addToCart('bp2', 'Seliana Hijab', 45000, '../best-seller/gambar all product/seliana hijab.png'); event.stopPropagation();">
-                            <i class="fas fa-cart-plus"></i> Tambah
-                        </button>
+                <a href="../detailproduk/index.php?id=5&kategori=best_seller" style="text-decoration: none; color: inherit; display: block;">
+                    <span class="badge-new">NEW</span>
+                    <div class="product-img-wrapper">
+                        <img src="../best-seller/gambar all product/Seliana Hijab.png" class="product-img">
+                        <div class="product-img-overlay">
+                            <button type="button" class="quick-view-btn" onclick="event.preventDefault(); event.stopPropagation(); addToCart('5', 'Seliana Hijab', 45000, '../best-seller/gambar all product/Seliana Hijab.png');">
+                                <i class="fas fa-cart-plus"></i> Tambah
+                            </button>
+                        </div>
                     </div>
-                </div>
-                <div class="product-info">
-                    <h4>Seliana Hijab</h4>
-                    <p class="product-price">Rp 45.000</p>
-                    <div class="stars">
-                        <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
-                        <span>(235)</span>
+                    <div class="product-info">
+                        <h4>Seliana Hijab</h4>
+                        <p class="product-price">Rp 45.000</p>
+                        <div class="stars">
+                            <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                            <span>(235)</span>
+                        </div>
                     </div>
-                </div>
+                </a>
             </div>
 
-            <!-- Kartu Produk 3 -->
             <div class="product-card">
-                <span class="badge-new">NEW</span>
-                <div class="product-img-wrapper">
-                    <img src="../best-seller/gambar all product/raell koko.png" alt="Raell Koko" class="product-img">
-                    <div class="product-img-overlay">
-                        <!-- Tombol Tambah Ke Keranjang -->
-                        <button class="quick-view-btn" onclick="addToCart('bp3', 'Raell Koko', 156000, '../best-seller/gambar all product/raell koko.png'); event.stopPropagation();">
-                            <i class="fas fa-cart-plus"></i> Tambah
-                        </button>
+                <a href="../detailproduk/index.php?id=8&kategori=best_seller" style="text-decoration: none; color: inherit; display: block;">
+                    <span class="badge-new">NEW</span>
+                    <div class="product-img-wrapper">
+                        <img src="../best-seller/gambar all product/Raell Koko.png" alt="Raell Koko" class="product-img">
+                        <div class="product-img-overlay">
+                            <button type="button" class="quick-view-btn" onclick="event.preventDefault(); event.stopPropagation(); addToCart('8', 'Raell Koko', 156000, '../best-seller/gambar all product/Raell Koko.png');">
+                                <i class="fas fa-cart-plus"></i> Tambah
+                            </button>
+                        </div>
                     </div>
-                </div>
-                <div class="product-info">
-                    <h4>Raell Koko</h4>
-                    <p class="product-price">Rp 156.000</p>
-                    <div class="stars">
-                        <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star-half-alt"></i>
-                        <span>(182)</span>
+                    <div class="product-info">
+                        <h4>Raell Koko</h4>
+                        <p class="product-price">Rp 156.000</p>
+                        <div class="stars">
+                            <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star-half-alt"></i>
+                            <span>(182)</span>
+                        </div>
                     </div>
-                </div>
+                </a>
             </div>
+            
         </div>
     </section>
 

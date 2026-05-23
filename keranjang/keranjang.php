@@ -205,13 +205,7 @@
     </style>
 </head>
 <body>
-    <!-- Loading Screen -->
-    <div class="loader" id="loader">
-        <div class="loader-text">caymira</div>
-        <div class="loader-bar">
-            <div class="loader-progress"></div>
-        </div>
-    </div>
+   
 
     <!-- Toast -->
     <div class="toast" id="toast">
@@ -442,6 +436,9 @@
                 let imgPath = item.image;
                 if(!imgPath.includes('../')) {
                     imgPath = '../Gamis/' + imgPath; // Jika item dari Gamis
+                    imgPath = '../Koko/'  + imgPath;
+                    imgPath = '../Jubah/'  + imgPath;
+                    imgPath = '../best-seller/'  + imgPath;
                 }
 
                 itemsHTML += `
@@ -580,15 +577,30 @@
 
         function checkout(total) {
             let cart = getCart();
-            let pesan = "Halo Admin Caymira Modest, saya ingin memesan:\n\n";
-            cart.forEach((item, i) => {
-                pesan += `${i+1}. ${item.name} (x${item.quantity})\n`;
-            });
-            pesan += `\n*Total Belanja: ${formatRupiah(total)}*`;
-            if(discountAmount > 0) pesan += `\n(Sudah termasuk potongan voucher)`;
             
-            // Ganti 628... dengan no WhatsApp aslimu
-            window.open(`https://wa.me/62895704200408?text=${encodeURIComponent(pesan)}`, '_blank');
+            // 1. Cek dulu apakah keranjang kosong
+            if (cart.length === 0) {
+                showToast("⚠️ Keranjang Anda masih kosong!");
+                return;
+            }
+
+            // 2. Simpan total akhir dan diskon ke LocalStorage biar bisa dibaca di halaman informasi/pembayaran
+            localStorage.setItem('caymira_grand_total', total);
+            localStorage.setItem('caymira_discount', discountAmount);
+
+            // 3. Efek loading sebentar biar elegan, lalu meluncur ke halaman Informasi
+            const btn = document.querySelector('.checkout-btn');
+            if (btn) {
+                btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Memproses...';
+                btn.style.opacity = '0.8';
+                btn.style.cursor = 'wait';
+            }
+            sessionStorage.setItem('caymira_checkout_jalur', 'dari_keranjang');
+    window.location.href = '../checkout/informasi.php';
+            setTimeout(() => {
+                // Arahkan ke halaman form informasi checkout kamu
+                window.location.href = '../checkout/informasi.php';
+            }, 800);
         }
     </script>
 </body>

@@ -627,31 +627,44 @@ img { max-width: 100%; height: auto; display: block; }
 .filter-sort select:hover { border-color: var(--gold); }
 
 /* === JUBAH COLLECTION SECTION === */
-.jubah-collection { padding: 80px 0; position: relative; }
-.jubah-collection::before {
-    content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-    background: radial-gradient(circle at 0% 50%, rgba(201, 168, 76, 0.03) 0%, transparent 50%),
-                radial-gradient(circle at 100% 50%, rgba(201, 168, 76, 0.03) 0%, transparent 50%);
-    pointer-events: none;
-}
-.section-header { text-align: center; margin-bottom: 60px; position: relative; z-index: 1; }
-.section-header h2 {
-    font-family: var(--font-heading); font-size: 42px; color: var(--gold);
-    margin-bottom: 15px; position: relative; display: inline-block;
-    opacity: 0; transform: translateY(30px);
-}
-.section-header h2.visible { animation: fadeInUp 0.8s ease forwards; }
-.section-header h2::after {
-    content: ''; position: absolute; bottom: -12px; left: 50%;
-    transform: translateX(-50%); width: 0; height: 2px;
-    background: var(--gold); transition: width 0.6s ease;
-}
-.section-header h2.visible::after { width: 80px; }
-.section-header p {
-    color: var(--text-muted); font-size: 16px; margin-top: 25px;
-    font-style: italic; opacity: 0; transform: translateY(20px);
-}
-.section-header p.visible { animation: fadeInUp 0.8s ease 0.3s forwards; }
+ .jubah-hero { position: relative; width: 100%; min-height: 85vh; display: flex; align-items: center; overflow: hidden; margin-top: 70px; background: linear-gradient(135deg, var(--navy) 0%, var(--navy-light) 50%, var(--navy-lighter) 100%); }
+        .jubah-hero::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: radial-gradient(circle at 20% 50%, rgba(201, 168, 76, 0.1) 0%, transparent 50%), radial-gradient(circle at 80% 80%, rgba(201, 168, 76, 0.05) 0%, transparent 50%); z-index: 1; pointer-events: none; }
+        .jubah-hero::after { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23c9a84c' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E"); z-index: 0; opacity: 0.5; }
+        .jubah-hero-wrapper { position: relative; z-index: 2; display: flex; align-items: center; justify-content: space-between; width: 90%; max-width: 1200px; margin: 0 auto; padding: 60px 0; gap: 60px; }
+        .jubah-hero-text { flex: 1; max-width: 550px; }
+        .jubah-hero-text .subtitle { font-family: var(--font-heading); font-style: italic; font-weight: 400; font-size: 22px; margin-bottom: 15px; color: var(--gold-light); opacity: 0; transform: translateY(30px); animation: fadeInUp 1s ease 0.3s forwards; }
+        .jubah-hero-text h1 { font-family: var(--font-heading); font-size: 52px; line-height: 1.15; margin-bottom: 20px; color: var(--white); font-weight: 700; opacity: 0; transform: translateY(30px); animation: fadeInUp 1s ease 0.5s forwards; }
+        .jubah-hero-text h1 span { display: block; background: linear-gradient(135deg, var(--gold) 0%, var(--gold-light) 50%, var(--gold) 100%); background-size: 200% auto; -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; animation: shine 3s linear infinite; }
+        @keyframes shine { to { background-position: 200% center; } }
+        .jubah-hero-text .description { color: var(--text-light); font-size: 15px; line-height: 1.9; margin-bottom: 35px; opacity: 0; transform: translateY(30px); animation: fadeInUp 1s ease 0.7s forwards; }
+        .jubah-hero-text .description span { color: var(--gold); font-weight: 500; }
+        .jubah-hero-cta { display: inline-flex; align-items: center; gap: 12px; background: linear-gradient(135deg, var(--gold), var(--gold-light)); color: var(--navy); padding: 16px 36px; border-radius: 30px; font-weight: 600; font-size: 14px; text-transform: uppercase; letter-spacing: 1.5px; transition: all 0.4s ease; cursor: pointer; border: none; position: relative; overflow: hidden; opacity: 0; transform: translateY(30px); animation: fadeInUp 1s ease 0.9s forwards; }
+        .jubah-hero-cta::before { content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent); transition: left 0.5s; }
+        .jubah-hero-cta:hover::before { left: 100%; }
+        .jubah-hero-cta:hover { transform: translateY(-3px) scale(1.02); box-shadow: 0 15px 40px rgba(201, 168, 76, 0.4); }
+        .jubah-hero-cta i { transition: transform 0.3s; }
+        .jubah-hero-cta:hover i { transform: translateX(5px); }
+        .jubah-hero-images { flex: 1; display: flex; align-items: center; justify-content: center; gap: 20px; position: relative; }
+        .jubah-hero-img { width: 220px; height: 380px; object-fit: cover; border-radius: 20px; border: 2px solid rgba(201, 168, 76, 0.3); transition: all 0.5s ease; opacity: 0; transform: translateY(50px); }
+        .jubah-hero-img:nth-child(1) { animation: fadeInUp 1s ease 0.5s forwards; margin-top: 40px; }
+        .jubah-hero-img:nth-child(2) { animation: fadeInUp 1s ease 0.7s forwards; margin-bottom: 40px; }
+        .jubah-hero-img:hover { transform: translateY(-10px) scale(1.03); border-color: var(--gold); box-shadow: 0 20px 40px rgba(201, 168, 76, 0.2); }
+
+        .jubah-deco-circle { position: absolute; border: 1px solid rgba(201, 168, 76, 0.15); border-radius: 50%; pointer-events: none; }
+        .jubah-deco-1 { width: 300px; height: 300px; top: -50px; right: -80px; animation: rotate 25s linear infinite; }
+        .jubah-deco-2 { width: 180px; height: 180px; bottom: 30px; right: 200px; animation: rotate 20s linear infinite reverse; }
+        .jubah-deco-3 { width: 100px; height: 100px; top: 50%; left: -50px; animation: rotate 18s linear infinite; }
+        @keyframes rotate { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+        .koko-collection { padding: 80px 0; position: relative; }
+        .koko-collection::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: radial-gradient(circle at 0% 50%, rgba(201, 168, 76, 0.03) 0%, transparent 50%), radial-gradient(circle at 100% 50%, rgba(201, 168, 76, 0.03) 0%, transparent 50%); pointer-events: none; }
+        .section-header { text-align: center; margin-bottom: 60px; position: relative; z-index: 1; }
+        .section-header h2 { font-family: var(--font-heading); font-size: 42px; color: var(--gold); margin-bottom: 15px; position: relative; display: inline-block; opacity: 0; transform: translateY(30px); }
+        .section-header h2.visible { animation: fadeInUp 0.8s ease forwards; }
+        .section-header h2::after { content: ''; position: absolute; bottom: -12px; left: 50%; transform: translateX(-50%); width: 0; height: 2px; background: var(--gold); transition: width 0.6s ease; }
+        .section-header h2.visible::after { width: 80px; }
+        .section-header p { color: var(--text-muted); font-size: 16px; margin-top: 25px; font-style: italic; opacity: 0; transform: translateY(20px); }
+        .section-header p.visible { animation: fadeInUp 0.8s ease 0.3s forwards; }
+
 
 /* === PRODUCT GRID - MODERN CARDS === */
 .jubah-grid {
@@ -924,13 +937,7 @@ img { max-width: 100%; height: auto; display: block; }
     <div class="custom-cursor" id="cursor"></div>
     <div class="cursor-dot" id="cursorDot"></div>
 
-    <!-- Loading Screen -->
-    <div class="loader" id="loader">
-        <div class="loader-text">caymira</div>
-        <div class="loader-bar">
-            <div class="loader-progress"></div>
-        </div>
-    </div>
+   
 
     <!-- Particles -->
     <div class="particles" id="particles"></div>
@@ -966,7 +973,7 @@ img { max-width: 100%; height: auto; display: block; }
         <div class="nav-icons">
             <i class="fas fa-search" onclick="toggleSearch()"></i>
             <i class="fas fa-user" onclick="window.location.href='../login_register/profil.php'"></i>
-            <div class="cart-icon">
+           <div class="cart-icon">
                 <i class="fas fa-shopping-cart" onclick="window.location.href='../keranjang/keranjang.php'"></i>
                 <span class="cart-badge" id="cartBadge" style="display: none;">0</span>
             </div>
@@ -981,9 +988,7 @@ img { max-width: 100%; height: auto; display: block; }
         <div class="hero-deco-circle hero-deco-1"></div>
         <div class="hero-deco-circle hero-deco-2"></div>
         <div class="hero-deco-circle hero-deco-3"></div>
-        <div class="hero-deco-line hero-deco-line-1"></div>
-        <div class="hero-deco-line hero-deco-line-2"></div>
-
+    
         <div class="jubah-hero-wrapper">
             <div class="jubah-hero-text">
                 <p class="subtitle">Stylish & Elegan</p>
@@ -998,9 +1003,9 @@ img { max-width: 100%; height: auto; display: block; }
                 </button>
             </div>
 
-            <div class="jubah-hero-images">
-                <img src="https://images.unsplash.com/photo-1596755094514-f87e34085b2c?w=400&h=600&fit=crop" alt="Jubah Model 1" class="jubah-hero-img">
-                <img src="https://images.unsplash.com/photo-1594938298603-c8148c4dae35?w=400&h=600&fit=crop" alt="Jubah Model 2" class="jubah-hero-img">
+             <div class="jubah-hero-images">
+                <img src="../Jubah/jubah1.png" alt="Jubah Model 1" class="jubah-hero-img">
+                <img src="../Jubah/jubah2.png" alt="Jubah Model 2" class="jubah-hero-img">
             </div>
         </div>
     </section>
@@ -1049,95 +1054,76 @@ img { max-width: 100%; height: auto; display: block; }
             <p>Koleksi jubah stylish dan elegan untuk laki-laki dewasa</p>
         </div>
 
-     <div class="jubah-grid" id="jubahGrid">
+  <div class="jubah-grid" id="jubahGrid">
 
             <?php 
-            // 1. Mulai perulangan PHP untuk tabel jubah
             while($row = mysqli_fetch_assoc($query)) { 
-                // --- PENYESUAIAN DATA AMAN (FALLBACK) ---
                 $label = isset($row['label']) ? $row['label'] : 'NEW';
                 $category_lbl = strtolower($label); 
                 $ulasan = isset($row['total_ulasan']) ? $row['total_ulasan'] : rand(40, 150);
 
-                // Menyesuaikan fleksibilitas kolom harga database kelompokmu
                 $harga_sekarang = isset($row['harga_diskon']) ? $row['harga_diskon'] : (isset($row['harga']) ? $row['harga'] : 0);
                 $harga_coret = isset($row['harga_asli']) ? $row['harga_asli'] : (isset($row['harga_coret']) ? $row['harga_coret'] : 0);
 
-                // Trik Gambar Hybrid (Bisa membaca Link Address Internet atau File Lokal Folder)
                 $sumber_gambar = (strpos($row['gambar'], 'http') === 0) ? $row['gambar'] : '../Beranda/Gambarberanda/' . $row['gambar']; 
+                $nama_aman = htmlspecialchars($row['nama_produk'], ENT_QUOTES);
             ?>
 
-            <a href="../detailproduk/index.php?id=<?php echo $row['id']; ?>&kategori=jubah" style="text-decoration: none; color: inherit; display: block;" data-price="<?php echo $harga_sekarang; ?>" class="jubah-card-link">
+            <div class="jubah-card" data-category="<?php echo $category_lbl; ?>" data-price="<?php echo $harga_sekarang; ?>">
                 
-                <div class="jubah-card" data-category="<?php echo $category_lbl; ?>" data-price="<?php echo $harga_sekarang; ?>" onclick="showToast('👔 Menuju detail <?php echo addslashes($row['nama_produk']); ?>')">
+                <?php if(!empty($label)): ?>
+                    <span class="jubah-badge <?php echo $category_lbl; ?>"><?php echo $label; ?></span>
+                <?php endif; ?>
+
+                <div class="jubah-img-wrapper">
+                    <a href="../detailproduk/index.php?id=<?php echo $row['id']; ?>&kategori=jubah" style="display: block;">
+                        <img src="<?php echo $sumber_gambar; ?>" alt="<?php echo $nama_aman; ?>" class="jubah-img" style="width: 100%; height: 320px; object-fit: cover; object-position: top; border-radius: 12px;">
+                    </a>
                     
-                    <?php if(!empty($label)): ?>
-                        <span class="jubah-badge <?php echo $category_lbl; ?>"><?php echo $label; ?></span>
-                    <?php endif; ?>
-
-                    <div class="jubah-img-wrapper">
-                        <img src="<?php echo $sumber_gambar; ?>" alt="<?php echo $row['nama_produk']; ?>" class="jubah-img" style="width: 100%; height: 320px; object-fit: cover; object-position: top; border-radius: 12px;">
+                    <div class="jubah-img-overlay" style="display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 10px;">
                         
-                        <div class="jubah-img-overlay">
-                            <button class="overlay-btn" onclick="event.preventDefault(); window.location.href='../detailproduk/index.php?id=<?php echo $row['id']; ?>&kategori=jubah';"><i class="fas fa-eye"></i> Quick View</button>
-                            <button class="overlay-btn wishlist" onclick="event.preventDefault();"><i class="far fa-heart"></i></button>
-                        </div>
-                    </div>
-
-
-                    <div class="jubah-info">
-                        <h3><?php echo $row['nama_produk']; ?></h3>
                         
-                        <p class="jubah-price">
-                            Rp <?php echo number_format($harga_sekarang, 0, ',', '.'); ?>
-                            <?php if($harga_coret > $harga_sekarang): ?>
-                                <span style="text-decoration: line-through; color: #888; font-size: 14px; margin-left: 5px;">
-                                    Rp <?php echo number_format($harga_coret, 0, ',', '.'); ?>
-                                </span>
-                            <?php endif; ?>
-                        </p>
+                        <button type="button" 
+                                style="background: #c9a84c; color: #0a1628; border: none; padding: 10px 15px; border-radius: 8px; cursor: pointer; font-weight: bold; width: 80%; display: flex; align-items: center; justify-content: center; gap: 8px; transition: all 0.3s;"
+                                onclick="event.preventDefault(); event.stopPropagation(); addToCart('<?php echo $row['id']; ?>', '<?php echo $nama_aman; ?>', <?php echo $harga_sekarang; ?>, '<?php echo $sumber_gambar; ?>')">
+                            <i class="fas fa-cart-plus" style="pointer-events: none;"></i> Tambah 
+                        </button>
 
-                        <div class="jubah-rating">
-                            <span class="stars" style="color: #ffcc00;">
-                                <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star-half-alt"></i>
-                            </span>
-                            <span class="review-count">(<?php echo $ulasan; ?>)</span>
-                        </div>
-
-                        <div class="jubah-colors">
-                            <span class="color-dot active" style="background: #2c2c54;" onclick="event.preventDefault();"></span>
-                            <span class="color-dot" style="background: #40407a;" onclick="event.preventDefault();"></span>
-                            <span class="color-dot" style="background: #706fd3;" onclick="event.preventDefault();"></span>
-                        </div>
                     </div>
                 </div>
-            </a>
 
-    <div class="jubah-card" data-category="<?php echo $category_lbl; ?>" onclick="showToast('👔 <?php echo $row['nama_produk']; ?> - Rp <?php echo number_format($row['harga'], 0, ',', '.'); ?>')">
-        
-        <?php if(!empty($row['label'])): ?>
-            <span class="jubah-badge <?php echo $category_lbl; ?>"><?php echo $row['label']; ?></span>
-        <?php endif; ?>
+                <div class="jubah-info">
+                    <a href="../detailproduk/index.php?id=<?php echo $row['id']; ?>&kategori=jubah" style="text-decoration: none; color: inherit;">
+                        <h3 style="margin-bottom: 5px;"><?php echo $row['nama_produk']; ?></h3>
+                    </a>
+                    
+                    <p class="jubah-price">
+                        Rp <?php echo number_format($harga_sekarang, 0, ',', '.'); ?>
+                        <?php if($harga_coret > $harga_sekarang): ?>
+                            <span style="text-decoration: line-through; color: #888; font-size: 14px; margin-left: 5px;">
+                                Rp <?php echo number_format($harga_coret, 0, ',', '.'); ?>
+                            </span>
+                        <?php endif; ?>
+                    </p>
 
-        <div class="jubah-img-wrapper">
-            <img src="<?php echo $row['gambar']; ?>" alt="<?php echo $row['nama_produk']; ?>" class="jubah-img" style="width: 100%; height: 320px; object-fit: cover; object-position: top; border-radius: 12px;">
-            
-            <div class="jubah-img-overlay">
-                <button class="overlay-btn" onclick="addToCart('<?php echo $row['id']; ?>', '<?php echo htmlspecialchars($row['nama_produk'], ENT_QUOTES); ?>', <?php echo $row['harga']; ?>, '<?php echo $row['gambar']; ?>'); event.stopPropagation();">
-                    <i class="fas fa-cart-plus"></i> Tambah
-                </button>
-                <button class="overlay-btn wishlist"><i class="far fa-heart"></i></button>
+                    <div class="jubah-rating">
+                        <span class="stars" style="color: #ffcc00;">
+                            <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star-half-alt"></i>
+                        </span>
+                        <span class="review-count">(<?php echo $ulasan; ?>)</span>
+                    </div>
+
+                    <div class="jubah-colors">
+                        <span class="color-dot active" style="background: #2c2c54;"></span>
+                        <span class="color-dot" style="background: #40407a;"></span>
+                        <span class="color-dot" style="background: #706fd3;"></span>
+                    </div>
+                </div>
             </div>
-        </div>
-
 
             <?php 
-            } // 2. Selesai perulangan PHP (Penutup while)
+            } 
             ?>
-
-        </div>
-
-
 
         </div>
     </section>
@@ -1412,6 +1398,8 @@ img { max-width: 100%; height: auto; display: block; }
         });
 
         // ===================== LOGIKA KERANJANG BELANJA =====================
+       // ===================== LOGIKA KERANJANG BELANJA (LOCAL STORAGE) =====================
+        
         function getCart() {
             return JSON.parse(localStorage.getItem('caymira_cart')) || [];
         }
@@ -1454,6 +1442,7 @@ img { max-width: 100%; height: auto; display: block; }
             showToast('🛒 ' + name + ' berhasil ditambahkan!');
         }
 
+        // Jalankan update badge otomatis pas halaman jubah baru dibuka
         document.addEventListener("DOMContentLoaded", function () {
             updateCartBadge();
         });
