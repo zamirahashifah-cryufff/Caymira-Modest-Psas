@@ -90,52 +90,7 @@ $total_produk = $count_row['total'];
             pointer-events: none;
             z-index: 99999;
         }
-
-        /* === LOADING SCREEN === */
-        .loader {
-            position: fixed;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            background: var(--navy);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            z-index: 99999;
-            transition: opacity 0.6s, visibility 0.6s;
-        }
-        .loader.hidden {
-            opacity: 0;
-            visibility: hidden;
-        }
-        .loader-text {
-            font-family: 'Playfair Display', serif;
-            font-size: 42px;
-            color: var(--gold);
-            animation: loaderPulse 1.5s ease-in-out infinite;
-        }
-        .loader-bar {
-            width: 200px;
-            height: 2px;
-            background: rgba(201, 168, 76, 0.2);
-            margin-top: 30px;
-            border-radius: 2px;
-            overflow: hidden;
-        }
-        .loader-progress {
-            height: 100%;
-            background: var(--gold);
-            width: 0%;
-            animation: loadProgress 2s ease forwards;
-        }
-        @keyframes loaderPulse {
-            0%, 100% { opacity: 0.4; letter-spacing: 2px; }
-            50% { opacity: 1; letter-spacing: 8px; }
-        }
-        @keyframes loadProgress {
-            0% { width: 0%; }
-            100% { width: 100%; }
-        }
+        
 
         /* ===================== PARTICLES ===================== */
         .particles {
@@ -1172,6 +1127,7 @@ $total_produk = $count_row['total'];
     </style>
 </head>
 <body>
+
     <!-- Loading Screen -->
     <?php $is_filtering = isset($_GET['filter']) || isset($_GET['sort']); ?>
     <div class="loader <?php echo $is_filtering ? 'hidden' : ''; ?>" id="loader" <?php echo $is_filtering ? 'style="display: none;"' : ''; ?>>
@@ -1180,6 +1136,7 @@ $total_produk = $count_row['total'];
             <div class="loader-progress"></div>
         </div>
     </div>
+
 
     <!-- Toast -->
     <div class="toast" id="toast">
@@ -1247,9 +1204,9 @@ $total_produk = $count_row['total'];
 
         <div class="hero-gamis-image">
             <div class="hero-gamis-image-inner">
-                <img src="gambarabout/gambar baju.png"
+                <img src="gambargamis/gamis%20hero.png" 
                     alt="Caymira Modest Gamis Collection"
-                    onerror="this.src='https://images.unsplash.com/photo-1558618666-fcd25c85f82e?w=600&h=700&fit=crop'; this.onerror=null;">
+                    onerror="this.src='gambargamis/gamis-hero.jpg'">
                 <div class="hero-gamis-tag">NEW ARRIVAL</div>
             </div>
         </div>
