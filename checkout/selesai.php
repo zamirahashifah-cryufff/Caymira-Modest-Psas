@@ -1230,12 +1230,26 @@ img { max-width: 100%; height: auto; display: block; }
                 let itemPrice = parseInt(item.price) || 0;
                 let itemQty = parseInt(item.quantity) || 1;
                 subtotal += (itemPrice * itemQty);
-
+                
+// === JURUS HYBRID DETEKSI GAMBAR 2 DIMENSI ===
                 let imgPath = item.image || '';
-                if(imgPath !== '' && !imgPath.includes('http') && !imgPath.includes('../')) {
-                    imgPath = '../Gamis/' + imgPath; 
-                } else if (imgPath === '') {
+                
+                if (imgPath === '') {
                     imgPath = 'https://via.placeholder.com/60x60/0a1628/c9a84c?text=Foto'; 
+                } else if (!imgPath.includes('http') && !imgPath.includes('../')) {
+                    // JALUR 1: Kalau dari DB ada folder (contoh: "gambar all product/...")
+                    if (imgPath.startsWith('gambar ')) {
+                        imgPath = '../best-seller/' + imgPath;
+                    } 
+                    // JALUR 2: Cuma nama file (contoh: "baju.png")
+                    else {
+                        let namaBaju = item.name.toLowerCase();
+                        if (namaBaju.includes('gamis')) imgPath = '../Gamis/' + imgPath;
+                        else if (namaBaju.includes('koko')) imgPath = '../Koko/' + imgPath;
+                        else if (namaBaju.includes('hijab') || namaBaju.includes('kerudung')) imgPath = '../hijab/' + imgPath; 
+                        else if (namaBaju.includes('jubah')) imgPath = '../Jubah/' + imgPath;   
+                        else imgPath = '../Beranda/Gambarberanda/' + imgPath;
+                    }
                 }
 
                 itemsHTML += `
