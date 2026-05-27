@@ -960,8 +960,8 @@ img { max-width: 100%; height: auto; display: block; }
             </div>
 
              <div class="jubah-hero-images">
-                <img src="../Jubah/jubah1.png" alt="Jubah Model 1" class="jubah-hero-img">
-                <img src="../Jubah/jubah2.png" alt="Jubah Model 2" class="jubah-hero-img">
+                <img src="gambarjubah/jubah1.png" alt="Jubah Model 1" class="jubah-hero-img">
+                <img src="gambarjubah/jubah2.png" alt="Jubah Model 2" class="jubah-hero-img">
             </div>
         </div>
     </section>
@@ -989,7 +989,6 @@ img { max-width: 100%; height: auto; display: block; }
                 <button class="filter-btn active" onclick="filterJubah('all', this)">Semua</button>
                 <button class="filter-btn" onclick="filterJubah('new', this)">Terbaru</button>
                 <button class="filter-btn" onclick="filterJubah('best', this)">Best Seller</button>
-                <button class="filter-btn" onclick="filterJubah('sale', this)">Sale</button>
             </div>
             <div class="filter-sort">
                 <label>Urutkan:</label>
@@ -1021,7 +1020,7 @@ img { max-width: 100%; height: auto; display: block; }
                 $harga_sekarang = isset($row['harga_diskon']) ? $row['harga_diskon'] : (isset($row['harga']) ? $row['harga'] : 0);
                 $harga_coret = isset($row['harga_asli']) ? $row['harga_asli'] : (isset($row['harga_coret']) ? $row['harga_coret'] : 0);
 
-                $sumber_gambar = (strpos($row['gambar'], 'http') === 0) ? $row['gambar'] : '../Beranda/Gambarberanda/' . $row['gambar']; 
+                $sumber_gambar = $row['gambar']; 
                 $nama_aman = htmlspecialchars($row['nama_produk'], ENT_QUOTES);
             ?>
 

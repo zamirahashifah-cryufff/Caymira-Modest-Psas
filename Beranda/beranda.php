@@ -406,50 +406,26 @@ img { max-width: 100%; height: auto; }
     transform: translateY(30px);
     animation: fadeInUp 1s ease 0.9s forwards;
 }
-.hero-cta {
-    display: inline-flex;
-    align-items: center;
-    gap: 12px;
+.btn-gold {
     background: linear-gradient(135deg, var(--gold), var(--gold-light));
     color: var(--navy);
-    padding: 16px 36px;
+    padding: 14px 35px;
     border-radius: 30px;
     font-weight: 600;
-    font-size: 14px;
-    margin-top: 35px;
     text-transform: uppercase;
     letter-spacing: 1.5px;
-    transition: all 0.4s ease;
-    cursor: pointer;
     border: none;
-    position: relative;
-    overflow: hidden;
-    opacity: 0;
-    transform: translateY(30px);
-    animation: fadeInUp 1s ease 1.1s forwards;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 10px 20px rgba(201, 168, 76, 0.2);
+    display: inline-flex; /* Agar ikon dan teks sejajar */
+    align-items: center;
+    margin-top: 35px;
 }
-.hero-cta::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
-    transition: left 0.5s;
-}
-.hero-cta:hover::before {
-    left: 100%;
-}
-.hero-cta:hover {
-    transform: translateY(-3px) scale(1.02);
-    box-shadow: 0 15px 40px rgba(201, 168, 76, 0.4);
-}
-.hero-cta i {
-    transition: transform 0.3s;
-}
-.hero-cta:hover i {
-    transform: translateX(5px);
+
+.btn-gold:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 15px 30px rgba(201, 168, 76, 0.4);
 }
 
 /* Scroll indicator */
@@ -1743,9 +1719,9 @@ img { max-width: 100%; height: auto; }
                 <h3>Tampil syar'i, anggun & berkelas</h3>
                 <h1>FASHION SYAR'I<br><span>PILIHAN TERBAIK</span></h1>
                 <p>Temukan koleksi hijab, gamis, koko, dan perlengkapan syar'i berkualitas dengan desain modern yang nyaman dipakai.</p>
-                <button class="hero-cta" onclick="showToast('✨ Mulai berbelanja sekarang!')">
-                    Belanja Sekarang <i class="fas fa-arrow-right"></i>
-                </button>
+            <button class="btn-gold" onclick="document.getElementById('collection').scrollIntoView({behavior: 'smooth'})">
+               Belanja Sekarang <i class="fas fa-arrow-down" style="margin-left:8px;"></i>
+            </button>
             </div>
         </div>
 

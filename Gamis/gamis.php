@@ -40,7 +40,7 @@ $total_produk = $count_row['total'];
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gamis Collection - Caymira Modest</title>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
    
     <style>
@@ -268,96 +268,134 @@ $total_produk = $count_row['total'];
             transition: transform 0.3s;
         }
         .search-close:hover { transform: translateY(-50%) rotate(90deg); }
-
-        /* ===================== HERO GAMIS ===================== */
+        
+        /* === GAMIS HERO SECTION (DISAMAKAN DENGAN JUBAH) === */
         .hero-gamis {
-            margin-top: 70px;
-            min-height: 85vh;
+            position: relative;
+            width: 100%;
+            min-height: 100vh;
             display: flex;
             align-items: center;
-            padding: 0 60px;
-            position: relative;
             overflow: hidden;
-            background: linear-gradient(135deg, var(--navy) 0%, var(--navy-light) 50%, var(--navy) 100%);
+            margin-top: 70px;
+            background: linear-gradient(135deg, var(--navy) 0%, var(--navy-light) 40%, var(--navy-lighter) 100%);
         }
+
         .hero-gamis::before {
             content: '';
             position: absolute;
-            top: 0; left: 0; right: 0; bottom: 0;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: 
+                radial-gradient(circle at 30% 50%, rgba(201, 168, 76, 0.12) 0%, transparent 50%),
+                radial-gradient(circle at 70% 20%, rgba(201, 168, 76, 0.08) 0%, transparent 40%);
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        .hero-gamis::after {
+            content: '';
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
             background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23c9a84c' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+            z-index: 0;
             opacity: 0.5;
         }
+
+        .hero-gamis-wrapper {
+            position: relative;
+            z-index: 2;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 60px 0;
+            gap: 60px;
+        }
+
         .hero-gamis-content {
             flex: 1;
             max-width: 550px;
-            z-index: 2;
-            animation: fadeInLeft 1s ease;
         }
-        .hero-gamis-label {
-            display: inline-block;
-            padding: 8px 20px;
-            border: 1px solid var(--gold);
-            color: var(--gold);
-            font-size: 11px;
-            letter-spacing: 3px;
-            text-transform: uppercase;
-            margin-bottom: 25px;
-            animation: fadeInUp 0.8s ease 0.3s both;
+
+        .hero-gamis-content .subtitle {
+            font-family: 'Playfair Display', serif;
+            font-style: italic;
+            font-weight: 400;
+            font-size: 22px;
+            margin-bottom: 15px;
+            color: var(--gold-light);
+            opacity: 0;
+            transform: translateY(30px);
+            animation: fadeInUp 1s ease 0.3s forwards;
         }
-        .hero-gamis-title {
+
+        .hero-gamis-content h1 {
             font-family: 'Playfair Display', serif;
             font-size: 58px;
-            color: var(--gold);
-            font-weight: 400;
-            letter-spacing: 3px;
-            margin-bottom: 25px;
-            line-height: 1.2;
-            position: relative;
+            line-height: 1.1;
+            margin-bottom: 20px;
+            color: var(--white);
+            font-weight: 700;
+            opacity: 0;
+            transform: translateY(30px);
+            animation: fadeInUp 1s ease 0.5s forwards;
+            letter-spacing: 2px;
         }
-        .hero-gamis-title::before {
-            content: '';
-            position: absolute;
-            top: -20px;
-            left: 0;
-            width: 60px;
-            height: 3px;
-            background: var(--gold);
-            animation: expandWidth 1s ease 0.5s both;
+
+        .hero-gamis-content h1 span {
+            display: block;
+            background: linear-gradient(135deg, var(--gold) 0%, var(--gold-light) 50%, var(--gold) 100%);
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: shine 3s linear infinite;
         }
-        @keyframes expandWidth {
-            from { width: 0; }
-            to { width: 60px; }
-        }
-        .hero-gamis-desc {
-            font-size: 16px;
-            line-height: 1.8;
+
+        @keyframes shine { to { background-position: 200% center; } }
+
+        .hero-gamis-content .description {
             color: var(--text-light);
-            max-width: 420px;
+            font-size: 15px;
+            line-height: 1.9;
             margin-bottom: 35px;
-            animation: fadeInUp 0.8s ease 0.5s both;
+            opacity: 0;
+            transform: translateY(30px);
+            animation: fadeInUp 1s ease 0.7s forwards;
         }
-        .hero-gamis-desc .highlight {
+
+        .hero-gamis-content .description .highlight {
             color: var(--gold);
             font-weight: 500;
         }
+
         .hero-gamis-btn {
             display: inline-flex;
             align-items: center;
             gap: 12px;
-            padding: 14px 32px;
-            background: var(--gold);
+            background: linear-gradient(135deg, var(--gold), var(--gold-light));
             color: var(--navy);
-            text-decoration: none;
-            font-size: 13px;
+            padding: 16px 36px;
+            border-radius: 30px;
             font-weight: 600;
-            letter-spacing: 2px;
+            font-size: 14px;
             text-transform: uppercase;
-            border-radius: 4px;
+            letter-spacing: 1.5px;
             transition: all 0.4s ease;
-            animation: fadeInUp 0.8s ease 0.7s both;
+            cursor: pointer;
+            border: none;
             position: relative;
             overflow: hidden;
+            opacity: 0;
+            transform: translateY(30px);
+            animation: fadeInUp 1s ease 0.9s forwards;
+            text-decoration: none;
         }
+
         .hero-gamis-btn::before {
             content: '';
             position: absolute;
@@ -366,52 +404,62 @@ $total_produk = $count_row['total'];
             background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
             transition: left 0.5s;
         }
-        .hero-gamis-btn:hover::before {
-            left: 100%;
-        }
+
+        .hero-gamis-btn:hover::before { left: 100%; }
+
         .hero-gamis-btn:hover {
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 15px 40px rgba(201, 168, 76, 0.4);
             background: var(--gold-light);
-            transform: translateY(-3px);
-            box-shadow: 0 10px 30px rgba(201, 168, 76, 0.3);
         }
-        .hero-gamis-btn i {
-            transition: transform 0.3s;
-        }
-        .hero-gamis-btn:hover i {
-            transform: translateX(5px);
-        }
-        .hero-gamis-image {
+
+        .hero-gamis-btn i { transition: transform 0.3s; }
+        .hero-gamis-btn:hover i { transform: translateX(5px); }
+
+        /* Hero Image - Disamakan dengan Jubah */
+        .hero-gamis-images {
             flex: 1;
             display: flex;
-            justify-content: center;
             align-items: center;
+            justify-content: center;
             position: relative;
-            animation: fadeInRight 1s ease 0.3s both;
             perspective: 1000px;
         }
-        .hero-gamis-image-inner {
+
+        .hero-gamis-img-wrapper {
             position: relative;
             transition: transform 0.5s ease;
             transform-style: preserve-3d;
+            animation: fadeInUp3D 1s ease 0.5s forwards;
+            opacity: 0;
+            transform: translateY(50px) rotateY(-10deg);
         }
-        .hero-gamis-image img {
-            max-width: 100%;
+
+        .hero-gamis-images img {
+            width: 320px;
             height: auto;
             max-height: 550px;
             object-fit: contain;
+            border-radius: 20px;
+            border: 2px solid rgba(201, 168, 76, 0.3);
             filter: drop-shadow(0 20px 40px rgba(0,0,0,0.4));
-            transition: all 0.5s ease;
+            transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
         }
-        .hero-gamis-image:hover .hero-gamis-image-inner {
-            transform: rotateY(5deg) rotateX(5deg);
+
+        .hero-gamis-img-wrapper:hover {
+            transform: translateY(-15px) scale(1.05) rotateY(0deg);
+            z-index: 10;
         }
-        .hero-gamis-image:hover img {
-            filter: drop-shadow(0 30px 60px rgba(201, 168, 76, 0.2));
+        
+        .hero-gamis-img-wrapper:hover img {
+            border-color: var(--gold);
+            box-shadow: 0 30px 60px rgba(201, 168, 76, 0.25);
         }
+
         .hero-gamis-tag {
             position: absolute;
             top: 20px;
-            right: 20px;
+            right: -20px;
             background: var(--gold);
             color: var(--navy);
             padding: 8px 16px;
@@ -419,19 +467,28 @@ $total_produk = $count_row['total'];
             font-size: 12px;
             font-weight: 600;
             animation: bounce 2s infinite;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-        .hero-gamis-tag:hover {
-            transform: scale(1.1);
-            box-shadow: 0 4px 15px rgba(201, 168, 76, 0.4);
-        }
-        @keyframes bounce {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-10px); }
+            z-index: 3;
         }
 
-        /* Gold Branch Decorations */
+        @keyframes fadeInUp3D {
+            from { opacity: 0; transform: translateY(50px) rotateY(-10deg); }
+            to { opacity: 1; transform: translateY(0) rotateY(-5deg); }
+        }
+
+        /* Decorative Elements Hero */
+        .hero-deco-circle {
+            position: absolute;
+            border: 1px solid rgba(201, 168, 76, 0.15);
+            border-radius: 50%;
+            pointer-events: none;
+        }
+        .hero-deco-1 { width: 350px; height: 350px; top: -80px; right: -100px; animation: rotate 25s linear infinite; }
+        .hero-deco-2 { width: 200px; height: 200px; bottom: 20px; right: 250px; animation: rotate 20s linear infinite reverse; }
+        .hero-deco-3 { width: 120px; height: 120px; top: 40%; left: -60px; animation: rotate 18s linear infinite; }
+        @keyframes rotate { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+        @keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+
+        /* Gold Branch Decorations (Tetap Ada) */
         .gold-branch-left {
             position: absolute;
             left: -60px;
@@ -440,6 +497,7 @@ $total_produk = $count_row['total'];
             opacity: 0.7;
             pointer-events: none;
             animation: sway 8s ease-in-out infinite;
+            z-index: 2;
         }
         .gold-branch-right {
             position: absolute;
@@ -449,6 +507,7 @@ $total_produk = $count_row['total'];
             opacity: 0.5;
             pointer-events: none;
             animation: sway 8s ease-in-out infinite reverse;
+            z-index: 2;
         }
         @keyframes sway {
             0%, 100% { transform: rotate(-1deg); }
@@ -638,7 +697,7 @@ $total_produk = $count_row['total'];
            left: 0; 
            width: 100%; 
            height: 100%;
-           background: linear-gradient(to top, rgba(10,22,40,0.9), transparent); /* Efek gradasi gelap di bawah */
+           background: linear-gradient(to top, rgba(10,22,40,0.9), transparent); 
            display: flex; 
            align-items: flex-end; 
            justify-content: center;
@@ -962,8 +1021,7 @@ $total_produk = $count_row['total'];
             background: transparent;
             border: none;
             padding: 12px 14px;
-            color: var(--text-light); /* Fixed from dark mode */
-            color: #333; /* For dark text on light footer */
+            color: #333; 
             font-size: 13px;
             outline: none;
         }
@@ -1089,6 +1147,8 @@ $total_produk = $count_row['total'];
         @media (max-width: 1024px) {
             .products-grid { grid-template-columns: repeat(3, 1fr); }
             .footer-content { grid-template-columns: 1fr 1fr; }
+            .hero-gamis-wrapper { flex-direction: column; text-align: center; }
+            .hero-gamis-content { max-width: 100%; }
         }
 
         @media (max-width: 768px) {
@@ -1109,8 +1169,8 @@ $total_produk = $count_row['total'];
             }
             .nav-links.active { right: 0; }
             .mobile-menu-btn { display: flex; }
-            .hero-gamis-title { font-size: 32px; }
-            .hero-gamis-image img { max-height: 300px; }
+            .hero-gamis-content h1 { font-size: 32px; }
+            .hero-gamis-images img { max-height: 300px; width: 220px; }
             .products-grid { grid-template-columns: repeat(2, 1fr); gap: 15px; }
             .products-section { padding: 30px; }
             .filter-section { padding: 20px 30px; }
@@ -1127,15 +1187,6 @@ $total_produk = $count_row['total'];
     </style>
 </head>
 <body>
-
-    <!-- Loading Screen -->
-    <?php $is_filtering = isset($_GET['filter']) || isset($_GET['sort']); ?>
-    <div class="loader <?php echo $is_filtering ? 'hidden' : ''; ?>" id="loader" <?php echo $is_filtering ? 'style="display: none;"' : ''; ?>>
-        <div class="loader-text">caymira</div>
-        <div class="loader-bar">
-            <div class="loader-progress"></div>
-        </div>
-    </div>
 
 
     <!-- Toast -->
@@ -1187,47 +1238,42 @@ $total_produk = $count_row['total'];
         </div>
     </nav>
 
-    <!-- Hero Gamis -->
+    <!-- Hero Gamis (Gaya Jubah) -->
     <section class="hero-gamis" id="gamis">
-        <div class="hero-gamis-content">
-            <div class="hero-gamis-label">Koleksi Eksklusif</div>
-            <h1 class="hero-gamis-title">GAMIS</h1>
-            <p class="hero-gamis-desc">
-                Koleksi gamis terbaru dengan sentuhan modern dan elegan.
-                Didesain untuk muslimah yang ingin tampil <span class="highlight">anggun, modern, dan tetap syar'i</span>
-                setiap hari dengan kenyamanan maksimal.
-            </p>
-            <a href="#products" class="hero-gamis-btn">
-                Jelajahi Koleksi <i class="fas fa-arrow-right"></i>
-            </a>
-        </div>
+        <div class="hero-deco-circle hero-deco-1"></div>
+        <div class="hero-deco-circle hero-deco-2"></div>
+        <div class="hero-deco-circle hero-deco-3"></div>
+    
+        <div class="hero-gamis-wrapper">
+            <div class="hero-gamis-content">
+                <p class="subtitle">Koleksi Eksklusif</p>
+                <h1>GAMIS <span>PREMIUM</span></h1>
+                <p class="description">
+                    Koleksi gamis terbaru dengan sentuhan modern dan elegan.
+                    Didesain untuk muslimah yang ingin tampil <span class="highlight">anggun, modern, dan tetap syar'i</span>
+                    setiap hari dengan kenyamanan maksimal.
+                </p>
+                <a href="#products" class="hero-gamis-btn">
+                    Jelajahi Koleksi <i class="fas fa-arrow-right"></i>
+                </a>
+            </div>
 
-        <div class="hero-gamis-image">
-            <div class="hero-gamis-image-inner">
-                <img src="gambargamis/gamis%20hero.png" 
-                    alt="Caymira Modest Gamis Collection"
-                    onerror="this.src='gambargamis/gamis-hero.jpg'">
-                <div class="hero-gamis-tag">NEW ARRIVAL</div>
+            <div class="hero-gamis-images">
+                <div class="hero-gamis-img-wrapper">
+                    <img src="gambargamis/hero gamis.png" 
+                        alt="Caymira Modest Gamis Collection"
+                        onerror="this.src='gambargamis/gamis-hero.jpg'">
+                    <div class="hero-gamis-tag">NEW ARRIVAL</div>
+                </div>
             </div>
         </div>
 
+        <!-- Gold Branch Decorations -->
         <svg class="gold-branch-left" viewBox="0 0 200 300" fill="none">
             <path d="M100 300 Q80 250 100 200 Q120 150 100 100 Q80 50 100 0" stroke="#c9a84c" stroke-width="1" fill="none" opacity="0.6"/>
-            <circle cx="100" cy="50" r="2" fill="#c9a84c" opacity="0.8"/>
-            <circle cx="90" cy="80" r="1.5" fill="#c9a84c" opacity="0.6"/>
-            <circle cx="110" cy="120" r="2" fill="#c9a84c" opacity="0.7"/>
-            <circle cx="95" cy="160" r="1.5" fill="#c9a84c" opacity="0.5"/>
-            <circle cx="105" cy="200" r="2" fill="#c9a84c" opacity="0.8"/>
-            <circle cx="85" cy="240" r="1.5" fill="#c9a84c" opacity="0.6"/>
-            <circle cx="115" cy="280" r="2" fill="#c9a84c" opacity="0.7"/>
         </svg>
         <svg class="gold-branch-right" viewBox="0 0 200 300" fill="none">
             <path d="M100 300 Q120 250 100 200 Q80 150 100 100 Q120 50 100 0" stroke="#c9a84c" stroke-width="1" fill="none" opacity="0.5"/>
-            <circle cx="100" cy="40" r="2" fill="#c9a84c" opacity="0.7"/>
-            <circle cx="110" cy="90" r="1.5" fill="#c9a84c" opacity="0.6"/>
-            <circle cx="90" cy="140" r="2" fill="#c9a84c" opacity="0.8"/>
-            <circle cx="105" cy="190" r="1.5" fill="#c9a84c" opacity="0.5"/>
-            <circle cx="95" cy="240" r="2" fill="#c9a84c" opacity="0.7"/>
         </svg>
     </section>
 
@@ -1433,7 +1479,6 @@ $total_produk = $count_row['total'];
     document.addEventListener("DOMContentLoaded", function () {
         const loader = document.getElementById("loader");
         
-        // Hanya jalankan animasi jika loader tidak disembunyikan oleh filter
         if (loader && loader.style.display !== 'none') {
             const forceHide = setTimeout(() => {
                 loader.classList.add("hidden");
@@ -1507,7 +1552,6 @@ $total_produk = $count_row['total'];
         const badge = document.getElementById('cartBadge');
         if (badge) {
             badge.textContent = totalItems;
-            // Sembunyikan badge jika keranjang kosong
             badge.style.display = totalItems > 0 ? 'flex' : 'none';
         }
     }
