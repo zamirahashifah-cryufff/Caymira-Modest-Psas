@@ -305,8 +305,23 @@
 
         function applyVoucher() {
             const code = document.getElementById('vCode').value.toUpperCase();
-            if(code === 'DISKON50') { discount = 50000; alert('Voucher Berhasil!'); } 
-            else { discount = 0; alert('Voucher Tidak Valid'); }
+            
+            if (code === 'DISKON50') { 
+                discount = 50000; 
+                alert('✅ Voucher Berhasil! Diskon Rp 50.000 diterapkan.'); 
+            } 
+            else if (code === 'NEWJEANSNEVERDIE') { 
+                discount = 72250; 
+                alert('🐰 Voucher Spesial Berhasil! Diskon Rp 72.250 diterapkan. NewJeans Never Die!'); 
+            } 
+            else { 
+                discount = 0; 
+                alert('❌ Voucher Tidak Valid'); 
+            }
+            
+            // Wajib disimpen ke brankas biar halaman Checkout tahu kamu dapet diskon!
+            localStorage.setItem('caymira_discount', discount);
+            
             renderCart();
         }
 
@@ -328,13 +343,27 @@
                 subtotal += itemTotal;
                 totalQty += item.quantity;
 
-                let path = item.image;
-                if(!path.includes('../')) {
-                  if(item.name.toLowerCase().includes('gamis')) path = '../Gamis/' + path;
-                  else if(item.name.toLowerCase().includes('koko')) path = '../Koko/' + path;
-                  else if(item.name.toLowerCase().includes('hijab')) path = '../hijab/' + path; 
-                  else if(item.name.toLowerCase().includes('jubah')) path = '../Jubah/' + path;   
-                  else path = '../best-seller/' + path;
+               // === JURUS HYBRID DETEKSI GAMBAR KERANJANG ===
+                let path = item.image || '';
+                
+                if (path === '') {
+                    // Kalau foto beneran kosong
+                    path = 'https://via.placeholder.com/80x105/0a1628/c9a84c?text=Foto'; 
+                } else if (!path.includes('http') && !path.includes('../')) {
+                    // JALUR 1: Kalau dari database udah bawa nama folder (contoh: "gambar all product/...")
+                    if (path.startsWith('gambar ')) {
+                        path = '../best-seller/' + path;
+                    } 
+                    // JALUR 2: Kalau murni cuma nama file doang di database (contoh: "ameera.png")
+                    else {
+                        let namaBaju = item.name.toLowerCase();
+                        if (namaBaju.includes('gamis')) path = '../Gamis/' + path;
+                        else if (namaBaju.includes('koko')) path = '../Koko/' + path;
+                        // Tambahan kata kunci 'kerudung' biar hijab aman
+                        else if (namaBaju.includes('hijab') || namaBaju.includes('kerudung')) path = '../hijab/' + path; 
+                        else if (namaBaju.includes('jubah')) path = '../Jubah/' + path;   
+                        else path = '../Beranda/Gambarberanda/' + path; // Fallback terakhir
+                    }
                 }
 
                 return `
