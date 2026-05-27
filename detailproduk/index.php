@@ -14,7 +14,10 @@ $kategori  = isset($_GET['kategori']) ? mysqli_real_escape_string($db_koneksi, $
 $nama_produk = "Produk Tidak Ditemukan";
 $harga_asli = 0;
 $harga_diskon = 0;
-$deskripsi = "Detail produk belum tersedia.";
+$deskripsi = "Deskripsi produk belum tersedia.";
+$spesifikasi = "Spesifikasi belum tersedia.";
+$pengiriman = "Pengiriman dikirim dari gudang pusat Caymira. Estimasi 2-3 hari kerja.";
+$info_ulasan = "Belum ada ulasan tertulis untuk produk ini.";
 $gambar_utama = "default.png";
 $ulasan = rand(50, 200);
 
@@ -27,17 +30,14 @@ if (!empty($id_produk) && in_array($kategori, $tabel_valid)) {
     
     // HELM PELINDUNG (TRY-CATCH)
     try {
-        // PLAN A: Cari pakai kolom 'id_produk' (Tabel Best Seller biasanya pakai ini)
         $query = "SELECT * FROM `$kategori` WHERE id_produk = '$id_produk'";
         $result = mysqli_query($db_koneksi, $query);
     } catch (Exception $e) {
-        // Kalau PLAN A bikin PHP ngambek (error), tangkap error-nya dan jalankan PLAN B!
         try {
-            // PLAN B: Cari pakai kolom 'id' (Tabel Koko/Jubah biasanya pakai ini)
             $query = "SELECT * FROM `$kategori` WHERE id = '$id_produk'";
             $result = mysqli_query($db_koneksi, $query);
         } catch (Exception $e2) {
-            $result = false; // Kalau dua-duanya gagal, yaudah pasrah aja
+            $result = false; 
         }
     }
     
@@ -47,23 +47,24 @@ if (!empty($id_produk) && in_array($kategori, $tabel_valid)) {
         $nama_produk = isset($row['nama_produk']) ? $row['nama_produk'] : 'Produk Caymira';
         $harga_asli = isset($row['harga_asli']) ? $row['harga_asli'] : (isset($row['harga_coret']) ? $row['harga_coret'] : 0);
         $harga_diskon = isset($row['harga_diskon']) ? $row['harga_diskon'] : (isset($row['harga']) ? $row['harga'] : 0);
-        $deskripsi = isset($row['deskripsi']) ? $row['deskripsi'] : "Koleksi terbaik dengan desain elegan dan bahan premium.";
         
-     // JURUS hybrid gambar anti-salah folder
-        // JURUS RADAR GAMBAR OTOMATIS (PHP NYARI SENDIRI)
+        // ========================================================
+        // DI SINI TEMPATNYA BOS! (Penangkap data 4 Tab)
+        // ========================================================
+        $deskripsi = isset($row['deskripsi']) && !empty($row['deskripsi']) ? nl2br($row['deskripsi']) : "Deskripsi produk belum tersedia.";
+        $spesifikasi = isset($row['spesifikasi']) && !empty($row['spesifikasi']) ? nl2br($row['spesifikasi']) : "Spesifikasi belum tersedia.";
+        $pengiriman = isset($row['pengiriman']) && !empty($row['pengiriman']) ? nl2br($row['pengiriman']) : "Pengiriman dikirim dari gudang pusat Caymira. Estimasi 2-3 hari kerja.";
+        $info_ulasan = isset($row['info_ulasan']) && !empty($row['info_ulasan']) ? nl2br($row['info_ulasan']) : "Belum ada ulasan tertulis untuk produk ini.";
+        // ========================================================
+
         // JURUS PENCERAHAN (LANGSUNG TEMBAK KE RUMAH TETANGGA)
         if (isset($row['gambar'])) {
             $db_gambar = $row['gambar'];
-            
             if (strpos($db_gambar, 'http') === 0) {
-                // Kalau link internet luar
                 $gambar_utama = $db_gambar;
             } elseif (strpos($db_gambar, 'gambar ') === 0) {
-                // Nah ini dia! Karena foldernya ada di best-seller, kita suruh dia keluar dulu (../) 
-                // trus masuk ke folder best-seller!
                 $gambar_utama = '../best-seller/' . $db_gambar;
             } else {
-                // Default kalau cuma tulisan nama gambarnya doang
                 $gambar_utama = '../Beranda/Gambarberanda/' . $db_gambar;
             }
         }
@@ -1523,9 +1524,7 @@ img { max-width: 100%; height: auto; }
         <div class="breadcrumb">
             <a href="../Beranda/beranda.php">Beranda</a>
             <i class="fas fa-chevron-right"></i>
-            <a href="../Koko/koko.php">Koko</a>
-            <i class="fas fa-chevron-right"></i>
-            <span>Jubah Hasan</span>
+            <span>Detail-Produk</span>
         </div>
     </div>
 
@@ -1548,8 +1547,7 @@ img { max-width: 100%; height: auto; }
                 <div class="stars">
                     <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star-half-alt"></i>
                 </div>
-                <span class="rating-count"><span>4.8</span> (<?php echo $ulasan; ?> Ulasan)</span>
-                <a href="#review" class="review-link" onclick="switchTab(document.querySelectorAll('.tab-btn')[3], 'review')">Lihat Ulasan</a>
+                
             </div>
 
             <div class="price-section">
@@ -1680,38 +1678,23 @@ img { max-width: 100%; height: auto; }
                     <button class="tab-btn" onclick="switchTab(this, 'shipping')">Pengiriman</button>
                     <button class="tab-btn" onclick="switchTab(this, 'review')">Ulasan</button>
                 </div>
+                
                 <div class="tab-content active" id="desc">
-                    <p>Jubah Hasan adalah pilihan sempurna untuk Anda yang menginginkan penampilan syar'i namun tetap modern dan elegan. Terbuat dari bahan katun premium yang lembut, nyaman, dan breathable, cocok untuk digunakan sehari-hari maupun acara formal.</p>
-                    <br>
-                    <p>Desain gradasi hitam putih memberikan kesan mewah dan timeless yang tidak akan ketinggalan zaman. Dengan detail bordir halus dan potongan yang pas di badan, Jubah Hasan akan membuat Anda tampil percaya diri di setiap kesempatan.</p>
+                    <p><?php echo isset($deskripsi) ? $deskripsi : 'Deskripsi belum tersedia.'; ?></p>
                 </div>
+                
                 <div class="tab-content" id="spec">
-                    <ul>
-                        <li><i class="fas fa-check"></i> Bahan: Katun Premium Twill</li>
-                        <li><i class="fas fa-check"></i> Berat: 450 gram</li>
-                        <li><i class="fas fa-check"></i> Panjang: 130-140cm (tergantung ukuran)</li>
-                        <li><i class="fas fa-check"></i> Lebar Dada: 52-64cm</li>
-                        <li><i class="fas fa-check"></i> Lengan: Panjang dengan manset</li>
-                        <li><i class="fas fa-check"></i> Perawatan: Dry clean atau cuci tangan</li>
-                    </ul>
+                    <p><?php echo isset($spesifikasi) ? $spesifikasi : 'Spesifikasi belum tersedia.'; ?></p>
                 </div>
+                
                 <div class="tab-content" id="shipping">
-                    <ul>
-                        <li><i class="fas fa-truck"></i> Pengiriman: JNE, J&T, SiCepat</li>
-                        <li><i class="fas fa-clock"></i> Estimasi: 2-5 hari kerja</li>
-                        <li><i class="fas fa-box"></i> Packaging: Box eksklusif Caymira</li>
-                        <li><i class="fas fa-gift"></i> Free stiker dan kartu ucapan</li>
-                    </ul>
+                    <p><?php echo isset($pengiriman) ? $pengiriman : 'Pengiriman dikirim dari gudang pusat Caymira. Estimasi 2-3 hari kerja.'; ?></p>
                 </div>
+                
                 <div class="tab-content" id="review">
-                    <ul>
-                        <li><i class="fas fa-star"></i> "Kualitas bahan sangat bagus, adem dan nyaman dipakai" - Ahmad R.</li>
-                        <li><i class="fas fa-star"></i> "Warna gradasinya elegan banget, recommended!" - Faisal K.</li>
-                        <li><i class="fas fa-star"></i> "Pengiriman cepat dan packaging rapi, puas belanja disini" - Rizky M.</li>
-                    </ul>
+                    <p><?php echo isset($info_ulasan) ? $info_ulasan : 'Belum ada ulasan tertulis untuk produk ini.'; ?></p>
                 </div>
             </div>
-        </div>
     </section>
 
     <!-- Related Products -->
