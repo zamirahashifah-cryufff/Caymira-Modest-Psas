@@ -14,7 +14,10 @@ $kategori  = isset($_GET['kategori']) ? mysqli_real_escape_string($db_koneksi, $
 $nama_produk = "Produk Tidak Ditemukan";
 $harga_asli = 0;
 $harga_diskon = 0;
-$deskripsi = "Detail produk belum tersedia.";
+$deskripsi = "Deskripsi produk belum tersedia.";
+$spesifikasi = "Spesifikasi belum tersedia.";
+$pengiriman = "Pengiriman dikirim dari gudang pusat Caymira. Estimasi 2-3 hari kerja.";
+$info_ulasan = "Belum ada ulasan tertulis untuk produk ini.";
 $gambar_utama = "default.png";
 $ulasan = rand(50, 200);
 
@@ -27,12 +30,10 @@ if (!empty($id_produk) && in_array($kategori, $tabel_valid)) {
     
     // HELM PELINDUNG (TRY-CATCH)
     try {
-        // PLAN A: Cari pakai kolom 'id_produk' (Tabel Best Seller biasanya pakai ini)
         $query = "SELECT * FROM `$kategori` WHERE id_produk = '$id_produk'";
         $result = mysqli_query($db_koneksi, $query);
     } catch (Exception $e) {
         try {
-            // PLAN B: Cari pakai kolom 'id' (Tabel Koko/Jubah biasanya pakai ini)
             $query = "SELECT * FROM `$kategori` WHERE id = '$id_produk'";
             $result = mysqli_query($db_koneksi, $query);
         } catch (Exception $e2) {
@@ -48,9 +49,11 @@ if (!empty($id_produk) && in_array($kategori, $tabel_valid)) {
         $harga_diskon = isset($row['harga_diskon']) ? $row['harga_diskon'] : (isset($row['harga']) ? $row['harga'] : 0);
         $deskripsi = isset($row['deskripsi']) ? $row['deskripsi'] : "Koleksi terbaik dengan desain elegan dan bahan premium.";
         
+     // JURUS hybrid gambar anti-salah folder
+        // JURUS RADAR GAMBAR OTOMATIS (PHP NYARI SENDIRI)
+        // JURUS PENCERAHAN (LANGSUNG TEMBAK KE RUMAH TETANGGA)
         if (isset($row['gambar'])) {
             $db_gambar = $row['gambar'];
-            
             if (strpos($db_gambar, 'http') === 0) {
                 $gambar_utama = $db_gambar;
             } elseif (strpos($db_gambar, 'gambar ') === 0) {
@@ -449,26 +452,52 @@ img { max-width: 100%; height: auto; }
     <!-- Product Detail -->
     <div class="container" style="padding-top: 100px;">
         <div class="breadcrumb">
-            <a href="../Beranda/beranda.php">Beranda</a> <i class="fas fa-chevron-right"></i>
-            <span><?php echo $nama_produk; ?></span>
+            <a href="../Beranda/beranda.php">Beranda</a>
+            <i class="fas fa-chevron-right"></i>
+            <a href="../Koko/koko.php">Koko</a>
+            <i class="fas fa-chevron-right"></i>
+            <span>Jubah Hasan</span>
         </div>
+    </div>
 
         <section class="product-detail">
             <div class="main-image-wrapper">
                 <img src="<?php echo $gambar_utama; ?>" class="main-image" id="mainImage">
             </div>
             
-            <div class="product-info">
-                <h1 class="product-title"><?php echo $nama_produk; ?></h1>
-                
-                <div class="price-section">
-                    <div class="price-main">
-                        Rp <?php echo number_format($harga_diskon, 0, ',', '.'); ?>
-                        <?php if($harga_asli > $harga_diskon): ?>
-                            <span class="price-original">Rp <?php echo number_format($harga_asli, 0, ',', '.'); ?></span>
-                        <?php endif; ?>
-                    </div>
+          <div class="product-info">
+            <div class="product-brand">
+                <i class="fas fa-certificate"></i>
+                Caymira Original
+            </div>
+
+            <h1 class="product-title"><?php echo htmlspecialchars($nama_produk); ?></h1>
+
+            <div class="rating-row">
+                <div class="stars">
+                    <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star-half-alt"></i>
                 </div>
+                <span class="rating-count"><span>4.8</span> (<?php echo $ulasan; ?> Ulasan)</span>
+                <a href="#review" class="review-link" onclick="switchTab(document.querySelectorAll('.tab-btn')[3], 'review')">Lihat Ulasan</a>
+            </div>
+
+            <div class="price-section">
+                <div class="price-main">
+                    Rp <?php echo number_format($harga_diskon, 0, ',', '.'); ?>
+                    
+                    <?php if($harga_asli > $harga_diskon): ?>
+                        <span class="price-original">Rp <?php echo number_format($harga_asli, 0, ',', '.'); ?></span>
+                        <?php 
+                            // Hitung persentase diskon otomatis!
+                            $persen = round((($harga_asli - $harga_diskon) / $harga_asli) * 100); 
+                        ?>
+                        <span class="price-discount">-<?php echo $persen; ?>%</span>
+                    <?php endif; ?>
+                </div>
+            </div>
+           
+
+           
 
                 <div class="guarantee-row">
                     <div class="guarantee-item"><i class="fas fa-shield-alt"></i> 100% Original</div>
@@ -494,11 +523,49 @@ img { max-width: 100%; height: auto; }
                     <button class="tab-btn active" onclick="switchTab(this, 'desc')">Deskripsi</button>
                     <button class="tab-btn" onclick="switchTab(this, 'spec')">Spesifikasi</button>
                 </div>
-                <div id="desc" class="tab-content active"><p><?php echo $deskripsi; ?></p></div>
-                <div id="spec" class="tab-content"><p>Bahan Premium, Jahitan Rapi, Nyaman dipakai seharian.</p></div>
+                <div class="tab-content active" id="desc">
+                    <p>Jubah Hasan adalah pilihan sempurna untuk Anda yang menginginkan penampilan syar'i namun tetap modern dan elegan. Terbuat dari bahan katun premium yang lembut, nyaman, dan breathable, cocok untuk digunakan sehari-hari maupun acara formal.</p>
+                    <br>
+                    <p>Desain gradasi hitam putih memberikan kesan mewah dan timeless yang tidak akan ketinggalan zaman. Dengan detail bordir halus dan potongan yang pas di badan, Jubah Hasan akan membuat Anda tampil percaya diri di setiap kesempatan.</p>
+                </div>
+                <div class="tab-content" id="spec">
+                    <ul>
+                        <li><i class="fas fa-check"></i> Bahan: Katun Premium Twill</li>
+                        <li><i class="fas fa-check"></i> Berat: 450 gram</li>
+                        <li><i class="fas fa-check"></i> Panjang: 130-140cm (tergantung ukuran)</li>
+                        <li><i class="fas fa-check"></i> Lebar Dada: 52-64cm</li>
+                        <li><i class="fas fa-check"></i> Lengan: Panjang dengan manset</li>
+                        <li><i class="fas fa-check"></i> Perawatan: Dry clean atau cuci tangan</li>
+                    </ul>
+                </div>
+                <div class="tab-content" id="shipping">
+                    <ul>
+                        <li><i class="fas fa-truck"></i> Pengiriman: JNE, J&T, SiCepat</li>
+                        <li><i class="fas fa-clock"></i> Estimasi: 2-5 hari kerja</li>
+                        <li><i class="fas fa-box"></i> Packaging: Box eksklusif Caymira</li>
+                        <li><i class="fas fa-gift"></i> Free stiker dan kartu ucapan</li>
+                    </ul>
+                </div>
+                <div class="tab-content" id="review">
+                    <ul>
+                        <li><i class="fas fa-star"></i> "Kualitas bahan sangat bagus, adem dan nyaman dipakai" - Ahmad R.</li>
+                        <li><i class="fas fa-star"></i> "Warna gradasinya elegan banget, recommended!" - Faisal K.</li>
+                        <li><i class="fas fa-star"></i> "Pengiriman cepat dan packaging rapi, puas belanja disini" - Rizky M.</li>
+                    </ul>
+                </div>
             </div>
-        </section>
-    </div>
+        </div>
+    </section>
+
+    <!-- Related Products -->
+    
+           
+
+           
+            
+
+        </div>
+    </section>
 
     <!-- FOOTER (SAMA DENGAN BERANDA) -->
     <footer class="footer" id="contact">
