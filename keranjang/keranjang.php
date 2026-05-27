@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
    
     <style>
-        /* === VARIABEL WARNA & FONT (Identik Beranda) === */
+        /* === VARIABEL WARNA & FONT === */
         :root {
             --navy: #0a1628;
             --navy-light: #0f1d35;
@@ -20,12 +20,13 @@
             --white: #ffffff;
             --font-heading: 'Playfair Display', serif;
             --font-body: 'Poppins', sans-serif;
+            --red: #ff4d4d; /* Tambahan warna merah untuk hapus */
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { background-color: var(--navy); color: var(--text-light); font-family: var(--font-body); line-height: 1.6; }
 
-        /* === NAVBAR (Identik Beranda) === */
+        /* === NAVBAR === */
         .navbar {
             position: fixed; top: 0; width: 100%; height: 70px; padding: 0 60px;
             display: flex; justify-content: space-between; align-items: center; z-index: 1000;
@@ -53,7 +54,6 @@
         
         .cart-container { max-width: 1200px; margin: 0 auto 100px; padding: 0 20px; display: grid; grid-template-columns: 1fr 380px; gap: 30px; }
         
-        /* Table Style */
         .cart-table-head { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; background: var(--gold); color: var(--navy); padding: 15px; font-weight: 700; border-radius: 4px; }
         .cart-item { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; padding: 20px 15px; align-items: center; border-bottom: 1px solid rgba(201, 168, 76, 0.2); background: rgba(255,255,255,0.02); }
         
@@ -62,13 +62,26 @@
         .product-details h4 { font-size: 16px; color: var(--white); font-family: var(--font-heading); }
         .product-details p { font-size: 11px; color: var(--text-muted); margin: 5px 0; }
 
-        /* Qty Control */
+        /* Hapus Button Style */
+        .btn-remove-item {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            margin-top: 8px;
+            color: var(--text-muted);
+            font-size: 11px;
+            text-decoration: none;
+            transition: 0.3s;
+        }
+        .btn-remove-item:hover {
+            color: var(--red);
+        }
+
         .qty-control { display: flex; align-items: center; border: 1px solid var(--gold); border-radius: 4px; width: fit-content; overflow: hidden; }
         .qty-control button { background: none; border: none; color: white; padding: 5px 12px; cursor: pointer; transition: 0.3s; }
         .qty-control button:hover { background: var(--gold); color: var(--navy); }
         .qty-control span { padding: 0 10px; font-weight: bold; }
 
-        /* Sidebar Summary */
         .order-summary { border: 1px solid var(--gold); padding: 25px; border-radius: 8px; background: rgba(255,255,255,0.02); height: fit-content; }
         .order-summary h3 { color: var(--gold); font-family: var(--font-heading); font-size: 24px; margin-bottom: 25px; border-bottom: 1px solid rgba(201, 168, 76, 0.3); padding-bottom: 10px; }
         .summary-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
@@ -77,13 +90,11 @@
         .btn-checkout { width: 100%; background: var(--gold); color: var(--navy); border: none; padding: 15px; border-radius: 4px; font-weight: bold; font-size: 16px; cursor: pointer; display: flex; justify-content: center; align-items: center; gap: 10px; transition: 0.3s; margin-top: 10px; }
         .btn-checkout:hover { background: var(--gold-light); transform: translateY(-2px); }
 
-        /* Actions */
         .cart-actions { margin-top: 25px; display: flex; justify-content: space-between; align-items: center; }
         .voucher-box { display: flex; gap: 10px; }
         .voucher-box input { background: transparent; border: 1px solid var(--gold); padding: 10px; color: white; border-radius: 4px; outline: none; }
         .btn-apply { background: var(--gold); border: none; padding: 10px 20px; font-weight: bold; border-radius: 4px; cursor: pointer; }
 
-        /* === FOOTER (Identik Beranda) === */
         .footer { background: #ffffff; border-top: 1px solid rgba(201, 168, 76, 0.15); padding: 50px 60px 30px; position: relative; margin-top: 50px; color: #333; }
         .gold-branch-footer { position: absolute; left: -30px; top: -70px; width: 200px; opacity: 0.5; pointer-events: none; }
         .footer-content { display: grid; grid-template-columns: 1.2fr 1fr 1.2fr 1.2fr; gap: 35px; max-width: 1300px; margin: 0 auto; }
@@ -101,7 +112,6 @@
         .contact-item i { color: var(--gold); margin-top: 3px; }
         .footer-bottom { text-align: center; padding: 35px 0; margin-top: 35px; border-top: 1px solid rgba(201, 168, 76, 0.15); font-size: 12px; color: #ffffff; background-color: #000000; margin-left: -60px; margin-right: -60px; }
 
-        /* Custom Cursor (Identik Beranda) */
         .custom-cursor { width: 20px; height: 20px; border: 2px solid var(--gold); border-radius: 50%; position: fixed; pointer-events: none; z-index: 99999; transition: transform 0.1s; mix-blend-mode: difference; }
         .cursor-dot { width: 6px; height: 6px; background: var(--gold); border-radius: 50%; position: fixed; pointer-events: none; z-index: 99999; }
 
@@ -203,7 +213,7 @@
         </div>
     </div>
 
-    <!-- Footer Identik Beranda -->
+    <!-- Footer -->
     <footer class="footer">
         <svg class="gold-branch-footer" viewBox="0 0 200 300" fill="none">
             <path d="M100 300 Q120 250 100 200 Q80 150 100 100 Q120 50 100 0" stroke="#c9a84c" stroke-width="1" fill="none" opacity="0.4"/>
@@ -255,7 +265,6 @@
         document.addEventListener("DOMContentLoaded", function () {
             renderCart();
             updateBadge();
-            // Mouse Cursor Logic
             const cursor = document.getElementById('cursor');
             const cursorDot = document.getElementById('cursorDot');
             document.addEventListener('mousemove', (e) => {
@@ -268,6 +277,16 @@
 
         function getCart() { return JSON.parse(localStorage.getItem('caymira_cart')) || []; }
         function saveCart(cart) { localStorage.setItem('caymira_cart', JSON.stringify(cart)); renderCart(); updateBadge(); }
+        
+        // TAMBAHAN FITUR HAPUS SATU-SATU
+        function removeItem(index) {
+            let cart = getCart();
+            if(confirm('Hapus produk ini dari keranjang?')) {
+                cart.splice(index, 1);
+                saveCart(cart);
+            }
+        }
+
         function updateBadge() {
             const cart = getCart();
             document.getElementById('cartBadge').textContent = cart.reduce((t, item) => t + item.quantity, 0);
@@ -309,12 +328,13 @@
                 subtotal += itemTotal;
                 totalQty += item.quantity;
 
-                // Path Gambar Cerdas
                 let path = item.image;
                 if(!path.includes('../')) {
-                    if(item.name.toLowerCase().includes('gamis')) path = '../Gamis/' + path;
-                    else if(item.name.toLowerCase().includes('koko')) path = '../Koko/' + path;
-                    else path = '../best-seller/' + path;
+                  if(item.name.toLowerCase().includes('gamis')) path = '../Gamis/' + path;
+                  else if(item.name.toLowerCase().includes('koko')) path = '../Koko/' + path;
+                  else if(item.name.toLowerCase().includes('hijab')) path = '../hijab/' + path; 
+                  else if(item.name.toLowerCase().includes('jubah')) path = '../Jubah/' + path;   
+                  else path = '../best-seller/' + path;
                 }
 
                 return `
@@ -326,6 +346,12 @@
                                 <p>Premium Quality</p>
                                 <span style="font-size:9px; border:1px solid #c9a84c; padding:1px 4px; color:#c9a84c; border-radius:2px;">Color</span>
                                 <span style="font-size:9px; border:1px solid #c9a84c; padding:1px 4px; color:#c9a84c; border-radius:2px;">Size</span>
+                                <!-- FITUR HAPUS DI BAWAH COLOR/SIZE -->
+                                <div>
+                                    <a href="javascript:void(0)" class="btn-remove-item" onclick="removeItem(${index})">
+                                        <i class="fas fa-trash-alt"></i> Hapus Produk
+                                    </a>
+                                </div>
                             </div>
                         </div>
                         <div style="text-align:center;">${formatRupiah(item.price)}</div>
