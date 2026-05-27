@@ -1,11 +1,25 @@
 <?php
 include "koneksi.php";
 
-$query = mysqli_query($conn, "SELECT * FROM best_seller");
+// Ambil parameter search dari URL
+$search = isset($_GET['search']) ? mysqli_real_escape_string($conn, $_GET['search']) : '';
+
+// Build query dasar
+$sql = "SELECT * FROM best_seller WHERE 1=1";
+
+// Logika Pencarian (Search) jika ada
+if (!empty($search)) {
+    $sql .= " AND (nama_produk LIKE '%$search%' OR kategori LIKE '%$search%')";
+}
+
+$query = mysqli_query($conn, $sql);
 
 if(!$query){
    die("Error: ".mysqli_error($conn));
 }
+
+// Hitung jumlah produk yang muncul
+$total_produk = mysqli_num_rows($query);
 ?>
 
 <!DOCTYPE html>
@@ -15,14 +29,14 @@ if(!$query){
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Best Seller - Caymira Modest</title>
 
-    <!-- Fonts (Disamakan dengan halaman Contact) -->
+    <!-- Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
     
     <!-- Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <style>
-        /* === VARIABLES (Disamakan dengan Contact) === */
+        /* === VARIABLES === */
         :root {
             --navy: #0a1628;
             --navy-light: #0f1d35;
@@ -57,7 +71,7 @@ if(!$query){
         ::-webkit-scrollbar-thumb { background: var(--gold); border-radius: 4px; }
         ::-webkit-scrollbar-thumb:hover { background: var(--gold-light); }
 
-        /* === CUSTOM CURSOR (Dari Contact) === */
+        /* === CUSTOM CURSOR === */
         .custom-cursor {
             width: 20px; height: 20px;
             border: 2px solid var(--gold);
@@ -81,7 +95,7 @@ if(!$query){
             z-index: 99999;
         }
 
-        /* === NAVBAR IDENTIK DENGAN CONTACT === */
+        /* === NAVBAR === */
         .navbar {
             position: fixed;
             top: 0;
@@ -261,6 +275,7 @@ if(!$query){
             font-weight: 400;
             color: var(--text-light);
             margin-bottom: 10px;
+            text-transform: uppercase;
         }
         .header-star {
             color: var(--gold);
@@ -277,7 +292,7 @@ if(!$query){
         .features-banner {
             max-width: 1000px;
             margin: 0 auto 50px;
-            border: 1px solid rgba(201, 168, 76, 0.5); /* Mengikuti var(--gold) */
+            border: 1px solid rgba(201, 168, 76, 0.5);
             border-radius: 8px;
             display: flex;
             justify-content: space-between;
@@ -383,7 +398,7 @@ if(!$query){
             border-radius: 0 4px 4px 0; letter-spacing: 1px; z-index: 2;
         }
 
-        /* === TOMBOL ADD TO CART (TAMPIL SAAT HOVER) === */
+        /* === TOMBOL ADD TO CART === */
         .action-overlay {
            position: absolute; 
            bottom: -50px; 
@@ -435,7 +450,21 @@ if(!$query){
         .stars { color: var(--gold); }
         .reviews { color: var(--text-muted); }
 
-        /* === FOOTER IDENTIK DENGAN CONTACT === */
+        /* No Products Found Style */
+        .no-products {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 60px 20px;
+            color: var(--text-muted);
+        }
+        .no-products i {
+            font-size: 48px;
+            color: var(--gold);
+            margin-bottom: 20px;
+            display: block;
+        }
+
+        /* === FOOTER === */
         .footer {
             background: #ffffff;
             border-top: 1px solid rgba(201, 168, 76, 0.15);
@@ -569,7 +598,7 @@ if(!$query){
     <!-- Search Overlay -->
     <div class="search-overlay" id="searchOverlay">
         <div class="search-box">
-            <input type="text" placeholder="Cari produk..." id="searchInput" />
+            <input type="text" placeholder="Cari produk best seller..." id="searchInput" value="<?= htmlspecialchars($search) ?>" />
             <i class="fas fa-times search-close" onclick="toggleSearch()"></i>
         </div>
     </div>
@@ -595,18 +624,11 @@ if(!$query){
 
       <div class="nav-icons">
         <i class="fas fa-search" onclick="toggleSearch()"></i>
-
-          <i class="fas fa-user" onclick="window.location.href='../login_register/profil.php'"></i>
-
-            <div class="cart-icon">
-
-        <!-- Cart Icon Diperbarui -->
-
+        <i class="fas fa-user" onclick="window.location.href='../login_register/profil.php'"></i>
         <div class="cart-icon">
           <i class="fas fa-shopping-cart" onclick="window.location.href='../keranjang/keranjang.php'"></i>
           <span class="cart-badge" id="cartBadge" style="display: none;">0</span>
         </div>
-
         <div class="mobile-menu-btn" id="mobileMenuBtn" onclick="toggleMobileMenu()">
           <span></span>
           <span></span>
@@ -618,11 +640,17 @@ if(!$query){
 
     <!-- HEADER -->
     <section class="header-section">
-        <h1 class="header-title">BEST SELLER</h1>
+        <h1 class="header-title">
+            <?= !empty($search) ? 'HASIL PENCARIAN: "' . htmlspecialchars($search) . '"' : 'BEST SELLER' ?>
+        </h1>
         <div class="header-star"><i class="fas fa-star"></i></div>
         <p class="header-desc">
-            Produk favorit pilihan pelanggan Caymira Modest.<br>
-            Kualitas terbaik, desain timeless, dan selalu jadi pilihan utama
+            <?php if(!empty($search)): ?>
+                <?= $total_produk ?> Produk ditemukan. <a href="?" style="color: var(--gold); text-decoration: underline; margin-left: 10px;">Hapus Pencarian</a>
+            <?php else: ?>
+                Produk favorit pilihan pelanggan Caymira Modest.<br>
+                Kualitas terbaik, desain timeless, dan selalu jadi pilihan utama
+            <?php endif; ?>
         </p>
     </section>
 
@@ -659,7 +687,7 @@ if(!$query){
     </div>
 
     <!-- MAIN CONTENT -->
-    <div class="main-container">
+    <div class="main-container" id="mainContainer">
         
         <!-- SIDEBAR -->
         <aside class="sidebar">
@@ -685,7 +713,6 @@ if(!$query){
                     <div class="checkmark"></div>
                     <span>Hijab</span>
                 </label>
-                <!-- TAMBAHAN KATEGORI JUBAH -->
                 <label class="checkbox-container">
                     <input type="checkbox" class="cat-filter" value="jubah">
                     <div class="checkmark"></div>
@@ -696,63 +723,68 @@ if(!$query){
 
 
         <!-- PRODUCT GRID -->
-     <div class="product-grid" id="productGrid">
+        <div class="product-grid" id="productGrid">
 
-         <?php while($data = mysqli_fetch_assoc($query)) { ?>
+            <?php 
+            if (mysqli_num_rows($query) > 0) {
+                while($data = mysqli_fetch_assoc($query)) { 
+            ?>
 
-            <div class="product-card" data-category="<?= $data['kategori'] ?>">
-                
-<a href="../detailproduk/index.php?id=<?= $data['id_produk'] ?>&kategori=best_seller&nama=<?= urlencode($data['nama_produk']) ?>&harga=<?= $data['harga'] ?>&gambar=<?= urlencode($data['gambar']) ?>" style="text-decoration: none; color: inherit; display: block;">
-                    <div class="product-img-wrap">
-                        <div class="badge-bestseller">
-                        BEST SELLER
-                        </div>
-
-                        <img src="<?= $data['gambar'] ?>" alt="<?= $data['nama_produk'] ?>">
-                        
-                        <div class="action-overlay">
-                            <button type="button" class="btn-action" onclick="event.preventDefault(); event.stopPropagation(); addToCart('<?= $data['id_produk'] ?>', '<?= htmlspecialchars($data['nama_produk'], ENT_QUOTES) ?>', <?= $data['harga'] ?>, '<?= $data['gambar'] ?>');">
-                               <i class="fas fa-cart-plus"></i> Tambah
-                            </button>
-                        </div>
-                    </div>
-
-                    <div class="product-info">
-                        <div class="product-name">
-                            <?= $data['nama_produk'] ?>
-                        </div>
-
-                        <div class="product-price">
-                            Rp. <?= number_format($data['harga'],0,',','.') ?>
-                        </div>
-
-                        <div class="product-rating">
-                            <span class="stars">
-                               <i class="fas fa-star"></i>
-                               <i class="fas fa-star"></i>
-                               <i class="fas fa-star"></i>
-                               <i class="fas fa-star"></i>
-                               <i class="fas fa-star"></i>
-                            </span>
-                            <span class="reviews">
-                                (<?= $data['ulasan'] ?>)
-                            </span>
-                        </div>
-                    </div>
+                <div class="product-card" data-category="<?= $data['kategori'] ?>">
                     
-                </a> </div>
+                    <a href="../detailproduk/index.php?id=<?= $data['id_produk'] ?>&kategori=best_seller&nama=<?= urlencode($data['nama_produk']) ?>&harga=<?= $data['harga'] ?>&gambar=<?= urlencode($data['gambar']) ?>" style="text-decoration: none; color: inherit; display: block;">
+                        <div class="product-img-wrap">
+                            <div class="badge-bestseller">
+                            BEST SELLER
+                            </div>
 
-         <?php } ?>
+                            <img src="<?= $data['gambar'] ?>" alt="<?= $data['nama_produk'] ?>">
+                            
+                            <div class="action-overlay">
+                                <button type="button" class="btn-action" onclick="event.preventDefault(); event.stopPropagation(); addToCart('<?= $data['id_produk'] ?>', '<?= htmlspecialchars($data['nama_produk'], ENT_QUOTES) ?>', <?= $data['harga'] ?>, '<?= $data['gambar'] ?>');">
+                                <i class="fas fa-cart-plus"></i> Tambah
+                                </button>
+                            </div>
+                        </div>
 
-        </div> ```
+                        <div class="product-info">
+                            <div class="product-name">
+                                <?= $data['nama_produk'] ?>
+                            </div>
 
+                            <div class="product-price">
+                                Rp. <?= number_format($data['harga'],0,',','.') ?>
+                            </div>
 
-           
+                            <div class="product-rating">
+                                <span class="stars">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                </span>
+                                <span class="reviews">
+                                    (<?= $data['ulasan'] ?>)
+                                </span>
+                            </div>
+                        </div>
+                        
+                    </a> 
+                </div>
+
+            <?php 
+                } 
+            } else {
+                echo "<div class='no-products'><i class='fas fa-search'></i><h3>Produk Tidak Ditemukan</h3><p>Maaf, produk best seller yang Anda cari tidak tersedia.</p></div>";
+            }
+            ?>
+
         </div> <!-- END OF PRODUCT GRID -->
     </div> <!-- END OF MAIN CONTAINER -->
 
 
-    <!-- Footer (Identik dengan Contact) -->
+    <!-- Footer -->
     <footer class="footer" id="contact">
       <svg class="gold-branch-footer" viewBox="0 0 200 300" fill="none">
         <path d="M100 300 Q120 250 100 200 Q80 150 100 100 Q120 50 100 0" stroke="#c9a84c" stroke-width="1" fill="none" opacity="0.4" />
@@ -832,10 +864,10 @@ if(!$query){
         const cursorDot = document.getElementById("cursorDot");
 
         document.addEventListener("mousemove", (e) => {
-            cursor.style.left = e.clientX - 10 + "px";
-            cursor.style.top = e.clientY - 10 + "px";
-            cursorDot.style.left = e.clientX - 3 + "px";
-            cursorDot.style.top = e.clientY - 3 + "px";
+            cursor.style.left = e.clientX - 10 + 'px';
+            cursor.style.top = e.clientY - 10 + 'px';
+            cursorDot.style.left = e.clientX - 3 + 'px';
+            cursorDot.style.top = e.clientY - 3 + 'px';
         });
 
         document.querySelectorAll("a, button, i, .product-card").forEach((el) => {
@@ -877,6 +909,18 @@ if(!$query){
                 setTimeout(() => document.getElementById("searchInput").focus(), 400);
             }
         }
+
+        // Logika menjalankan pencarian saat tekan Enter (Scroll ke productGrid)
+        document.getElementById('searchInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                const searchTerm = this.value.trim();
+                if (searchTerm !== "") {
+                    window.location.href = '?search=' + encodeURIComponent(searchTerm) + '#mainContainer';
+                } else {
+                    window.location.href = '?#mainContainer';
+                }
+            }
+        });
 
         document.getElementById("searchOverlay").addEventListener("click", (e) => {
             if (e.target === e.currentTarget) toggleSearch();
@@ -944,7 +988,6 @@ if(!$query){
 
             toastText.innerText = message;
             
-            // Menyembunyikan icon centang bawaan untuk emoticon love dll
             if(useIcon) {
                 toastIcon.style.display = 'inline-block';
             } else {
@@ -973,7 +1016,6 @@ if(!$query){
             const badge = document.getElementById('cartBadge');
             if (badge) {
                 badge.textContent = totalItems;
-                // Sembunyikan badge jika keranjang kosong
                 badge.style.display = totalItems > 0 ? 'flex' : 'none';
             }
         }
@@ -1000,7 +1042,6 @@ if(!$query){
             showToast( name + ' berhasil ditambahkan!', false);
         }
 
-        // Panggil fungsi ketika halaman selesai dimuat agar jumlah badge update di awal
         document.addEventListener("DOMContentLoaded", function () {
             updateCartBadge();
         });

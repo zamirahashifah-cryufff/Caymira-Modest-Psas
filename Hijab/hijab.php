@@ -1,6 +1,20 @@
 <?php
 // Memanggil koneksi database
 include 'koneksi.php'; 
+
+// Ambil parameter search dari URL
+$search = isset($_GET['search']) ? mysqli_real_escape_string($koneksi, $_GET['search']) : '';
+
+// Build query dasar
+$query = "SELECT * FROM hijab";
+
+// Tambahkan logika Pencarian (Search) jika ada
+if (!empty($search)) {
+    $query .= " WHERE nama_produk LIKE '%$search%'";
+}
+
+$result = mysqli_query($koneksi, $query);
+$total_produk = mysqli_num_rows($result);
 ?>
 <!DOCTYPE html>
 <html lang="id">
@@ -161,10 +175,21 @@ include 'koneksi.php';
 
         /* ===================== HERO SECTION HIJAB ===================== */
         .hero-hijab {
-            padding: 150px 0 80px; display: flex; align-items: center;
-            justify-content: space-between; position: relative;
-            border-bottom: 1px solid rgba(201, 168, 76, 0.2); z-index: 2;
+            width: 100%;
+            position: relative;
+            z-index: 2;
+            /* GARIS PEMBATAS FULL SCREEN & TIPIS */
+            border-bottom: 1px solid var(--gold);
         }
+        
+        /* Wrapper untuk konten hero agar tetap di tengah */
+        .hero-wrapper {
+            display: flex; 
+            align-items: center;
+            justify-content: space-between; 
+            padding: 150px 0 80px;
+        }
+
         .hero-hijab::before {
             content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
             background: radial-gradient(circle at 70% 50%, rgba(201, 168, 76, 0.1) 0%, transparent 60%);
@@ -255,16 +280,6 @@ include 'koneksi.php';
         .product-card:hover .product-info h3 { color: var(--gold-light); }
         .product-info p { color: var(--gold); font-weight: 600; font-size: 16px; }
 
-        /* ===================== PAGINATION ===================== */
-        .pagination { display: flex; justify-content: center; gap: 15px; padding: 40px 0 80px; position: relative; z-index:2; }
-        .page-btn {
-            background: transparent; border: 1px solid rgba(201, 168, 76, 0.4);
-            color: var(--text-light); padding: 10px 25px; border-radius: 30px;
-            font-size: 13px; font-weight: 500; cursor: pointer; transition: all 0.3s ease;
-            display: flex; align-items: center; gap: 10px;
-        }
-        .page-btn:hover { background: var(--gold); color: var(--navy); border-color: var(--gold); }
-
         /* ===================== FOOTER ===================== */
         .footer {
             background: #ffffff; border-top: 1px solid rgba(201, 168, 76, 0.15);
@@ -348,6 +363,12 @@ include 'koneksi.php';
         .scroll-top.visible { opacity: 1; visibility: visible; }
         .scroll-top:hover { transform: translateY(-5px) scale(1.1); box-shadow: 0 8px 25px rgba(201, 168, 76, 0.5); }
 
+        /* No Results Section */
+        .no-products {
+            grid-column: 1 / -1; text-align: center; padding: 60px 20px; color: var(--text-muted);
+        }
+        .no-products i { font-size: 48px; color: var(--gold); margin-bottom: 20px; display: block; }
+
         /* ===================== RESPONSIVE ===================== */
         @media (max-width: 1024px) {
             .product-grid { grid-template-columns: repeat(3, 1fr); }
@@ -365,7 +386,7 @@ include 'koneksi.php';
             }
             .nav-links.active { right: 0; }
             .mobile-menu-btn { display: flex; }
-            .hero-hijab { flex-direction: column; padding-top: 120px; text-align: center; }
+            .hero-wrapper { flex-direction: column; padding-top: 120px; text-align: center; }
             .hero-text { padding-right: 0; }
             .hero-images { margin-top: 40px; width: 100%; height: 350px; }
             .img-front { left: 50%; transform: translateX(-50%); width: 250px; height: 320px; }
@@ -398,7 +419,7 @@ include 'koneksi.php';
     <!-- Search Overlay -->
     <div class="search-overlay" id="searchOverlay">
         <div class="search-box">
-            <input type="text" placeholder="Cari produk kerudung..." id="searchInput">
+            <input type="text" placeholder="Cari produk kerudung..." id="searchInput" value="<?= htmlspecialchars($search) ?>">
             <i class="fas fa-times search-close" onclick="toggleSearch()"></i>
         </div>
     </div>
@@ -406,7 +427,6 @@ include 'koneksi.php';
     <!-- Navbar -->
     <nav class="navbar" id="navbar">
         <div class="logo" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">
-            <!-- Sesuaikan src logo dengan path Anda -->
             <img src="../Beranda/Gambarberanda/logo_caymira_modest.png" alt="Caymira Modest" class="logo-img" onerror="this.src='https://via.placeholder.com/150x50/0a1628/c9a84c?text=Caymira'">
         </div>
 
@@ -421,7 +441,6 @@ include 'koneksi.php';
             <i class="fas fa-search" onclick="toggleSearch()"></i>
             <i class="fas fa-user" onclick="window.location.href='../login_register/profil.php'"></i>
             
-            <!-- Icon Keranjang Diperbarui -->
             <div class="cart-icon">
                 <i class="fas fa-shopping-cart" onclick="window.location.href='../keranjang/keranjang.php'"></i>
                 <span class="cart-badge" id="cartBadge" style="display: none;">0</span>
@@ -433,41 +452,39 @@ include 'koneksi.php';
         </div>
     </nav>
 
-    <!-- Hero Section Hijab -->
-    <section class="container hero-hijab">
-        <div class="hero-text">
-            <h1>Kerudung</h1>
-            <p>Koleksi kerudung terbaru dengan sentuhan modern dan elegan, dirancang untuk memberikan kenyamanan sekaligus tampilan yang menawan dalam setiap aktivitas Anda.</p>
-            <button class="btn-gold" onclick="document.getElementById('koleksi').scrollIntoView({behavior: 'smooth'})">
-                Belanja Sekarang <i class="fas fa-arrow-down" style="margin-left:8px;"></i>
-            </button>
-        </div>
-        <div class="hero-images">
-            <img src="gambarhijab/gambar_hero_1.png" alt="Model Hijab 1" class="hero-img img-front">
+    <!-- Hero Section Hijab (Width Full Screen untuk Garis) -->
+    <section class="hero-hijab">
+        <div class="container hero-wrapper">
+            <div class="hero-text">
+                <h1>Kerudung</h1>
+                <p>Koleksi kerudung terbaru dengan sentuhan modern dan elegan, dirancang untuk memberikan kenyamanan sekaligus tampilan yang menawan dalam setiap aktivitas Anda.</p>
+                <button class="btn-gold" onclick="document.getElementById('koleksi').scrollIntoView({behavior: 'smooth'})">
+                    Belanja Sekarang <i class="fas fa-arrow-down" style="margin-left:8px;"></i>
+                </button>
+            </div>
+            <div class="hero-images">
+                <img src="gambarhijab/gambar_hero_1.png" alt="Model Hijab 1" class="hero-img img-front">
+            </div>
         </div>
     </section>
 
     <!-- Header Grid Produk -->
     <section class="container section-header" id="koleksi">
-        <h2>Koleksi Kerudung</h2>
-        <p>Beragam model kerudung terbaru dengan kualitas terbaik, siap melengkapi gaya muslimah yang modis dan elegan.</p>
+        <?php if(!empty($search)): ?>
+            <h2>Hasil Pencarian: "<?= htmlspecialchars($search) ?>"</h2>
+            <p><?= $total_produk ?> Produk ditemukan. <a href="?" style="color: var(--gold); text-decoration: underline; margin-left: 10px;">Hapus Pencarian</a></p>
+        <?php else: ?>
+            <h2>Koleksi Kerudung</h2>
+            <p>Beragam model kerudung terbaru dengan kualitas terbaik, siap melengkapi gaya muslimah yang modis dan elegan.</p>
+        <?php endif; ?>
     </section>
 
     <!-- Grid Produk (Dinamis dari Database) -->
     <section class="container product-grid">
         
         <?php
-        // Mengambil data dari tabel hijab yang ada di database
-        $query = "SELECT * FROM hijab";
-        $result = mysqli_query($koneksi, $query);
-
-        // Mengecek apakah ada data di dalam tabel
         if (mysqli_num_rows($result) > 0) {
-            
-            // Melakukan perulangan untuk menampilkan semua produk
             while ($row = mysqli_fetch_assoc($result)) {
-                
-                // Format harga agar rapi, contoh: Rp 229.000
                 $harga_format = "Rp " . number_format($row['harga'], 0, ',', '.');
         ?>
         
@@ -475,7 +492,6 @@ include 'koneksi.php';
             <div class="img-wrapper">
                 <img src="<?= $row['gambar'] ?>" alt="<?= $row['nama_produk'] ?>">
                 
-                <!-- Action Overlay & Tombol Tambah ke Keranjang Diperbarui -->
                 <div class="action-overlay">
                     <button class="btn-action" onclick="addToCart('<?= $row['id'] ?>', '<?= htmlspecialchars($row['nama_produk'], ENT_QUOTES) ?>', <?= $row['harga'] ?>, '<?= $row['gambar'] ?>'); event.stopPropagation();">
                         <i class="fas fa-cart-plus"></i> Tambah
@@ -490,10 +506,9 @@ include 'koneksi.php';
         </div>
 
         <?php 
-            } // Penutup while loop
+            }
         } else {
-            // Jika tabel kosong, tampilkan pesan ini
-            echo "<p style='grid-column: 1 / -1; text-align: center; color: var(--gold);'>Belum ada produk yang ditambahkan di database.</p>";
+            echo "<div class='no-products'><i class='fas fa-search'></i><h3>Produk tidak ditemukan</h3><p>Coba gunakan kata kunci lain.</p></div>";
         }
         ?>
 
@@ -563,13 +578,9 @@ include 'koneksi.php';
         </div>
     </footer>
 
-    <!-- JavaScript Interaktif Terpadu -->
+    <!-- JavaScript -->
     <script>
         document.addEventListener("DOMContentLoaded", function () {
-            const loader = document.getElementById("loader");
-            setTimeout(() => { loader.classList.add("hidden"); }, 1000); 
-            
-            // Update badge keranjang saat pertama kali web dimuat
             updateCartBadge();
         });
 
@@ -597,7 +608,25 @@ include 'koneksi.php';
         }
 
         // Search Overlay
-        function toggleSearch() { document.getElementById('searchOverlay').classList.toggle('active'); }
+        function toggleSearch() { 
+            const overlay = document.getElementById('searchOverlay');
+            overlay.classList.toggle('active');
+            if (overlay.classList.contains('active')) {
+                setTimeout(() => document.getElementById('searchInput').focus(), 300);
+            }
+        }
+
+        // Logika Enter untuk Search
+        document.getElementById('searchInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                const searchTerm = this.value.trim();
+                if (searchTerm !== "") {
+                    window.location.href = '?search=' + encodeURIComponent(searchTerm) + '#koleksi';
+                } else {
+                    window.location.href = '?#koleksi';
+                }
+            }
+        });
 
         // Mobile Menu
         function toggleMobileMenu() {
@@ -613,7 +642,7 @@ include 'koneksi.php';
             setTimeout(() => toast.classList.remove('show'), 3000);
         }
 
-        // Scroll to Top Button dynamically added
+        // Scroll to Top
         const scrollTopBtn = document.createElement('button');
         scrollTopBtn.className = 'scroll-top';
         scrollTopBtn.innerHTML = '<i class="fas fa-arrow-up"></i>';
@@ -623,7 +652,6 @@ include 'koneksi.php';
             if(window.scrollY > 500) scrollTopBtn.classList.add('visible');
             else scrollTopBtn.classList.remove('visible');
             
-            // Navbar Scroll Effect
             const navbar = document.getElementById('navbar');
             if(window.scrollY > 50) navbar.classList.add('scrolled');
             else navbar.classList.remove('scrolled');
@@ -631,34 +659,12 @@ include 'koneksi.php';
 
         scrollTopBtn.addEventListener('click', () => { window.scrollTo({top: 0, behavior: 'smooth'}); });
 
-        // Newsletter Subscription
         function handleSubscribe(e) {
             e.preventDefault();
             const email = document.getElementById('emailInput').value;
             showToast('📧 Terima kasih! ' + email + ' telah berlangganan.');
             document.getElementById('emailInput').value = '';
         }
-
-        // Animasi Scroll Reveal (Kartu Produk Hijab)
-        const cards = document.querySelectorAll('.product-card');
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach((entry, index) => {
-                if (entry.isIntersecting) {
-                    setTimeout(() => {
-                        entry.target.style.opacity = '1';
-                        entry.target.style.transform = 'translateY(0)';
-                    }, index * 80);
-                    observer.unobserve(entry.target);
-                }
-            });
-        }, { threshold: 0.1 });
-
-        cards.forEach(card => {
-            card.style.opacity = '0';
-            card.style.transform = 'translateY(40px)';
-            card.style.transition = 'all 0.6s cubic-bezier(0.4, 0, 0.2, 1)';
-            observer.observe(card);
-        });
 
         // ===================== LOGIKA KERANJANG BELANJA =====================
         function getCart() {
@@ -676,7 +682,6 @@ include 'koneksi.php';
             const badge = document.getElementById('cartBadge');
             if (badge) {
                 badge.textContent = totalItems;
-                // Sembunyikan badge jika keranjang kosong
                 badge.style.display = totalItems > 0 ? 'flex' : 'none';
             }
         }

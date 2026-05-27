@@ -1,12 +1,18 @@
 <?php
 include 'koneksi.php';
 
-// Ambil parameter filter dari URL
+// Ambil parameter filter, sort, dan search dari URL
 $filter = isset($_GET['filter']) ? $_GET['filter'] : 'all';
 $sort = isset($_GET['sort']) ? $_GET['sort'] : 'newest';
+$search = isset($_GET['search']) ? mysqli_real_escape_string($conn, $_GET['search']) : '';
 
-// Build query
+// Build query dasar
 $sql = "SELECT * FROM gamis WHERE 1=1";
+
+// Tambahkan logika Pencarian (Search) jika ada
+if (!empty($search)) {
+    $sql .= " AND (nama LIKE '%$search%' OR warna LIKE '%$search%')";
+}
 
 // Filter
 if ($filter == 'new') {
@@ -28,8 +34,11 @@ if ($sort == 'price-low') {
 
 $result = mysqli_query($conn, $sql);
 
-// Hitung total produk
-$count_sql = "SELECT COUNT(*) as total FROM gamis";
+// Hitung total produk (terpengaruh hasil pencarian)
+$count_sql = "SELECT COUNT(*) as total FROM gamis WHERE 1=1";
+if (!empty($search)) {
+    $count_sql .= " AND (nama LIKE '%$search%' OR warna LIKE '%$search%')";
+}
 $count_result = mysqli_query($conn, $count_sql);
 $count_row = mysqli_fetch_assoc($count_result);
 $total_produk = $count_row['total'];
@@ -269,7 +278,7 @@ $total_produk = $count_row['total'];
         }
         .search-close:hover { transform: translateY(-50%) rotate(90deg); }
         
-        /* === GAMIS HERO SECTION (DISAMAKAN DENGAN JUBAH) === */
+        /* === GAMIS HERO SECTION === */
         .hero-gamis {
             position: relative;
             width: 100%;
@@ -416,7 +425,7 @@ $total_produk = $count_row['total'];
         .hero-gamis-btn i { transition: transform 0.3s; }
         .hero-gamis-btn:hover i { transform: translateX(5px); }
 
-        /* Hero Image - Disamakan dengan Jubah */
+        /* Hero Image */
         .hero-gamis-images {
             flex: 1;
             display: flex;
@@ -488,7 +497,7 @@ $total_produk = $count_row['total'];
         @keyframes rotate { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
         @keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
 
-        /* Gold Branch Decorations (Tetap Ada) */
+        /* Gold Branch Decorations */
         .gold-branch-left {
             position: absolute;
             left: -60px;
@@ -1025,6 +1034,7 @@ $total_produk = $count_row['total'];
             font-size: 13px;
             outline: none;
         }
+        .newsletter-form input::placeholder { color: #888; }
         .newsletter-form button {
             background: var(--gold);
             border: none;
@@ -1205,7 +1215,7 @@ $total_produk = $count_row['total'];
     <!-- Search Overlay -->
     <div class="search-overlay" id="searchOverlay">
         <div class="search-box">
-            <input type="text" placeholder="Cari produk gamis..." id="searchInput">
+            <input type="text" placeholder="Cari produk gamis..." id="searchInput" value="<?php echo htmlspecialchars($search); ?>">
             <i class="fas fa-times search-close" onclick="toggleSearch()"></i>
         </div>
     </div>
@@ -1238,7 +1248,7 @@ $total_produk = $count_row['total'];
         </div>
     </nav>
 
-    <!-- Hero Gamis (Gaya Jubah) -->
+    <!-- Hero Gamis -->
     <section class="hero-gamis" id="gamis">
         <div class="hero-deco-circle hero-deco-1"></div>
         <div class="hero-deco-circle hero-deco-2"></div>
@@ -1260,7 +1270,7 @@ $total_produk = $count_row['total'];
 
             <div class="hero-gamis-images">
                 <div class="hero-gamis-img-wrapper">
-                    <img src="gambargamis/hero gamis.png" 
+                    <img src="gambargamis/hero gamis new.png" 
                         alt="Caymira Modest Gamis Collection"
                         onerror="this.src='gambargamis/gamis-hero.jpg'">
                     <div class="hero-gamis-tag">NEW ARRIVAL</div>
@@ -1278,16 +1288,24 @@ $total_produk = $count_row['total'];
     </section>
 
     <!-- Filter Section -->
-    <section class="filter-section">
+    <section class="filter-section" id="filterArea">
         <div class="filter-container">
             <div class="filter-title">
-                Koleksi Gamis <span><?php echo $total_produk; ?> Produk</span>
+                <?php if(!empty($search)): ?>
+                    Hasil Pencarian: "<?php echo htmlspecialchars($search); ?>"
+                <?php else: ?>
+                    Koleksi Gamis 
+                <?php endif; ?>
+                <span><?php echo $total_produk; ?> Produk</span>
+                <?php if(!empty($search)): ?>
+                    <a href="?" style="font-size: 12px; color: var(--gold); margin-left: 10px; text-decoration: underline;">Hapus Pencarian</a>
+                <?php endif; ?>
             </div>
             
             <div class="filter-buttons">
-                <a href="?filter=all&sort=<?php echo $sort; ?>" class="filter-btn <?php echo $filter == 'all' ? 'active' : ''; ?>">Semua</a>
-                <a href="?filter=new&sort=<?php echo $sort; ?>" class="filter-btn <?php echo $filter == 'new' ? 'active' : ''; ?>">Terbaru</a>
-                <a href="?filter=bestseller&sort=<?php echo $sort; ?>" class="filter-btn <?php echo $filter == 'bestseller' ? 'active' : ''; ?>">Best Seller</a>
+                <a href="?filter=all&sort=<?php echo $sort; ?>&search=<?php echo urlencode($search); ?>#products" class="filter-btn <?php echo $filter == 'all' ? 'active' : ''; ?>">Semua</a>
+                <a href="?filter=new&sort=<?php echo $sort; ?>&search=<?php echo urlencode($search); ?>#products" class="filter-btn <?php echo $filter == 'new' ? 'active' : ''; ?>">Terbaru</a>
+                <a href="?filter=bestseller&sort=<?php echo $sort; ?>&search=<?php echo urlencode($search); ?>#products" class="filter-btn <?php echo $filter == 'bestseller' ? 'active' : ''; ?>">Best Seller</a>
             </div>
 
             <div class="sort-dropdown">
@@ -1295,16 +1313,16 @@ $total_produk = $count_row['total'];
                     Urutkan <i class="fas fa-chevron-down"></i>
                 </button>
                 <ul class="sort-menu" id="sortMenu">
-                    <li><a href="?filter=<?php echo $filter; ?>&sort=newest" class="<?php echo $sort == 'newest' ? 'active' : ''; ?>">Terbaru</a></li>
-                    <li><a href="?filter=<?php echo $filter; ?>&sort=price-low" class="<?php echo $sort == 'price-low' ? 'active' : ''; ?>">Harga: Rendah ke Tinggi</a></li>
-                    <li><a href="?filter=<?php echo $filter; ?>&sort=price-high" class="<?php echo $sort == 'price-high' ? 'active' : ''; ?>">Harga: Tinggi ke Rendah</a></li>
-                    <li><a href="?filter=<?php echo $filter; ?>&sort=popular" class="<?php echo $sort == 'popular' ? 'active' : ''; ?>">Paling Populer</a></li>
+                    <li><a href="?filter=<?php echo $filter; ?>&sort=newest&search=<?php echo urlencode($search); ?>#products" class="<?php echo $sort == 'newest' ? 'active' : ''; ?>">Terbaru</a></li>
+                    <li><a href="?filter=<?php echo $filter; ?>&sort=price-low&search=<?php echo urlencode($search); ?>#products" class="<?php echo $sort == 'price-low' ? 'active' : ''; ?>">Harga: Rendah ke Tinggi</a></li>
+                    <li><a href="?filter=<?php echo $filter; ?>&sort=price-high&search=<?php echo urlencode($search); ?>#products" class="<?php echo $sort == 'price-high' ? 'active' : ''; ?>">Harga: Tinggi ke Rendah</a></li>
+                    <li><a href="?filter=<?php echo $filter; ?>&sort=popular&search=<?php echo urlencode($search); ?>#products" class="<?php echo $sort == 'popular' ? 'active' : ''; ?>">Paling Populer</a></li>
                 </ul>
             </div>
         </div>
     </section>
 
-    <!-- Products Grid (PHP LOOP) -->
+    <!-- Products Grid -->
    <section class="products-section" id="products">
         <div class="products-grid" id="productsGrid">
             <?php
@@ -1378,9 +1396,9 @@ $total_produk = $count_row['total'];
             else:
             ?>
             <div class="no-products">
-                <i class="fas fa-box-open"></i>
-                <h3>Belum Ada Produk</h3>
-                <p>Produk akan segera hadir. Stay tuned!</p>
+                <i class="fas fa-search"></i>
+                <h3>Pencarian Tidak Ditemukan</h3>
+                <p>Maaf, produk yang Anda cari tidak tersedia. Coba kata kunci lain.</p>
             </div>
             <?php endif; ?>
         </div>
@@ -1506,8 +1524,25 @@ $total_produk = $count_row['total'];
     }
 
     function toggleSearch() {
-        document.getElementById('searchOverlay').classList.toggle('active');
+        const overlay = document.getElementById('searchOverlay');
+        overlay.classList.toggle('active');
+        if (overlay.classList.contains('active')) {
+            setTimeout(() => document.getElementById('searchInput').focus(), 300);
+        }
     }
+
+    // Logika menjalankan pencarian saat tekan Enter (Sekarang otomatis scroll ke bagian produk)
+    document.getElementById('searchInput').addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') {
+            const searchTerm = this.value.trim();
+            if (searchTerm !== "") {
+                // Menambahkan #products di akhir URL agar halaman otomatis scroll ke sana
+                window.location.href = '?search=' + encodeURIComponent(searchTerm) + '#products';
+            } else {
+                window.location.href = '?#products';
+            }
+        }
+    });
 
     function toggleMobileMenu() {
         document.getElementById('navLinks').classList.toggle('active');

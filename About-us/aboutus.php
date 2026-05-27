@@ -1153,15 +1153,18 @@ if (!isset($_SESSION['user_id'])) {
     
     <i class="fas fa-user" onclick="window.location.href='../login_register/profil.php'"></i>
     
+    <!-- Fitur Keranjang yang sudah disamakan dengan Best Seller -->
     <div class="cart-icon">
-        <i class="fas fa-shopping-cart" onclick="showToast('🛒 Menuju keranjang belanja...')"></i>
+        <i class="fas fa-shopping-cart" onclick="window.location.href='../keranjang/keranjang.php'"></i>
+        <span class="cart-badge" id="cartBadge" style="display: none;">0</span>
     </div>
+
     <div class="mobile-menu-btn" id="mobileMenuBtn" onclick="toggleMobileMenu()">
+        <span></span>
+        <span></span>
+        <span></span>
+    </div>
 </div>
-                <span></span>
-                <span></span>
-                <span></span>
-            </div>
         </div>
     </nav>
 
@@ -1249,17 +1252,17 @@ if (!isset($_SESSION['user_id'])) {
         <h2 class="values-title">Our Values</h2>
         <div class="values-grid">
             <div class="value-card" onclick="showToast('🎯 Modesty: Gaya tanpa meninggalkan nilai syar\'i')">
-                <div class="value-icon">🧕</div>
+                <div class="value-icon">✦</div>
                 <h3 class="value-title">Modesty</h3>
                 <p class="value-desc">Menjaga aurat dengan gaya yang tetap anggun dan modern</p>
             </div>
             <div class="value-card" onclick="showToast('💎 Quality: Bahan terbaik untuk kenyamanan maksimal')">
-                <div class="value-icon">✨</div>
+                <div class="value-icon">✹</div>
                 <h3 class="value-title">Quality</h3>
                 <p class="value-desc">Bahan premium yang nyaman dan tahan lama</p>
             </div>
             <div class="value-card" onclick="showToast('🎨 Design: Timeless design untuk setiap momen')">
-                <div class="value-icon">🎨</div>
+                <div class="value-icon">❈</div>
                 <h3 class="value-title">Design</h3>
                 <p class="value-desc">Desain timeless yang sesuai untuk berbagai acara</p>
             </div>
@@ -1384,7 +1387,8 @@ if (!isset($_SESSION['user_id'])) {
         // ===== LOADING SCREEN =====
         window.addEventListener('load', () => {
             setTimeout(() => {
-                document.getElementById('loader').classList.add('hidden');
+                const loader = document.getElementById('loader');
+                if(loader) loader.classList.add('hidden');
             }, 2000);
         });
 
@@ -1509,6 +1513,7 @@ if (!isset($_SESSION['user_id'])) {
         const dots = document.querySelectorAll('.slider-dot');
 
         function goToSlide(index) {
+            if (slides.length === 0) return;
             slides[currentSlide].classList.remove('active');
             dots[currentSlide].classList.remove('active');
             currentSlide = index;
@@ -1518,6 +1523,7 @@ if (!isset($_SESSION['user_id'])) {
 
         // Auto slide
         setInterval(() => {
+            if (slides.length === 0) return;
             const next = (currentSlide + 1) % slides.length;
             goToSlide(next);
         }, 5000);
@@ -1626,18 +1632,36 @@ if (!isset($_SESSION['user_id'])) {
 
         // ===== KEYBOARD SHORTCUTS =====
         document.addEventListener('keydown', (e) => {
-            // ESC to close overlays
             if (e.key === 'Escape') {
                 document.getElementById('searchOverlay').classList.remove('active');
                 document.getElementById('popupOverlay').classList.remove('active');
             }
-            // / to open search
             if (e.key === '/' && !e.target.matches('input')) {
                 e.preventDefault();
                 toggleSearch();
             }
-        
+        });
 
+        // ===================== LOGIKA KERANJANG BELANJA (SAMA DENGAN BEST SELLER) =====================
+        function getCart() {
+            return JSON.parse(localStorage.getItem('caymira_cart')) || [];
+        }
+
+        function updateCartBadge() {
+            const cart = getCart();
+            const totalItems = cart.reduce((total, item) => total + item.quantity, 0);
+            
+            const badge = document.getElementById('cartBadge');
+            if (badge) {
+                badge.textContent = totalItems;
+                // Sembunyikan badge jika keranjang kosong
+                badge.style.display = totalItems > 0 ? 'flex' : 'none';
+            }
+        }
+
+        // Panggil fungsi ketika halaman selesai dimuat agar jumlah badge update di awal
+        document.addEventListener("DOMContentLoaded", function () {
+            updateCartBadge();
         });
     </script>
 </body>

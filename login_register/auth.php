@@ -282,7 +282,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     <nav class="navbar">
         <div class="logo">
-            <h2>CAYMIRA</h2>
+             <img src="../Beranda/Gambarberanda/logo_caymira_modest.png" alt="Caymira Modest" class="logo-img">
         </div>
         <ul class="nav-links">
             <li><a href="../Beranda/beranda.php" class="interactive">Beranda</a></li>
