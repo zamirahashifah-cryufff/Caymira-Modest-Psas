@@ -443,9 +443,7 @@ include 'koneksi.php';
             </button>
         </div>
         <div class="hero-images">
-            <!-- Ganti src dengan gambar model hijab asli Anda -->
-            <img src="https://via.placeholder.com/400x600/152238/c9a84c?text=Model+2" alt="Model Hijab 2" class="hero-img img-back">
-            <img src="https://via.placeholder.com/400x600/141e2a/c9a84c?text=Model+1" alt="Model Hijab 1" class="hero-img img-front">
+            <img src="gambarhijab/gambar_hero_1.png" alt="Model Hijab 1" class="hero-img img-front">
         </div>
     </section>
 
