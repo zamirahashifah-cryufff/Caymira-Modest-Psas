@@ -1126,6 +1126,31 @@ select.form-input {
     .checkout-card { padding: 25px; }
     .pricing-total-value { font-size: 22px; }
 }
+/* === FIX AUTOFILL BROWSER BIAR GAK JADI PUTIH & TEKS TETAP TERANG === */
+input:-webkit-autofill,
+input:-webkit-autofill:hover, 
+input:-webkit-autofill:focus, 
+input:-webkit-autofill:active,
+textarea:-webkit-autofill,
+textarea:-webkit-autofill:hover,
+textarea:-webkit-autofill:focus,
+textarea:-webkit-autofill:active,
+select:-webkit-autofill,
+select:-webkit-autofill:hover,
+select:-webkit-autofill:focus {
+    -webkit-text-fill-color: var(--text-light) !important;
+    -webkit-box-shadow: 0 0 0px 1000px transparent inset !important;
+    background-color: transparent !important;
+    color: var(--text-light) !important;
+    transition: background-color 5000s ease-in-out 0s;
+}
+
+/* === FIX WARNA OPSI DROPDOWN BIAR GELAP === */
+select.form-input option {
+    background-color: var(--bg-card);
+    color: var(--text-light);
+    padding: 10px;
+}
     </style>
 <base target="_blank">
 </head>
@@ -1196,15 +1221,15 @@ select.form-input {
     <!-- Main Checkout -->
     <main class="checkout-main container">
         <div class="checkout-grid">
-            <!-- Left Column: Form -->
+            
             <div class="checkout-left">
-                <!-- Shipping Info -->
+                
                 <div class="checkout-card" style="margin-bottom: 30px;">
                     <h2 class="card-title"><i class="fas fa-truck"></i> Informasi Pengiriman</h2>
                     <form id="checkoutForm" onsubmit="handleCheckout(event)">
                         <div class="form-group">
                             <label class="form-label">Nama Lengkap</label>
-                            <input type="text" class="form-input" id="nama" placeholder="Masukkan nama lengkap Anda" required>
+                            <input type="text" class="form-input" id="nama" placeholder="Masukkan nama lengkap Anda" required spellcheck="false">
                             <span class="error-text" id="error-nama">Nama lengkap wajib diisi</span>
                         </div>
                         <div class="form-row">
@@ -1220,21 +1245,53 @@ select.form-input {
                         </div>
                         <div class="form-group">
                             <label class="form-label">Alamat Lengkap</label>
-                            <textarea class="form-input" id="alamat" placeholder="Nama jalan, nomor rumah, RT/RW, kelurahan" required></textarea>
+                            <textarea class="form-input" id="alamat" placeholder="Nama jalan, nomor rumah, RT/RW, kelurahan" required spellcheck="false"></textarea>
                             <span class="error-text" id="error-alamat">Alamat lengkap wajib diisi</span>
                         </div>
                         <div class="form-row">
                             <div class="form-group">
                                 <label class="form-label">Provinsi</label>
                                 <div class="select-wrapper">
-                                    <select class="form-input" id="provinsi" required>
+                                    <select class="form-input" id="provinsi" required onchange="updateKota()">
                                         <option value="" disabled selected>Pilih Provinsi</option>
-                                        <option value="jawa-barat">Jawa Barat</option>
-                                        <option value="jawa-timur">Jawa Timur</option>
-                                        <option value="jawa-tengah">Jawa Tengah</option>
-                                        <option value="dki-jakarta">DKI Jakarta</option>
+                                        <option value="aceh">Aceh</option>
+                                        <option value="bali">Bali</option>
                                         <option value="banten">Banten</option>
-                                        <option value="yogyakarta">DI Yogyakarta</option>
+                                        <option value="bengkulu">Bengkulu</option>
+                                        <option value="di-yogyakarta">DI Yogyakarta</option>
+                                        <option value="dki-jakarta">DKI Jakarta</option>
+                                        <option value="gorontalo">Gorontalo</option>
+                                        <option value="jambi">Jambi</option>
+                                        <option value="jawa-barat">Jawa Barat</option>
+                                        <option value="jawa-tengah">Jawa Tengah</option>
+                                        <option value="jawa-timur">Jawa Timur</option>
+                                        <option value="kalimantan-barat">Kalimantan Barat</option>
+                                        <option value="kalimantan-selatan">Kalimantan Selatan</option>
+                                        <option value="kalimantan-tengah">Kalimantan Tengah</option>
+                                        <option value="kalimantan-timur">Kalimantan Timur</option>
+                                        <option value="kalimantan-utara">Kalimantan Utara</option>
+                                        <option value="kepulauan-bangka-belitung">Kepulauan Bangka Belitung</option>
+                                        <option value="kepulauan-riau">Kepulauan Riau</option>
+                                        <option value="lampung">Lampung</option>
+                                        <option value="maluku">Maluku</option>
+                                        <option value="maluku-utara">Maluku Utara</option>
+                                        <option value="nusa-tenggara-barat">Nusa Tenggara Barat (NTB)</option>
+                                        <option value="nusa-tenggara-timur">Nusa Tenggara Timur (NTT)</option>
+                                        <option value="papua">Papua</option>
+                                        <option value="papua-barat">Papua Barat</option>
+                                        <option value="papua-barat-daya">Papua Barat Daya</option>
+                                        <option value="papua-pegunungan">Papua Pegunungan</option>
+                                        <option value="papua-selatan">Papua Selatan</option>
+                                        <option value="papua-tengah">Papua Tengah</option>
+                                        <option value="riau">Riau</option>
+                                        <option value="sulawesi-barat">Sulawesi Barat</option>
+                                        <option value="sulawesi-selatan">Sulawesi Selatan</option>
+                                        <option value="sulawesi-tengah">Sulawesi Tengah</option>
+                                        <option value="sulawesi-tenggara">Sulawesi Tenggara</option>
+                                        <option value="sulawesi-utara">Sulawesi Utara</option>
+                                        <option value="sumatera-barat">Sumatera Barat</option>
+                                        <option value="sumatera-selatan">Sumatera Selatan</option>
+                                        <option value="sumatera-utara">Sumatera Utara</option>
                                     </select>
                                 </div>
                             </div>
@@ -1242,12 +1299,7 @@ select.form-input {
                                 <label class="form-label">Kota / Kabupaten</label>
                                 <div class="select-wrapper">
                                     <select class="form-input" id="kota" required>
-                                        <option value="" disabled selected>Pilih Kota</option>
-                                        <option value="bandung">Bandung</option>
-                                        <option value="jakarta">Jakarta</option>
-                                        <option value="surabaya">Surabaya</option>
-                                        <option value="semarang">Semarang</option>
-                                        <option value="yogyakarta">Yogyakarta</option>
+                                        <option value="" disabled selected>Pilih Provinsi Dulu</option>
                                     </select>
                                 </div>
                             </div>
@@ -1270,7 +1322,6 @@ select.form-input {
                     </form>
                 </div>
 
-                <!-- Payment Method -->
                 <div class="checkout-card">
                     <h2 class="card-title"><i class="fas fa-credit-card"></i> Metode Pembayaran</h2>
                     <div class="payment-methods">
@@ -1300,10 +1351,8 @@ select.form-input {
                         </div>
                     </div>
                 </div>
-            </div>
 
-            <!-- Right Column: Order Summary -->
-          <div class="checkout-right" style="width: 100%; box-sizing: border-box; overflow: hidden;">
+            </div> <div class="checkout-right" style="width: 100%; box-sizing: border-box; overflow: hidden;">
                 <div class="checkout-card" style="position: sticky; top: 90px; width: 100%;">
                     <h2 class="card-title" style="margin-top:0;"><i class="fas fa-shopping-bag"></i> Ringkasan Pesanan</h2>
                     
@@ -1333,17 +1382,18 @@ select.form-input {
 
                     <input type="hidden" id="inputTotalBayar" name="total_pembayaran" value="0">
 
-                    <button type="button" id="btnCheckout" onclick="processCheckout()" style="width: 100%; background: linear-gradient(135deg, #dfba6b, #c9a84c); color: #0a1118; padding: 18px; border: none; border-radius: 12px; font-size: 14px; font-weight: 700; letter-spacing: 1.5px; cursor: pointer; display: flex; justify-content: center; align-items: center; gap: 10px; font-family: 'Poppins', sans-serif;">
-                        BAYAR SEKARANG <i class="fas fa-arrow-right"></i>
+                 <button type="button" id="btnCheckout" onclick="processCheckout()" style="width: 100%; background: linear-gradient(135deg, #dfba6b, #c9a84c); color: #0a1118; padding: 18px; border: none; border-radius: 12px; font-size: 14px; font-weight: 700; letter-spacing: 1.5px; cursor: pointer; display: flex; justify-content: center; align-items: center; gap: 10px; font-family: 'Poppins', sans-serif; transition: all 0.3s ease; box-shadow: 0 4px 15px rgba(201, 168, 76, 0.2);" onmouseover="this.style.transform='translateY(-3px)'; this.style.boxShadow='0 10px 25px rgba(201, 168, 76, 0.4)';" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 15px rgba(201, 168, 76, 0.2)';">
+                        <i class="fas fa-shopping-bag"></i> BELI SEKARANG <i class="fas fa-arrow-right" style="margin-left: 5px;"></i>
                     </button>
-                    
                     <div class="security-badge" style="margin-top: 20px;">
                         <i class="fas fa-lock"></i>
                         <span>Transaksi aman dengan enkripsi SSL</span>
                     </div>
                 </div>
             </div>
-        </div> </main> 
+            
+        </div> 
+    </main>
        
     <!-- Footer -->
   <footer class="footer" id="contact">
@@ -1555,6 +1605,68 @@ select.form-input {
             if (textTotal) textTotal.innerText = 'Rp ' + formatRupiah(totalBaru);
             if (totalBayarDua) totalBayarDua.textContent = 'Rp ' + formatRupiah(totalBaru);
             if (inputTotalBayar) inputTotalBayar.value = totalBaru;
+        }
+        // ===== DATA PROVINSI & KOTA DINAMIS =====
+        // ===== DATA 38 PROVINSI & KOTA UTAMA =====
+        const dataWilayah = {
+            "aceh": ["Banda Aceh", "Lhokseumawe", "Langsa", "Sabang", "Subulussalam", "Kab. Aceh Besar", "Kab. Pidie"],
+            "bali": ["Denpasar", "Badung", "Gianyar", "Buleleng", "Tabanan", "Karangasem", "Jembrana", "Klungkung", "Bangli"],
+            "banten": ["Tangerang", "Tangerang Selatan", "Serang", "Cilegon", "Kab. Tangerang", "Kab. Lebak", "Kab. Pandeglang"],
+            "bengkulu": ["Bengkulu", "Kab. Rejang Lebong", "Kab. Muko Muko", "Kab. Seluma"],
+            "di-yogyakarta": ["Yogyakarta", "Sleman", "Bantul", "Gunungkidul", "Kulon Progo"],
+            "dki-jakarta": ["Jakarta Selatan", "Jakarta Timur", "Jakarta Pusat", "Jakarta Barat", "Jakarta Utara", "Kepulauan Seribu"],
+            "gorontalo": ["Gorontalo", "Kab. Gorontalo", "Kab. Boalemo", "Kab. Pohuwato"],
+            "jambi": ["Jambi", "Sungai Penuh", "Kab. Merangin", "Kab. Batanghari", "Kab. Muaro Jambi"],
+            "jawa-barat": ["Bandung", "Bekasi", "Bogor", "Depok", "Cimahi", "Cirebon", "Sukabumi", "Garut", "Tasikmalaya", "Kab. Karawang"],
+            "jawa-tengah": ["Semarang", "Surakarta (Solo)", "Magelang", "Salatiga", "Tegal", "Pekalongan", "Banyumas", "Purwokerto", "Kab. Cilacap", "Purbalingga", "Banjarnegara"],
+            "jawa-timur": ["Surabaya", "Malang", "Sidoarjo", "Kediri", "Madiun", "Batu", "Mojokerto", "Blitar", "Pasuruan", "Probolinggo", "Banyuwangi", "Jember"],
+            "kalimantan-barat": ["Pontianak", "Singkawang", "Kab. Sambas", "Kab. Sintang", "Kab. Ketapang"],
+            "kalimantan-selatan": ["Banjarmasin", "Banjarbaru", "Banjarbaru", "Kab. Banjar", "Kab. Tanah Bumbu"],
+            "kalimantan-tengah": ["Palangka Raya", "Kab. Kotawaringin Timur", "Kab. Kotawaringin Barat", "Kab. Kapuas"],
+            "kalimantan-timur": ["Samarinda", "Balikpapan", "Bontang", "Kab. Kutai Kartanegara", "Kab. Berau"],
+            "kalimantan-utara": ["Tarakan", "Kab. Bulungan", "Kab. Nunukan", "Kab. Malinau"],
+            "kepulauan-bangka-belitung": ["Pangkalpinang", "Kab. Bangka", "Kab. Belitung"],
+            "kepulauan-riau": ["Batam", "Tanjungpinang", "Kab. Bintan", "Kab. Karimun"],
+            "lampung": ["Bandar Lampung", "Metro", "Kab. Lampung Selatan", "Kab. Lampung Tengah"],
+            "maluku": ["Ambon", "Tual", "Kab. Maluku Tengah", "Kab. Seram Bagian Barat"],
+            "maluku-utara": ["Ternate", "Tidore Kepulauan", "Kab. Halmahera Utara"],
+            "nusa-tenggara-barat": ["Mataram", "Bima", "Kab. Lombok Barat", "Kab. Lombok Tengah", "Kab. Sumbawa"],
+            "nusa-tenggara-timur": ["Kupang", "Kab. Manggarai", "Kab. Ende", "Kab. Sikka"],
+            "papua": ["Jayapura", "Kab. Jayapura", "Kab. Keerom", "Kab. Biak Numfor"],
+            "papua-barat": ["Manokwari", "Kab. Fakfak", "Kab. Teluk Bintuni"],
+            "papua-barat-daya": ["Sorong", "Kab. Sorong", "Kab. Raja Ampat"],
+            "papua-pegunungan": ["Wamena", "Kab. Jayawijaya", "Kab. Lanny Jaya"],
+            "papua-selatan": ["Merauke", "Kab. Boven Digoel", "Kab. Asmat"],
+            "papua-tengah": ["Timika", "Nabire", "Kab. Mimika"],
+            "riau": ["Pekanbaru", "Dumai", "Kab. Kampar", "Kab. Bengkalis"],
+            "sulawesi-barat": ["Mamuju", "Kab. Majene", "Kab. Polewali Mandandar"],
+            "sulawesi-selatan": ["Makassar", "Palopo", "Parepare", "Kab. Gowa", "Kab. Bone", "Kab. Maros"],
+            "sulawesi-tengah": ["Palu", "Kab. Banggai", "Kab. Poso", "Kab. Donggala"],
+            "sulawesi-tenggara": ["Kendari", "Baubau", "Kab. Konawe", "Kab. Kolaka"],
+            "sulawesi-utara": ["Manado", "Bitung", "Tomohon", "Kab. Minahasa"],
+            "sumatera-barat": ["Padang", "Bukittinggi", "Payakumbuh", "Pariaman", "Kab. Agam"],
+            "sumatera-selatan": ["Palembang", "Lubuklinggau", "Prabumulih", "Pagar Alam", "Kab. Banyuasin"],
+            "sumatera-utara": ["Medan", "Binjai", "Pematangsiantar", "Tanjungbalai", "Tebing Tinggi", "Kab. Deli Serdang"]
+        };
+
+        function updateKota() {
+            const provSelect = document.getElementById('provinsi');
+            const kotaSelect = document.getElementById('kota');
+            const selectedProv = provSelect.value;
+
+            // Bersihkan daftar kota sebelumnya
+            kotaSelect.innerHTML = '<option value="" disabled selected>Pilih Kota / Kabupaten</option>';
+
+            // Kalau ada provinsi yang dipilih, masukkan daftar kotanya
+            if (selectedProv && dataWilayah[selectedProv]) {
+                dataWilayah[selectedProv].forEach(kota => {
+                    const option = document.createElement('option');
+                    // Bikin value huruf kecil & tanpa spasi buat sistem
+                    option.value = kota.toLowerCase().replace(/[^a-z0-9]/g, '-'); 
+                    option.textContent = kota; // Teks yang tampil di web
+                    kotaSelect.appendChild(option);
+                });
+            }
         }
 
         function formatRupiah(angka) {
@@ -1769,13 +1881,26 @@ select.form-input {
                 let itemQty = parseInt(item.quantity) || 1;
                 subtotal += (itemPrice * itemQty);
 
+               // === JURUS HYBRID DETEKSI GAMBAR (SAMA KAYA KERANJANG) ===
                 let imgPath = item.image || '';
-                if(imgPath !== '' && !imgPath.includes('http') && !imgPath.includes('../')) {
-                    imgPath = '../Gamis/' + imgPath; 
-                } else if (imgPath === '') {
+                
+                if (imgPath === '') {
                     imgPath = 'https://via.placeholder.com/70x70/0a1628/c9a84c?text=Foto'; 
+                } else if (!imgPath.includes('http') && !imgPath.includes('../')) {
+                    // JALUR 1: Kalau dari DB ada folder (contoh: "gambar all product/...")
+                    if (imgPath.startsWith('gambar ')) {
+                        imgPath = '../best-seller/' + imgPath;
+                    } 
+                    // JALUR 2: Cuma nama file (contoh: "baju.png")
+                    else {
+                        let namaBaju = item.name.toLowerCase();
+                        if (namaBaju.includes('gamis')) imgPath = '../Gamis/' + imgPath;
+                        else if (namaBaju.includes('koko')) imgPath = '../Koko/' + imgPath;
+                        else if (namaBaju.includes('hijab') || namaBaju.includes('kerudung')) imgPath = '../hijab/' + imgPath; 
+                        else if (namaBaju.includes('jubah')) imgPath = '../Jubah/' + imgPath;   
+                        else imgPath = '../Beranda/Gambarberanda/' + imgPath;
+                    }
                 }
-
                 itemsHTML += `
                     <div class="order-item" style="display: grid; grid-template-columns: 70px 1fr; gap: 15px; align-items: center; margin-bottom: 15px; width: 100%; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 15px;">
                         <div style="width: 70px; height: 70px;">

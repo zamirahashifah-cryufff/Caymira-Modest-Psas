@@ -486,6 +486,9 @@ $total_produk = mysqli_num_rows($result);
         if (mysqli_num_rows($result) > 0) {
             while ($row = mysqli_fetch_assoc($result)) {
                 $harga_format = "Rp " . number_format($row['harga'], 0, ',', '.');
+                
+                // Amankan ID (jaga-jaga kalau nama kolomnya 'id' atau 'id_produk' di database)
+                $id_hijab = isset($row['id_produk']) ? $row['id_produk'] : (isset($row['id']) ? $row['id'] : '');
         ?>
         
         <div class="product-card">
