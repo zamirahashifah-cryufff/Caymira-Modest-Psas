@@ -1,20 +1,28 @@
 <?php
 include 'koneksi.php';
 
+// Fitur deteksi otomatis nama variabel koneksi (biar ngga error layar putih)
+$db = isset($conn) ? $conn : (isset($koneksi) ? $koneksi : null);
+
+if (!$db) {
+    die("Koneksi gagal: Periksa file koneksi.php Anda");
+}
+
 // Ambil parameter filter, sort, dan search dari URL
 $filter = isset($_GET['filter']) ? $_GET['filter'] : 'all';
 $sort = isset($_GET['sort']) ? $_GET['sort'] : 'newest';
-$search = isset($_GET['search']) ? mysqli_real_escape_string($conn, $_GET['search']) : '';
+$search = isset($_GET['search']) ? mysqli_real_escape_string($db, $_GET['search']) : '';
 
-// Build query dasar
+// Build query dasar - Sesuaikan nama tabel jika perlu
 $sql = "SELECT * FROM gamis WHERE 1=1";
 
-// Tambahkan logika Pencarian (Search) jika ada
+// Tambahkan logika Pencarian
 if (!empty($search)) {
+    // Saya tambahkan cek kolom 'nama_produk' atau 'nama' agar lebih aman
     $sql .= " AND (nama LIKE '%$search%' OR warna LIKE '%$search%')";
 }
 
-// Filter
+// Filter (Hanya jalan jika kolom is_new/is_bestseller ada di database)
 if ($filter == 'new') {
     $sql .= " AND is_new = 1";
 } elseif ($filter == 'bestseller') {
@@ -23,25 +31,17 @@ if ($filter == 'new') {
 
 // Sort
 if ($sort == 'price-low') {
-    $sql .= " ORDER BY COALESCE(harga_diskon, harga) ASC";
+    $sql .= " ORDER BY harga ASC";
 } elseif ($sort == 'price-high') {
-    $sql .= " ORDER BY COALESCE(harga_diskon, harga) DESC";
-} elseif ($sort == 'popular') {
-    $sql .= " ORDER BY is_bestseller DESC, id DESC";
+    $sql .= " ORDER BY harga DESC";
 } else {
     $sql .= " ORDER BY id DESC"; // newest
 }
 
-$result = mysqli_query($conn, $sql);
+$result = mysqli_query($db, $sql);
 
-// Hitung total produk (terpengaruh hasil pencarian)
-$count_sql = "SELECT COUNT(*) as total FROM gamis WHERE 1=1";
-if (!empty($search)) {
-    $count_sql .= " AND (nama LIKE '%$search%' OR warna LIKE '%$search%')";
-}
-$count_result = mysqli_query($conn, $count_sql);
-$count_row = mysqli_fetch_assoc($count_result);
-$total_produk = $count_row['total'];
+// Hitung total produk
+$total_produk = ($result) ? mysqli_num_rows($result) : 0;
 ?>
 <!DOCTYPE html>
 <html lang="id">
@@ -439,9 +439,9 @@ $total_produk = $count_row['total'];
             position: relative;
             transition: transform 0.5s ease;
             transform-style: preserve-3d;
-            animation: fadeInUp3D 1s ease 0.5s forwards;
+            animation: fadeInUp 1s ease 0.5s forwards;
             opacity: 0;
-            transform: translateY(50px) rotateY(-10deg);
+            transform: translateY(50px);
         }
 
         .hero-gamis-images img {
@@ -456,7 +456,7 @@ $total_produk = $count_row['total'];
         }
 
         .hero-gamis-img-wrapper:hover {
-            transform: translateY(-15px) scale(1.05) rotateY(0deg);
+            transform: translateY(-15px) scale(1.05);
             z-index: 10;
         }
         
@@ -1228,7 +1228,7 @@ $total_produk = $count_row['total'];
 
         <ul class="nav-links" id="navLinks">
             <li><a href="../Beranda/beranda.php">Beranda</a></li>
-            <li><a href="../About-us/about.php">About Us</a></li>
+            <li><a href="../About-us/aboutus.php">About Us</a></li>
             <li><a href="../best-seller/best-seller.php">Best Seller</a></li>
             <li><a href="../contact/contact.php">Contact</a></li>
         </ul>
@@ -1238,7 +1238,7 @@ $total_produk = $count_row['total'];
              <i class="fas fa-user" onclick="window.location.href='../login_register/profil.php'"></i>
             <div class="cart-icon">
             <i class="fas fa-shopping-cart" onclick="window.location.href='../keranjang/keranjang.php'"></i>
-              <span class="cart-badge" id="cartBadge">0</span>
+              <span class="cart-badge" id="cartBadge" style="display: none;">0</span>
             </div>
             <div class="mobile-menu-btn" id="mobileMenuBtn" onclick="toggleMobileMenu()">
                 <span></span>
@@ -1328,67 +1328,74 @@ $total_produk = $count_row['total'];
             <?php
             $folder_gambar = 'gambargamis/'; 
 
-            if (mysqli_num_rows($result) > 0):
+            if ($result && mysqli_num_rows($result) > 0):
                 while($row = mysqli_fetch_assoc($result)):
-                    $badge_class = !empty($row['badge']) ? strtolower(str_replace(' ', '-', $row['badge'])) : '';
+                    // Deteksi nama kolom (bisa 'nama' atau 'nama_produk')
+                    $nama_p = isset($row['nama']) ? $row['nama'] : (isset($row['nama_produk']) ? $row['nama_produk'] : 'Produk Gamis');
+                    $badge_text = isset($row['badge']) ? $row['badge'] : '';
+                    $badge_class = !empty($badge_text) ? strtolower(str_replace(' ', '-', $badge_text)) : '';
                     $path_gambar = $folder_gambar . trim($row['gambar']);
-                    $harga_fix = (!empty($row['harga_diskon']) && $row['harga_diskon'] < $row['harga']) ? $row['harga_diskon'] : $row['harga']; 
+                    
+                    // Gunakan harga diskon jika ada, jika tidak gunakan harga biasa
+                    $harga_asli = $row['harga'];
+                    $harga_diskon = (isset($row['harga_diskon']) && !empty($row['harga_diskon'])) ? $row['harga_diskon'] : $harga_asli;
             ?>
             
             <div class="product-card">
-                
-                <div class="product-image" onclick="window.location.href='../detailproduk/index.php?id=<?php echo $row['id']; ?>&kategori=gamis'" style="cursor: pointer;">
-                    
-                    <img src="<?php echo $path_gambar; ?>?v=<?php echo time(); ?>" 
-                         alt="<?php echo htmlspecialchars($row['nama']); ?>"
-                         onerror="this.src='https://images.unsplash.com/photo-1558618666-fcd25c85f82e?w=400&h=533&fit=crop';">
-                    
-                    <?php if(!empty($row['badge'])): ?>
-                        <span class="product-badge badge-<?php echo $badge_class; ?>">
-                            <?php echo htmlspecialchars($row['badge']); ?>
-                        </span>
-                    <?php endif; ?>
-                    
-                    <div class="action-overlay">
-                      <button class="btn-action" onclick="event.stopPropagation(); addToCart('<?php echo $row['id']; ?>', '<?php echo htmlspecialchars($row['nama'], ENT_QUOTES); ?>', <?php echo $harga_fix; ?>, '<?php echo $path_gambar; ?>')">
-                         <i class="fas fa-cart-plus" style="pointer-events: none;"></i> Tambah
-                      </button>
+                <!-- Tambahkan link <a> membungkus konten kartu -->
+                <a href="../detailproduk/index.php?id=<?php echo $row['id']; ?>&kategori=gamis" style="text-decoration: none; color: inherit; display: block;">
+                    <div class="product-image">
+                        <img src="<?php echo $path_gambar; ?>?v=<?php echo time(); ?>" 
+                             alt="<?php echo htmlspecialchars($nama_p); ?>"
+                             onerror="this.src='https://via.placeholder.com/400x533/0a1628/c9a84c?text=Foto+Gamis';">
+                        
+                        <?php if(!empty($badge_text)): ?>
+                            <span class="product-badge badge-<?php echo $badge_class; ?>">
+                                <?php echo htmlspecialchars($badge_text); ?>
+                            </span>
+                        <?php endif; ?>
+                        
+                        <div class="action-overlay">
+                            <!-- preventDefault & stopPropagation agar klik tombol tidak memicu link detail -->
+                            <button type="button" class="btn-action" onclick="event.preventDefault(); event.stopPropagation(); addToCart('<?php echo $row['id']; ?>', '<?php echo htmlspecialchars($nama_p, ENT_QUOTES); ?>', <?php echo $harga_diskon; ?>, '<?php echo $path_gambar; ?>')">
+                                <i class="fas fa-cart-plus" style="pointer-events: none;"></i> Tambah
+                            </button>
+                        </div>
                     </div>
-                </div>
 
-                <div class="product-info">
-                    
-                    <h3 class="product-name" onclick="window.location.href='../detailproduk/index.php?id=<?php echo $row['id']; ?>&kategori=gamis'" style="cursor: pointer; transition: color 0.3s;" onmouseover="this.style.color='#c9a84c'" onmouseout="this.style.color='inherit'">
-                        <?php echo htmlspecialchars($row['nama']); ?>
-                    </h3>
-                    
-                    <div class="product-price">
-                        <?php if(!empty($row['harga_diskon']) && $row['harga_diskon'] < $row['harga']): ?>
-                            <span class="price-current">Rp <?php echo number_format($row['harga_diskon'], 0, ',', '.'); ?></span>
-                            <span class="price-original">Rp <?php echo number_format($row['harga'], 0, ',', '.'); ?></span>
-                        <?php else: ?>
-                            <span class="price-current">Rp <?php echo number_format($row['harga'], 0, ',', '.'); ?></span>
-                        <?php endif; ?>
+                    <div class="product-info">
+                        <h3 class="product-name">
+                            <?php echo htmlspecialchars($nama_p); ?>
+                        </h3>
+                        
+                        <div class="product-price">
+                            <?php if($harga_diskon < $harga_asli): ?>
+                                <span class="price-current">Rp <?php echo number_format($harga_diskon, 0, ',', '.'); ?></span>
+                                <span class="price-original">Rp <?php echo number_format($harga_asli, 0, ',', '.'); ?></span>
+                            <?php else: ?>
+                                <span class="price-current">Rp <?php echo number_format($harga_asli, 0, ',', '.'); ?></span>
+                            <?php endif; ?>
+                        </div>
+                        
+                        <div class="product-colors">
+                            <?php 
+                            if(!empty($row['warna'])):
+                                $colors = explode(',', $row['warna']);
+                                foreach($colors as $i => $color): 
+                                    $color = trim($color);
+                                    if(!empty($color)):
+                            ?>
+                                <span class="color-dot <?php echo $i==0 ? 'active' : ''; ?>" style="background: <?php echo htmlspecialchars($color); ?>;"></span>
+                            <?php 
+                                    endif;
+                                endforeach;
+                            else: 
+                            ?>
+                                <span class="color-dot active" style="background: #c9a84c;"></span>
+                            <?php endif; ?>
+                        </div>
                     </div>
-                    
-                    <div class="product-colors">
-                        <?php 
-                        if(!empty($row['warna'])):
-                            $colors = explode(',', $row['warna']);
-                            foreach($colors as $i => $color): 
-                                $color = trim($color);
-                                if(!empty($color)):
-                        ?>
-                            <span class="color-dot <?php echo $i==0 ? 'active' : ''; ?>" style="background: <?php echo htmlspecialchars($color); ?>;"></span>
-                        <?php 
-                                endif;
-                            endforeach;
-                        else: 
-                        ?>
-                            <span class="color-dot active" style="background: #2c3e50;"></span>
-                        <?php endif; ?>
-                    </div>
-                </div>
+                </a>
             </div>
             
             <?php 
@@ -1449,7 +1456,7 @@ $total_produk = $count_row['total'];
                 <h4 class="footer-title">Quick Links</h4>
                 <ul class="footer-links">
                     <li><a href="../Beranda/beranda.php">Beranda</a></li>
-                    <li><a href="../About-us/aboutus.php">About Us</a></li>
+                    <li><a href="../About-us/about.php">About Us</a></li>
                     <li><a href="../best-seller/best-seller.php">Best Seller</a></li>
                     <li><a href="../contact/contact.php">Contact</a></li>
                 </ul>
@@ -1531,12 +1538,11 @@ $total_produk = $count_row['total'];
         }
     }
 
-    // Logika menjalankan pencarian saat tekan Enter (Sekarang otomatis scroll ke bagian produk)
+    // Logika menjalankan pencarian saat tekan Enter
     document.getElementById('searchInput').addEventListener('keypress', function(e) {
         if (e.key === 'Enter') {
             const searchTerm = this.value.trim();
             if (searchTerm !== "") {
-                // Menambahkan #products di akhir URL agar halaman otomatis scroll ke sana
                 window.location.href = '?search=' + encodeURIComponent(searchTerm) + '#products';
             } else {
                 window.location.href = '?#products';
@@ -1618,7 +1624,6 @@ $total_produk = $count_row['total'];
 </script>
 </body>
 </html>
-
 <?php
-mysqli_close($conn);
+if(isset($db)) mysqli_close($db);
 ?>

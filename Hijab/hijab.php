@@ -487,25 +487,29 @@ $total_produk = mysqli_num_rows($result);
             while ($row = mysqli_fetch_assoc($result)) {
                 $harga_format = "Rp " . number_format($row['harga'], 0, ',', '.');
                 
-                // Amankan ID (jaga-jaga kalau nama kolomnya 'id' atau 'id_produk' di database)
-                $id_hijab = isset($row['id_produk']) ? $row['id_produk'] : (isset($row['id']) ? $row['id'] : '');
+                // Ambil ID sesuai kolom database Anda
+                $id_hijab = $row['id'];
         ?>
         
         <div class="product-card">
-            <div class="img-wrapper">
-                <img src="<?= $row['gambar'] ?>" alt="<?= $row['nama_produk'] ?>">
-                
-                <div class="action-overlay">
-                    <button class="btn-action" onclick="addToCart('<?= $row['id'] ?>', '<?= htmlspecialchars($row['nama_produk'], ENT_QUOTES) ?>', <?= $row['harga'] ?>, '<?= $row['gambar'] ?>'); event.stopPropagation();">
-                        <i class="fas fa-cart-plus"></i> Tambah
-                    </button>
+            <!-- Bungkus isi kartu dengan tag <a> untuk link ke detail -->
+            <a href="../detailproduk/index.php?id=<?= $id_hijab ?>&kategori=hijab" style="text-decoration: none; color: inherit; display: block;">
+                <div class="img-wrapper">
+                    <img src="<?= $row['gambar'] ?>" alt="<?= $row['nama_produk'] ?>">
+                    
+                    <div class="action-overlay">
+                        <!-- Gunakan preventDefault & stopPropagation agar klik tombol tambah tidak memicu link detail -->
+                        <button class="btn-action" onclick="event.preventDefault(); event.stopPropagation(); addToCart('<?= $row['id'] ?>', '<?= htmlspecialchars($row['nama_produk'], ENT_QUOTES) ?>', <?= $row['harga'] ?>, '<?= $row['gambar'] ?>');">
+                            <i class="fas fa-cart-plus"></i> Tambah
+                        </button>
+                    </div>
+                    
                 </div>
-                
-            </div>
-            <div class="product-info">
-                <h3><?= $row['nama_produk'] ?></h3>
-                <p><?= $harga_format ?></p>
-            </div>
+                <div class="product-info">
+                    <h3><?= $row['nama_produk'] ?></h3>
+                    <p><?= $harga_format ?></p>
+                </div>
+            </a>
         </div>
 
         <?php 

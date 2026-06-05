@@ -1901,12 +1901,12 @@ img { max-width: 100%; height: auto; }
 
     <!-- Banner Couple -->
     <section class="container banner-couple">
-        <img src="Gambarberanda/couple.png" alt="Couple Collection" class="banner-img">
+        <img src="Gambarberanda/banner bawah.png" alt="gamis collections" class="banner-img">
         <div class="banner-content">
             <span class="badge-collection">NEW COLLECTION</span>
-            <h2>KOLEKSI COUPLE<br><span style="font-style: italic; font-weight: 300;">ELEGAN</span></h2>
-            <p>Tampil elegan dan serasi dengan koleksi gamis dan koko premium berkualitas untuk setiap momen spesial.</p>
-            <button class="btn-shop" onclick="showToast('💑 Melihat koleksi couple...')">
+            <h2>KOLEKSI Gamis Modern<br><span style="font-style: italic; font-weight: 300;">ELEGAN</span></h2>
+            <p>Tampil anggun dalam setiap langkah dengan koleksi gamis premium yang dirancang khusus untuk wanita modern. Perpaduan desain elegan, bahan berkualitas, dan kenyamanan maksimal untuk menemani setiap momen istimewa.</p>
+            <button class="btn-shop" onclick="window.location.href='../Gamis/gamis.php'">
                 Belanja Sekarang <i class="fas fa-arrow-right"></i>
             </button>
         </div>
