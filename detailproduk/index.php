@@ -58,14 +58,18 @@ if (!empty($id_produk) && in_array($kategori, $tabel_valid)) {
             } else {
                 if ($kat_cek == 'gamis') {
                     $gambar_utama = '../Gamis/gambargamis/' . $file_gambar;
+                    
                 } elseif ($kat_cek == 'hijab') {
                     $gambar_utama = '../Hijab/' . $db_gambar . '/' . $file_gambar;
+
                 } elseif ($kat_cek == 'koko') {
                     $gambar_utama = '../Koko/' . $db_gambar . '/' . $file_gambar;
+
                 } elseif ($kat_cek == 'jubah') {
                     $gambar_utama = '../Jubah/' . $db_gambar . '/' . $file_gambar;
+
                 } elseif ($kat_cek == 'best_seller' || $kat_cek == 'best-seller') {
-                    $gambar_utama = '../best-seller/' . $db_gambar . '/' . $file_gambar;
+                    $gambar_utama = '../best-seller/' . $file_gambar;
                 } else {
                     $gambar_utama = '../Beranda/Gambarberanda/' . $file_gambar;
                 }
