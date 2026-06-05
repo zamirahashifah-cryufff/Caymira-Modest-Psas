@@ -1826,7 +1826,7 @@ img { max-width: 100%; height: auto; }
                     </div>
                     <div class="product-info">
                         <h4>Seliana Hijab</h4>
-                        <p class="product-price">Rp 45.000</p>
+                        <p class="product-price">Rp 55.000</p>
                         <div class="stars">
                             <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
                             <span>(235)</span>

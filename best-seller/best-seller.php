@@ -1,13 +1,11 @@
 <?php
 include "koneksi.php";
 
-// Ambil parameter search dari URL
+
 $search = isset($_GET['search']) ? mysqli_real_escape_string($conn, $_GET['search']) : '';
 
-// Build query dasar
 $sql = "SELECT * FROM best_seller WHERE 1=1";
 
-// Logika Pencarian (Search) jika ada
 if (!empty($search)) {
     $sql .= " AND (nama_produk LIKE '%$search%' OR kategori LIKE '%$search%')";
 }
@@ -732,7 +730,7 @@ $total_produk = mysqli_num_rows($query);
 
                 <div class="product-card" data-category="<?= $data['kategori'] ?>">
                     
-                    <a href="../detailproduk/index.php?id=<?= $data['id_produk'] ?>&kategori=best_seller&nama=<?= urlencode($data['nama_produk']) ?>&harga=<?= $data['harga'] ?>&gambar=<?= urlencode($data['gambar']) ?>" style="text-decoration: none; color: inherit; display: block;">
+                    <a href="../detailproduk/index.php?id=<?= $data['id'] ?>&kategori=best_seller&nama=<?= urlencode($data['nama_produk']) ?>&harga=<?= $data['harga'] ?>&gambar=<?= urlencode($data['gambar']) ?>" style="text-decoration: none; color: inherit; display: block;">
                         <div class="product-img-wrap">
                             <div class="badge-bestseller">
                             BEST SELLER
@@ -741,7 +739,7 @@ $total_produk = mysqli_num_rows($query);
                             <img src="<?= $data['gambar'] ?>" alt="<?= $data['nama_produk'] ?>">
                             
                             <div class="action-overlay">
-                                <button type="button" class="btn-action" onclick="event.preventDefault(); event.stopPropagation(); addToCart('<?= $data['id_produk'] ?>', '<?= htmlspecialchars($data['nama_produk'], ENT_QUOTES) ?>', <?= $data['harga'] ?>, '<?= $data['gambar'] ?>');">
+                                <button type="button" class="btn-action" onclick="event.preventDefault(); event.stopPropagation(); addToCart('<?= $data['id'] ?>', '<?= htmlspecialchars($data['nama_produk'], ENT_QUOTES) ?>', <?= $data['harga'] ?>, '<?= $data['gambar'] ?>');">
                                 <i class="fas fa-cart-plus"></i> Tambah
                                 </button>
                             </div>
