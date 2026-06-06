@@ -1318,6 +1318,29 @@ img { max-width: 100%; height: auto; display: block; }
         document.addEventListener('DOMContentLoaded', () => {
             updateCartBadgeGlobal();
         });
+
+        // 2. Kalau tokennya ada, langsung panggil pop-up Midtrans otomatis
+        if (snapToken) {
+            window.snap.pay(snapToken, {
+                onSuccess: function(result){
+                    // Redirect ke selesai.php udah DIMUSNAHKAN dari sini
+                    // Diganti jadi notif dan layar otomatis geser ke area Upload Bukti
+                    showToast('🎉 Pembayaran di Midtrans Sukses! Silakan unggah bukti transfer Anda.');
+                    document.getElementById('uploadArea').scrollIntoView({ behavior: 'smooth', block: 'center' });
+                },
+                onPending: function(result){
+                    showToast('⏳ Menunggu pembayaran. Selesaikan transfer lalu unggah bukti.');
+                },
+                onError: function(result){
+                    showToast('❌ Pembayaran Gagal di Midtrans!');
+                },
+                onClose: function(){
+                    showToast('⚠️ Pop-up ditutup. Jangan lupa unggah bukti jika sudah transfer.');
+                }
+            });
+        } else 
+
+            // ... (biarkan sisa kodingan di bawahnya tetap sama)
         // ===== CONFIRM PAYMENT =====
         function confirmPayment() {
             const btn = document.getElementById('btnConfirm');
