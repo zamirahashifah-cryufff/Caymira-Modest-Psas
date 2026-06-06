@@ -311,8 +311,8 @@
                 alert('✅ Voucher Berhasil! Diskon Rp 50.000 diterapkan.'); 
             } 
             else if (code === 'NEWJEANSNEVERDIE') { 
-                discount = 72250; 
-                alert('🐰 Voucher Spesial Berhasil! Diskon Rp 72.250 diterapkan. NewJeans Never Die!'); 
+                discount = 200000; 
+                alert('🐰 Voucher Spesial Berhasil! Diskon Rp 200.000 diterapkan. NewJeans Never Die!'); 
             } 
             else { 
                 discount = 0; 
