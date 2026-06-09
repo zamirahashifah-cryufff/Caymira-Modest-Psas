@@ -369,6 +369,8 @@
         text-align: center;
         transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
         border: 1px solid rgba(201, 168, 76, 0.1);
+        display: block; /* Agar seluruh area kartu bisa diklik */
+        text-decoration: none;
       }
 
       .card:hover {
@@ -1049,7 +1051,7 @@
         <li><a href="../Beranda/beranda.php">Beranda</a></li>
         <li><a href="../About-us/aboutus.php">About Us</a></li>
         <li><a href="../best-seller/best-seller.php">Best Seller</a></li>
-        <li><a href="../login_register/contact.php" class="active">Contact</a></li>
+        <li><a href="../login_register/contact.php"">Contact</a></li>
       </ul>
 
       <div class="nav-icons">
@@ -1089,21 +1091,27 @@
 
     <section class="contact-section container">
       <div class="contact-cards">
-        <div class="card">
+        <!-- LINK TELEPON AKTIF -->
+        <a href="tel:+6282340950845" class="card">
           <i class="fa-solid fa-phone"></i>
           <h3>Phone</h3>
           <p>+62 823-4095-0845</p>
-        </div>
-        <div class="card">
+        </a>
+
+        <!-- LINK WHATSAPP AKTIF -->
+        <a href="https://wa.me/62895704200408" target="_blank" class="card">
           <i class="fa-brands fa-whatsapp"></i>
           <h3>WhatsApp</h3>
           <p>+62 895-7042-00408</p>
-        </div>
-        <div class="card">
+        </a>
+
+        <!-- LINK EMAIL AKTIF -->
+        <a href="mailto:caymiramodest@gmail.com" class="card">
           <i class="fa-solid fa-envelope"></i>
           <h3>Email</h3>
           <p>caymiramodest@gmail.com</p>
-        </div>
+        </a>
+
         <div class="card">
           <i class="fa-solid fa-store"></i>
           <h3>Our Shop</h3>
@@ -1211,7 +1219,7 @@
             onclick="showToast('📞 Hubungi: 0895-7042-D0408')"
           >
             <i class="fas fa-phone"></i>
-            <div>0895-7042-D0408</div>
+            <div>0895-7042-00408</div>
           </div>
           <div
             class="footer-contact-item"
@@ -1358,15 +1366,44 @@
         setTimeout(() => toast.classList.remove("show"), 3000);
       }
 
-      // ===== NEWSLETTER =====
+      // ===== NEWSLETTER DENGAN DATABASE =====
       function handleSubscribe(e) {
         e.preventDefault();
-        const email = document.getElementById("emailInput").value;
-        if (email) {
-          showToast(
-            "✅ Terima kasih telah berlangganan newsletter Caymira!"
-          );
-          document.getElementById("emailInput").value = "";
+        const emailInput = document.getElementById("emailInput");
+        const emailValue = emailInput.value;
+        const submitBtn = e.target.querySelector("button");
+
+        if (emailValue) {
+          // Berikan efek loading pada tombol
+          const originalContent = submitBtn.innerHTML;
+          submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+          submitBtn.disabled = true;
+
+          const formData = new FormData();
+          formData.append("email", emailValue);
+
+          fetch("proses_newsletter.php", {
+            method: "POST",
+            body: formData
+          })
+          .then(response => response.json())
+          .then(data => {
+            if (data.status === "success") {
+              showToast("✅ " + data.message);
+              emailInput.value = ""; // Kosongkan input jika sukses
+            } else {
+              showToast("❌ " + data.message);
+            }
+          })
+          .catch(error => {
+            showToast("❌ Terjadi kesalahan koneksi.");
+            console.error("Error:", error);
+          })
+          .finally(() => {
+            // Kembalikan tombol ke semula
+            submitBtn.innerHTML = originalContent;
+            submitBtn.disabled = false;
+          });
         }
       }
 
@@ -1407,7 +1444,6 @@
       // ===== CONTACT FORM DENGAN AJAX & DOMContentLoaded =====
       document.addEventListener("DOMContentLoaded", () => {
         
-        // --- Memanggil logic update badge keranjang saat load ---
         updateCartBadge();
         // --------------------------------------------------------
 

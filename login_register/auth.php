@@ -108,21 +108,26 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             z-index: 99999;
         }
 
-        /* === HEADER / NAVBAR - UKURAN DISESUAIKAN === */
+        /* === HEADER / NAVBAR === */
         .navbar {
             position: fixed; top: 0; width: 100%; 
-            height: 90px; /* Navbar dibuat lebih tinggi agar logo leluasa */
+            height: 90px;
             padding: 0 60px;
             display: flex; justify-content: space-between; align-items: center;
             z-index: 1000; background: rgba(7, 13, 23, 0.98); backdrop-filter: blur(10px);
             border-bottom: 1px solid rgba(203, 168, 90, 0.3);
         }
         
-        .logo { display: flex; align-items: center; }
+        .logo { display: flex; align-items: center; cursor: none; }
         .logo-img { 
-            height: 65px; /* UKURAN LOGO DIPERBESAR SESUAI GAMBAR KANAN */
+            height: 65px; 
             width: auto; 
             object-fit: contain;
+            transition: all 0.3s ease;
+        }
+        .logo:hover .logo-img {
+            transform: scale(1.05);
+            filter: drop-shadow(0 0 8px rgba(203, 168, 90, 0.5));
         }
 
         .nav-links { display: flex; gap: 45px; list-style: none; }
@@ -186,7 +191,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             max-width: 1200px;
             margin: 0 auto;
         }
-        .footer-brand h2 { font-family: var(--font-heading); color: var(--gold-dark); font-size: 26px; margin-bottom: 15px; font-weight: 600; }
         .footer-brand p { font-size: 14px; line-height: 1.8; margin-bottom: 25px; padding-right: 20px; }
         .social-links { display: flex; gap: 15px; }
         .social-links a { width: 38px; height: 38px; border: 1px solid #e0ce9a; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: var(--gold-dark); font-size: 15px; transition: all 0.3s; }
@@ -214,18 +218,17 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     <nav class="navbar">
         <div class="logo">
-             <!-- Path gambar disesuaikan dengan folder proyekmu -->
-             <img src="../Beranda/Gambarberanda/logo_caymira_modest.png" alt="Caymira Modest" class="logo-img">
+             <img src="../Beranda/Gambarberanda/logo_caymira_modest.png" alt="Caymira Modest" class="logo-img interactive">
         </div>
         <ul class="nav-links">
             <li><a href="../Beranda/beranda.php" class="interactive">Beranda</a></li>
             <li><a href="../About-us/aboutus.php" class="interactive">About Us</a></li>
-            <li><a href="#" class="interactive">Best Seller</a></li>
-            <li><a href="../login_register/contact.php" class="interactive">Contact</a></li>
+            <li><a href="../best-seller/best-seller.php" class="interactive">Best Seller</a></li>
+            <li><a href="../contact/contact.php" class="interactive">Contact</a></li>
         </ul>
         <div class="nav-icons">
             <i class="fas fa-search interactive"></i>
-            <i class="fas fa-shopping-cart interactive"></i>
+            <i class="fas fa-shopping-cart interactive" onclick="window.location.href='../keranjang/keranjang.php'"></i>
             <a href="../login_register/profil.php" class="interactive"><i class="fas fa-user"></i></a>
         </div>
     </nav>
@@ -285,7 +288,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <footer class="footer">
         <div class="footer-content">
             <div class="footer-brand">
-                <h2>caymiramodest</h2>
+                <!-- LOGO GAMBAR DI FOOTER -->
+                <div class="logo" onclick="window.scrollTo({top: 0, behavior: 'smooth'})" style="margin-bottom: 20px;">
+                    <img src="../Beranda/Gambarberanda/logo_caymira_modest.png" alt="Caymira Modest" class="logo-img interactive">
+                </div>
                 <p>Fashion muslimah dengan desain modern, bahan berkualitas, dan nyaman dipakai setiap hari.</p>
                 <div class="social-links">
                     <a href="#" class="interactive"><i class="fab fa-instagram"></i></a>
@@ -293,15 +299,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     <a href="#" class="interactive"><i class="fab fa-whatsapp"></i></a>
                 </div>
             </div>
-            <!-- Sisa kolom footer tetap sama -->
+            
             <div class="footer-col">
                 <h4 class="footer-title">QUICK LINKS</h4>
                 <ul class="footer-links">
-                    <li><a href="index.php" class="interactive">Home</a></li>
-                    <li><a href="#" class="interactive">About Us</a></li>
-                    <li><a href="#" class="interactive">Collection</a></li>
-                    <li><a href="#" class="interactive">Best Seller</a></li>
-                    <li><a href="#" class="interactive">Contact</a></li>
+                    <li><a href="../Beranda/beranda.php" class="interactive">Beranda</a></li>
+                    <li><a href="../About-us/aboutus.php" class="interactive">About Us</a></li>
+                    <li><a href="../best-seller/best-seller.php" class="interactive">Best Seller</a></li>
+                    <li><a href="../contact/contact.php" class="interactive">Contact</a></li>
                 </ul>
             </div>
             <div class="footer-col">
@@ -331,7 +336,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <script>
         const cursor = document.querySelector('.custom-cursor');
         const cursorDot = document.querySelector('.cursor-dot');
-        const interactives = document.querySelectorAll('.interactive, a, input, button');
+        const interactives = document.querySelectorAll('.interactive, a, input, button, .logo');
 
         window.addEventListener('mousemove', (e) => {
             cursor.style.transform = `translate(${e.clientX - 10}px, ${e.clientY - 10}px)`;

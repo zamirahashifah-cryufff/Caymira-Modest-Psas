@@ -393,7 +393,7 @@ if (!isset($_SESSION['user_id'])) {
     <section class="about-hero-modern" id="about">
         <div class="hero-header-text">
             <h1 class="modern-title">ABOUT US</h1>
-            <p class="modern-subtitle">Caymira Modest adalah manifestasi dari keanggunan wanita muslimah modern. Kami merancang setiap helai pakaian dengan filosofi bahwa kecantikan sejati terpancar dari kesederhanaan yang berkualitas.</p>
+            <p class="modern-subtitle">Caymira Modest menghadirkan koleksi busana muslim yang memadukan kesederhanaan, kenyamanan, dan keanggunan dalam setiap detail. Dari gamis, jubah, baju koko, hingga kerudung, setiap produk dirancang untuk memberikan kualitas terbaik serta mendukung gaya hidup muslim yang modern dan sesuai syariat.</p>
         </div>
 
         <div class="hero-banner-strip">
@@ -409,8 +409,8 @@ if (!isset($_SESSION['user_id'])) {
             
             <div class="split-info-card">
                 <div class="glow-dot"></div>
-                <h2 class="card-title">Classic Elegance <br>For Modern Women</h2>
-                <p class="card-desc">Berdiri sejak tahun 2020, Caymira Modest lahir dari visi untuk mendefinisikan ulang fashion muslimah. Kami percaya bahwa setiap detail—mulai dari pemilihan bahan silk premium hingga presisi jahitan—adalah bentuk dedikasi kami untuk Anda.</p>
+                <h2 class="card-title">Classic Elegance <br>For Modern Muslims</h2>
+                <p class="card-desc">Sejak didirikannya pada tahun 2020, Caymira Modest berkomitmen menghadirkan busana muslim yang memadukan nilai syar'i, kenyamanan, dan keanggunan dalam setiap detail. Mulai dari gamis, jubah, baju koko, hingga kerudung, setiap koleksi dirancang dengan bahan pilihan dan proses yang teliti untuk memberikan kualitas terbaik bagi setiap pelanggan.</p>
                 
                 <div class="attributes-list">
                     <div class="attr-row"><span class="attr-label">Quality Standard</span><span class="attr-value">Premium Export Quality</span></div>
@@ -431,8 +431,9 @@ if (!isset($_SESSION['user_id'])) {
     <!-- Content Narrative -->
     <section class="content-section">
         <div class="content-text">
-            <p>Kami percaya bahwa berpakaian sesuai syariat bukan berarti membatasi gaya, melainkan menghadirkan <span class="gold-text" onclick="showToast('✨ Keanggunan dalam kesederhanaan')">keanggunan</span> yang memancarkan percaya diri.</p>
-            <p>Setiap produk Caymira Modest dibuat dengan bahan pilihan <span class="gold-text" onclick="showToast('🌟 Kualitas premium terjamin')">berkualitas</span>, desain yang timeless, dan detail yang nyaman digunakan sepanjang hari.</p>
+            <p>Kami percaya bahwa kesederhanaan adalah bentuk keindahan yang tak pernah lekang oleh waktu.
+              Dengan perpaduan kualitas terbaik, desain yang elegan, dan sentuhan detail yang penuh perhatian, Caymira Modest hadir untuk menjadi bagian dari perjalanan Anda dalam menampilkan versi terbaik diri Anda setiap hari. 
+            </p>
         </div>
     </section>
 

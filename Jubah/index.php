@@ -1,5 +1,6 @@
 <?php 
 include 'koneksi.php'; 
+// Mengambil semua data jubah
 $query = mysqli_query($koneksi, "SELECT * FROM jubah");
 ?>
 <!DOCTYPE html>
@@ -581,7 +582,6 @@ img { max-width: 100%; height: auto; display: block; }
 .filter-sort select:hover { border-color: var(--gold); }
 
 /* === JUBAH COLLECTION SECTION === */
-/* KITA KASIH PADDING BOTTOM YANG LEGA DI SINI BIAR GAK MEPET FOOTER */
 .jubah-collection { padding: 80px 0 120px 0; position: relative; } 
 .jubah-collection::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: radial-gradient(circle at 0% 50%, rgba(201, 168, 76, 0.03) 0%, transparent 50%), radial-gradient(circle at 100% 50%, rgba(201, 168, 76, 0.03) 0%, transparent 50%); pointer-events: none; }
 .section-header { text-align: center; margin-bottom: 60px; position: relative; z-index: 1; }
@@ -675,17 +675,17 @@ img { max-width: 100%; height: auto; display: block; }
 .jubah-colors { display: flex; gap: 8px; margin-top: 12px; }
 
 .color-dot {
-    width: 14px; height: 14px; /* Ukuran titik warnanya */
+    width: 14px; height: 14px; 
     border-radius: 50%; 
     cursor: pointer; transition: all 0.3s; position: relative;
-    margin: 4px; /* Jarak luar biar ada ruang buat cincin emasnya */
+    margin: 4px; 
 }
 .color-dot:hover, .color-dot.active { 
     transform: scale(1.1); 
 }
 .color-dot::after {
     content: ''; position: absolute; 
-    top: -5px; left: -5px; right: -5px; bottom: -5px; /* Ngunci cincinnya pas di tengah */
+    top: -5px; left: -5px; right: -5px; bottom: -5px; 
     border: 1px solid transparent; border-radius: 50%; transition: all 0.3s;
 }
 .color-dot:hover::after, .color-dot.active::after { 
@@ -706,7 +706,7 @@ img { max-width: 100%; height: auto; display: block; }
     color: var(--gold); font-size: 14px; background: var(--navy); padding: 0 15px;
 }
 
-/* === FOOTER (Dari About Us) === */
+/* === FOOTER === */
 .footer {
     background: #ffffff;
     border-top: 1px solid rgba(201, 168, 76, 0.15);
@@ -875,7 +875,7 @@ img { max-width: 100%; height: auto; display: block; }
 
     <nav class="navbar" id="navbar">
         <div class="logo" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">
-            <img src="../Beranda/Gambarberanda/logo_caymira_modest.png" alt="Caymira Modest" class="logo-img" onerror="this.src='https://via.placeholder.com/150x50/0a1628/c9a84c?text=Caymira'">
+            <img src="../Beranda/Gambarberanda/logo_caymira_modest.png" alt="Caymira Modest" class="logo-img">
         </div>
 
         <ul class="nav-links" id="navLinks">
@@ -969,20 +969,27 @@ img { max-width: 100%; height: auto; display: block; }
             <?php 
             while($row = mysqli_fetch_assoc($query)) { 
                 $label = isset($row['label']) ? $row['label'] : 'NEW';
+                
+                // LOGIKA FIX BEST SELLER: Agar data-category cocok dengan tombol 'best'
                 $category_lbl = strtolower($label); 
+                if($category_lbl == 'best seller') {
+                    $filter_slug = 'best';
+                } else {
+                    $filter_slug = $category_lbl;
+                }
+
                 $ulasan = isset($row['total_ulasan']) ? $row['total_ulasan'] : rand(40, 150);
-
-                $harga_sekarang = isset($row['harga_diskon']) ? $row['harga_diskon'] : (isset($row['harga']) ? $row['harga'] : 0);
-                $harga_coret = isset($row['harga_asli']) ? $row['harga_asli'] : (isset($row['harga_coret']) ? $row['harga_coret'] : 0);
-
+                $harga_sekarang = isset($row['harga']) ? $row['harga'] : 0;
+                $harga_coret = isset($row['harga_coret']) ? $row['harga_coret'] : 0;
                 $sumber_gambar = $row['gambar']; 
                 $nama_aman = htmlspecialchars($row['nama_produk'], ENT_QUOTES);
             ?>
 
-            <div class="jubah-card" data-category="<?php echo $category_lbl; ?>" data-price="<?php echo $harga_sekarang; ?>">
+            <!-- data-category sekarang menggunakan $filter_slug -->
+            <div class="jubah-card" data-category="<?php echo $filter_slug; ?>" data-price="<?php echo $harga_sekarang; ?>" data-id="<?php echo $row['id']; ?>">
                 
                 <?php if(!empty($label)): ?>
-                    <span class="jubah-badge <?php echo $category_lbl; ?>"><?php echo $label; ?></span>
+                    <span class="jubah-badge <?php echo ($category_lbl == 'best seller') ? 'best' : $category_lbl; ?>"><?php echo $label; ?></span>
                 <?php endif; ?>
 
                 <div class="jubah-img-wrapper">
@@ -991,14 +998,11 @@ img { max-width: 100%; height: auto; display: block; }
                     </a>
                     
                     <div class="jubah-img-overlay" style="display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 10px;">
-                        
-                        
                         <button type="button" 
                                 style="background: #c9a84c; color: #0a1628; border: none; padding: 10px 15px; border-radius: 8px; cursor: pointer; font-weight: bold; width: 80%; display: flex; align-items: center; justify-content: center; gap: 8px; transition: all 0.3s;"
                                 onclick="event.preventDefault(); event.stopPropagation(); addToCart('<?php echo $row['id']; ?>', '<?php echo $nama_aman; ?>', <?php echo $harga_sekarang; ?>, '<?php echo $sumber_gambar; ?>')">
-                            <i class="fas fa-cart-plus" style="pointer-events: none;"></i> Tambah 
+                            <i class="fas fa-cart-plus"></i> Tambah 
                         </button>
-
                     </div>
                 </div>
 
@@ -1009,7 +1013,7 @@ img { max-width: 100%; height: auto; display: block; }
                     
                     <p class="jubah-price">
                         Rp <?php echo number_format($harga_sekarang, 0, ',', '.'); ?>
-                        <?php if($harga_coret > $harga_sekarang): ?>
+                        <?php if($harga_coret > 0): ?>
                             <span style="text-decoration: line-through; color: #888; font-size: 14px; margin-left: 5px;">
                                 Rp <?php echo number_format($harga_coret, 0, ',', '.'); ?>
                             </span>
@@ -1055,7 +1059,7 @@ img { max-width: 100%; height: auto; display: block; }
         <div class="footer-content">
             <div class="footer-brand">
                  <div class="logo" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">
-                   <img src="../Beranda/Gambarberanda/logo_caymira_modest.png" alt="Caymira Modest" class="logo-img" onerror="this.src='https://via.placeholder.com/150x50/0a1628/c9a84c?text=Caymira'">
+                   <img src="../Beranda/Gambarberanda/logo_caymira_modest.png" alt="Caymira Modest" class="logo-img">
                  </div>
                 
                 <p>Fashion muslimah dengan desain modern, bahan berkualitas, dan nyaman dipakai setiap hari.</p>
@@ -1114,8 +1118,6 @@ img { max-width: 100%; height: auto; display: block; }
     </button>
 
     <script>
-
-        // 2. Custom Cursor
         const cursor = document.getElementById('cursor');
         const cursorDot = document.getElementById('cursorDot');
         
@@ -1131,7 +1133,6 @@ img { max-width: 100%; height: auto; display: block; }
             el.addEventListener('mouseleave', () => cursor.classList.remove('hover'));
         });
 
-        // 3. Floating Particles Generator
         function createParticles() {
             const particlesContainer = document.getElementById('particles');
             for (let i = 0; i < 25; i++) {
@@ -1146,7 +1147,6 @@ img { max-width: 100%; height: auto; display: block; }
         }
         createParticles();
 
-        // 4. Scroll Events
         window.addEventListener('scroll', () => {
             const navbar = document.getElementById('navbar');
             const scrollTopBtn = document.getElementById('scrollTop');
@@ -1164,55 +1164,43 @@ img { max-width: 100%; height: auto; display: block; }
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
-        // 5. Mobile Menu Toggle
         function toggleMobileMenu() {
             document.getElementById('mobileMenuBtn').classList.toggle('active');
             document.getElementById('navLinks').classList.toggle('active');
         }
 
-        // 6. Search Overlay Toggle
         function toggleSearch() {
             const overlay = document.getElementById('searchOverlay');
             overlay.classList.toggle('active');
-
             if(overlay.classList.contains('active')) {
                 setTimeout(() => document.getElementById('searchInput').focus(), 100);
             }
         }
 
-        // 7. Toast Notification System
         function showToast(message) {
             const toast = document.getElementById('toast');
             document.getElementById('toastText').innerText = message;
-
             toast.classList.add('show');
-
-            setTimeout(() => {
-                toast.classList.remove('show');
-            }, 3000);
+            setTimeout(() => { toast.classList.remove('show'); }, 3000);
         }
 
-        // 8. Newsletter Footer
         function handleSubscribe(e) {
             e.preventDefault();
             const email = document.getElementById('emailInput').value;
             if (email) {
-                showToast('✅ Terima kasih telah berlangganan newsletter Caymira!');
+                showToast('✅ Berlangganan berhasil!');
                 document.getElementById('emailInput').value = '';
             }
         }
 
-        // 9. Filter Produk Jubah
         function filterJubah(category, btnElement) {
             document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
             btnElement.classList.add('active');
-
             const items = document.querySelectorAll('.jubah-card');
-
             items.forEach(item => {
                 item.style.display = 'none';
-
                 setTimeout(() => {
+                    // Logika filter: mencocokkan atribut data-category
                     if (category === 'all' || item.getAttribute('data-category') === category) {
                         item.style.display = 'block';
                         item.classList.remove('visible');
@@ -1221,40 +1209,36 @@ img { max-width: 100%; height: auto; display: block; }
                     }
                 }, 50);
             });
-
-            showToast(`Menampilkan kategori: ${btnElement.innerText}`);
         }
-
-
-// 10. Sort Produk Jubah (Disesuaikan dengan pembungkus tag Link)
-
-        // 10. Sort Produk Jubah
 
         function sortJubah(sortType) {
             const grid = document.getElementById('jubahGrid');
-            const items = Array.from(grid.querySelectorAll('.jubah-card-link')); // Deteksi elemen pembungkus link baru
+            const items = Array.from(grid.querySelectorAll('.jubah-card')); 
 
             items.sort((a, b) => {
                 const priceA = parseInt(a.getAttribute('data-price')) || 0;
                 const priceB = parseInt(b.getAttribute('data-price')) || 0;
+                const idA = parseInt(a.getAttribute('data-id')) || 0;
+                const idB = parseInt(b.getAttribute('data-id')) || 0;
 
                 switch(sortType) {
                     case 'price-low': return priceA - priceB;
                     case 'price-high': return priceB - priceA;
-                    case 'newest': return -1;
+                    case 'newest': return idB - idA; 
+                    case 'popular': return Math.random() - 0.5; 
                     default: return 0;
                 }
             });
 
-            items.forEach(item => grid.appendChild(item));
-            showToast(`Diurutkan: ${sortType}`);
+            items.forEach(item => {
+                grid.appendChild(item);
+                item.classList.remove('visible');
+                void item.offsetWidth;
+                item.classList.add('visible');
+            });
         }
-        // 11. Intersection Observer untuk Animasi
-        const observerOptions = {
-            threshold: 0.1,
-            rootMargin: "0px 0px -50px 0px"
-        };
 
+        const observerOptions = { threshold: 0.1 };
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
@@ -1268,55 +1252,14 @@ img { max-width: 100%; height: auto; display: block; }
             observer.observe(el);
         });
 
-        // 12. Color Dots Interaction
-        document.querySelectorAll('.jubah-colors').forEach(container => {
-            const dots = container.querySelectorAll('.color-dot');
-
-            dots.forEach(dot => {
-                dot.addEventListener('click', (e) => {
-                    e.stopPropagation();
-                    dots.forEach(d => d.classList.remove('active'));
-                    dot.classList.add('active');
-                });
-            });
-        });
-
-        // 13. Wishlist Button
-        document.querySelectorAll('.overlay-btn.wishlist').forEach(btn => {
-            btn.addEventListener('click', (e) => {
-                e.stopPropagation();
-                btn.querySelector('i').classList.toggle('far');
-                btn.querySelector('i').classList.toggle('fas');
-
-                if(btn.querySelector('i').classList.contains('fas')) {
-                    btn.style.color = '#e74c3c';
-                    showToast('❤️ Ditambahkan ke Wishlist');
-                } else {
-                    btn.style.color = 'var(--white)';
-                    showToast('🤍 Dihapus dari Wishlist');
-                }
-            });
-        });
-
-        // ===================== LOGIKA KERANJANG BELANJA =====================
-       // ===================== LOGIKA KERANJANG BELANJA (LOCAL STORAGE) =====================
-        
-        function getCart() {
-            return JSON.parse(localStorage.getItem('caymira_cart')) || [];
-        }
-
-        function saveCart(cart) {
-            localStorage.setItem('caymira_cart', JSON.stringify(cart));
-        }
-
+        function getCart() { return JSON.parse(localStorage.getItem('caymira_cart')) || []; }
+        function saveCart(cart) { localStorage.setItem('caymira_cart', JSON.stringify(cart)); }
         function updateCartBadge() {
             const cart = getCart();
             const totalItems = cart.reduce((total, item) => total + item.quantity, 0);
-            
             const badge = document.getElementById('cartBadge');
             if (badge) {
                 badge.textContent = totalItems;
-                // Sembunyikan badge jika keranjang kosong
                 badge.style.display = totalItems > 0 ? 'flex' : 'none';
             }
         }
@@ -1324,29 +1267,14 @@ img { max-width: 100%; height: auto; display: block; }
         function addToCart(id, name, price, image) {
             let cart = getCart();
             let existingItem = cart.find(item => item.id === id);
-            
-            if (existingItem) {
-                  existingItem.quantity += 1; 
-            } else {
-                cart.push({
-                    id: id,
-                    name: name,
-                    price: price,
-                    image: image,
-                    quantity: 1
-                });
-            }
-
+            if (existingItem) { existingItem.quantity += 1; } 
+            else { cart.push({ id, name, price, image, quantity: 1 }); }
             saveCart(cart); 
             updateCartBadge(); 
-            
-            showToast( name + ' berhasil ditambahkan!');
+            showToast( name + ' ditambahkan ke keranjang!');
         }
 
-        // Jalankan update badge otomatis pas halaman jubah baru dibuka
-        document.addEventListener("DOMContentLoaded", function () {
-            updateCartBadge();
-        });
+        document.addEventListener("DOMContentLoaded", updateCartBadge);
     </script>
 </body>
 </html>
