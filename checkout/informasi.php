@@ -1341,14 +1341,6 @@ select.form-input option {
                                 <div class="payment-desc">GoPay, OVO, DANA, LinkAja</div>
                             </div>
                         </div>
-                        <div class="payment-option" onclick="selectPayment(this)">
-                            <div class="payment-radio"><i class="fas fa-check"></i></div>
-                            <div class="payment-icon"><i class="fas fa-store"></i></div>
-                            <div class="payment-info">
-                                <div class="payment-name">COD (Bayar di Tempat)</div>
-                                <div class="payment-desc">Bayar saat barang diterima</div>
-                            </div>
-                        </div>
                     </div>
                 </div>
 

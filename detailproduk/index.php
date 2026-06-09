@@ -162,10 +162,17 @@ if (!empty($id_produk) && in_array($kategori, $tabel_valid)) {
             <li><a href="../best-seller/best-seller.php">Best Seller</a></li>
             <li><a href="../Contact/contact.php">Contact</a></li>
         </ul>
-        <div class="nav-icons">
+         <div class="nav-icons">
+            <i class="fas fa-search" onclick="toggleSearch()"></i>
+             <i class="fas fa-user" onclick="window.location.href='../login_register/profil.php'"></i>
             <div class="cart-icon">
-                <i class="fas fa-shopping-cart" onclick="window.location.href='../keranjang/keranjang.php'"></i>
-                <span class="cart-badge" id="cartBadge">0</span>
+            <i class="fas fa-shopping-cart" onclick="window.location.href='../keranjang/keranjang.php'"></i>
+              <span class="cart-badge" id="cartBadge" style="display: none;">0</span>
+            </div>
+            <div class="mobile-menu-btn" id="mobileMenuBtn" onclick="toggleMobileMenu()">
+                <span></span>
+                <span></span> 
+                <span></span>
             </div>
         </div>
     </nav>

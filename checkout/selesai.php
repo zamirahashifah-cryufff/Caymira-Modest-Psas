@@ -353,56 +353,6 @@ img { max-width: 100%; height: auto; display: block; }
     margin-left: 10px;
 }
 
-/* === TIMELINE === */
-.timeline {
-    position: relative; padding-left: 35px;
-    position: relative; z-index: 1;
-}
-.timeline::before {
-    content: ''; position: absolute; left: 11px; top: 8px; bottom: 8px;
-    width: 2px; background: linear-gradient(to bottom, var(--gold), rgba(201,168,76,0.2));
-    border-radius: 2px;
-}
-.timeline-item {
-    position: relative; padding-bottom: 28px;
-    display: flex; gap: 18px;
-    animation: fadeInLeft 0.6s ease both;
-}
-.timeline-item:nth-child(1) { animation-delay: 0.1s; }
-.timeline-item:nth-child(2) { animation-delay: 0.2s; }
-.timeline-item:nth-child(3) { animation-delay: 0.3s; }
-.timeline-item:nth-child(4) { animation-delay: 0.4s; }
-.timeline-item:last-child { padding-bottom: 0; }
-.timeline-dot {
-    position: absolute; left: -35px; top: 2px;
-    width: 24px; height: 24px; border-radius: 50%;
-    background: var(--navy);
-    border: 2px solid rgba(201,168,76,0.3);
-    display: flex; align-items: center; justify-content: center;
-    z-index: 2; transition: var(--transition);
-}
-.timeline-item.active .timeline-dot {
-    border-color: #27ae60;
-    background: #27ae60;
-    box-shadow: 0 0 12px rgba(39,174,96,0.4);
-}
-.timeline-item.completed .timeline-dot {
-    border-color: var(--gold);
-    background: var(--gold);
-}
-.timeline-dot i { font-size: 10px; color: var(--navy); }
-.timeline-item.active .timeline-dot i { color: white; }
-.timeline-content { flex: 1; }
-.timeline-status {
-    font-size: 14px; font-weight: 600;
-    color: var(--text-light); margin-bottom: 4px;
-}
-.timeline-item.active .timeline-status { color: #27ae60; }
-.timeline-item.completed .timeline-status { color: var(--gold); }
-.timeline-date {
-    font-size: 12px; color: var(--text-muted);
-}
-
 /* === DETAIL ROW === */
 .detail-row {
     display: flex; justify-content: space-between; align-items: center;
@@ -463,28 +413,6 @@ img { max-width: 100%; height: auto; display: block; }
 }
 @media (max-width: 768px) {
     .btn-group { flex-direction: column; }
-}
-.btn-primary {
-    flex: 1; padding: 16px;
-    background: linear-gradient(135deg, var(--gold), var(--gold-light));
-    border: none; border-radius: 14px; color: var(--navy);
-    font-family: var(--font-body); font-size: 15px;
-    font-weight: 600; text-transform: uppercase;
-    letter-spacing: 1.5px; cursor: pointer;
-    transition: var(--transition);
-    position: relative; overflow: hidden;
-    display: flex; align-items: center; justify-content: center; gap: 10px;
-}
-.btn-primary::before {
-    content: ''; position: absolute; top: 0; left: -100%;
-    width: 100%; height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
-    transition: left 0.5s;
-}
-.btn-primary:hover::before { left: 100%; }
-.btn-primary:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 15px 40px rgba(201,168,76,0.4);
 }
 .btn-secondary {
     flex: 1; padding: 16px;
@@ -717,22 +645,18 @@ img { max-width: 100%; height: auto; display: block; }
 </head>
 
 <body>
-    <!-- Confetti -->
     <div class="confetti-container" id="confetti"></div>
 
-    <!-- Custom Cursor -->
     <div class="custom-cursor" id="cursor"></div>
     <div class="cursor-dot" id="cursorDot"></div>
 
  
 
-    <!-- Toast -->
     <div class="toast" id="toast">
         <i class="fas fa-check-circle"></i>
         <span id="toastText"></span>
     </div>
 
-    <!-- Navbar -->
     <nav class="navbar" id="navbar">
         <div class="logo" onclick="window.location.href='../Beranda/beranda.html'">
             <img src="../Beranda/Gambarberanda/logo_caymira_modest.png" alt="Caymira Modest" class="logo-img">
@@ -756,7 +680,6 @@ img { max-width: 100%; height: auto; display: block; }
         </div>
     </nav>
 
-    <!-- Success Hero -->
     <header class="success-hero">
         <div class="container">
             <div class="success-icon-wrapper">
@@ -774,7 +697,6 @@ img { max-width: 100%; height: auto; display: block; }
         </div>
     </header>
 
-    <!-- Progress Steps -->
     <div class="container">
         <div class="progress-steps">
             <div class="step completed" id="step1">
@@ -794,55 +716,11 @@ img { max-width: 100%; height: auto; display: block; }
         </div>
     </div>
 
-    <!-- Main Content -->
     <main class="success-main container">
         <div class="success-grid">
-            <!-- Left Column -->
             <div class="success-left">
-                <!-- Tracking Timeline -->
-                <div class="success-card">
-                    <h2 class="card-title"><i class="fas fa-shipping-fast"></i> Status Pengiriman</h2>
-                    <div class="timeline">
-                        <div class="timeline-item completed">
-                            <div class="timeline-dot"><i class="fas fa-check"></i></div>
-                            <div class="timeline-content">
-                                <div class="timeline-status">Pesanan Diterima</div>
-                                <div class="timeline-date">16 Mei 2026, 14:32 WIB</div>
-                            </div>
-                        </div>
-                        <div class="timeline-item completed">
-                            <div class="timeline-dot"><i class="fas fa-check"></i></div>
-                            <div class="timeline-content">
-                                <div class="timeline-status">Pembayaran Terverifikasi</div>
-                                <div class="timeline-date">16 Mei 2026, 14:35 WIB</div>
-                            </div>
-                        </div>
-                        <div class="timeline-item active">
-                            <div class="timeline-dot"><i class="fas fa-box"></i></div>
-                            <div class="timeline-content">
-                                <div class="timeline-status">Sedang Dikemas</div>
-                                <div class="timeline-date">Estimasi selesai hari ini</div>
-                            </div>
-                        </div>
-                        <div class="timeline-item">
-                            <div class="timeline-dot"></div>
-                            <div class="timeline-content">
-                                <div class="timeline-status">Dikirim ke Alamat Anda</div>
-                                <div class="timeline-date">Estimasi 18 - 19 Mei 2026</div>
-                            </div>
-                        </div>
-                        <div class="timeline-item">
-                            <div class="timeline-dot"></div>
-                            <div class="timeline-content">
-                                <div class="timeline-status">Pesanan Diterima</div>
-                                <div class="timeline-date">Menunggu konfirmasi Anda</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
 
-                <!-- Order Details -->
-<div class="success-card">
+                <div class="success-card">
     <h2 class="card-title"><i class="fas fa-receipt"></i> Detail Pesanan</h2>
     
     <div class="detail-row">
@@ -890,7 +768,6 @@ img { max-width: 100%; height: auto; display: block; }
     </div>
 </div>
 
-                <!-- WhatsApp Support -->
                 <div class="success-card" style="border: 1.5px solid rgba(39,174,96,0.2);">
                     <div class="whatsapp-cta" onclick="window.open('https://wa.me/6289570420408?text=Halo+Caymira,+saya+ingin+menanyakan+pesanan+saya+CM-250516-8842','_blank')">
                         <div class="whatsapp-icon"><i class="fab fa-whatsapp"></i></div>
@@ -903,7 +780,6 @@ img { max-width: 100%; height: auto; display: block; }
                 </div>
             </div>
 
-            <!-- Right Column -->
             <div class="success-right">
                 
                 <div class="success-card" style="margin-bottom: 25px;">
@@ -955,9 +831,6 @@ img { max-width: 100%; height: auto; display: block; }
                     </div>
 
                     <div class="btn-group" style="display: flex; gap: 10px; flex-direction: column;">
-                        <button class="btn-primary" onclick="window.location.href='../Pesanan/pesanan.html'" style="width: 100%; background: #c9a84c; color: #0a1118; padding: 15px; border-radius: 8px; border: none; font-weight: bold; cursor: pointer;">
-                            <i class="fas fa-box-open"></i> Cek Status Pesanan
-                        </button>
                         <button class="btn-secondary" onclick="window.location.href='../Beranda/beranda.php'" style="width: 100%; background: transparent; color: #c9a84c; border: 1px solid #c9a84c; padding: 15px; border-radius: 8px; font-weight: bold; cursor: pointer;">
                             <i class="fas fa-shopping-bag"></i> Belanja Lagi
                         </button>
@@ -966,7 +839,6 @@ img { max-width: 100%; height: auto; display: block; }
             </div>
     </main>
 
-    <!-- Footer -->
     <footer class="footer" id="contact">
         <svg class="gold-branch-footer" viewBox="0 0 200 300" fill="none">
             <path d="M100 300 Q120 250 100 200 Q80 150 100 100 Q120 50 100 0" stroke="#c9a84c" stroke-width="1" fill="none" opacity="0.4"/>
@@ -1029,7 +901,6 @@ img { max-width: 100%; height: auto; display: block; }
         </div>
     </footer>
 
-    <!-- Scroll to Top -->
     <button class="scroll-top" id="scrollTop" onclick="scrollToTop()">
         <i class="fas fa-chevron-up"></i>
     </button>
@@ -1231,7 +1102,7 @@ img { max-width: 100%; height: auto; display: block; }
                 let itemQty = parseInt(item.quantity) || 1;
                 subtotal += (itemPrice * itemQty);
                 
-// === JURUS HYBRID DETEKSI GAMBAR 2 DIMENSI ===
+                // === JURUS HYBRID DETEKSI GAMBAR 2 DIMENSI ===
                 let imgPath = item.image || '';
                 
                 if (imgPath === '') {
