@@ -206,9 +206,7 @@ if (!isset($_SESSION['user_id'])) {
         .mobile-menu-btn { display: none; flex-direction: column; gap: 5px; cursor: pointer; z-index: 1001; }
         .mobile-menu-btn span { width: 24px; height: 2px; background: var(--gold); transition: 0.3s; }
 
-        /* =========================================
-           HERO SECTION (BREAD TALE STYLE) - KEPT
-           ========================================= */
+        /* HERO SECTION */
         .about-hero-modern {
             margin-top: 100px;
             padding: 60px;
@@ -253,7 +251,6 @@ if (!isset($_SESSION['user_id'])) {
         .content-text { max-width: 800px; margin: 0 auto; font-size: 16px; line-height: 2.2; color: var(--text-light); }
         .content-text p { margin-bottom: 30px; opacity: 0; transform: translateY(20px); transition: 0.8s ease; }
         .content-text p.visible { opacity: 1; transform: translateY(0); }
-        .gold-text { color: var(--gold); font-weight: 500; cursor: pointer; }
 
         /* Values Section */
         .values-section { padding: 80px 60px; background: var(--navy); }
@@ -263,7 +260,7 @@ if (!isset($_SESSION['user_id'])) {
         .value-card:hover { transform: translateY(-10px); border-color: var(--gold); box-shadow: 0 20px 40px rgba(0,0,0,0.3); }
         .value-icon { font-size: 40px; color: var(--gold); margin-bottom: 25px; }
 
-        /* === FOOTER (COPIED FROM BERANDA) === */
+        /* FOOTER */
         .footer {
             background: #ffffff;
             border-top: 1px solid rgba(201, 168, 76, 0.15);
@@ -363,7 +360,7 @@ if (!isset($_SESSION['user_id'])) {
         </div>
     </div>
 
-    <!-- Navbar (Same as Beranda) -->
+    <!-- Navbar -->
     <nav class="navbar" id="navbar">
         <div class="logo" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">
             <img src="gambarabout/logo_caymira_modest.png" alt="Caymira Modest" class="logo-img">
@@ -389,11 +386,11 @@ if (!isset($_SESSION['user_id'])) {
         </div>
     </nav>
 
-    <!-- MODERN HERO SECTION (Bread Tale Style - Kept) -->
+    <!-- HERO SECTION -->
     <section class="about-hero-modern" id="about">
         <div class="hero-header-text">
             <h1 class="modern-title">ABOUT US</h1>
-            <p class="modern-subtitle">Caymira Modest menghadirkan koleksi busana muslim yang memadukan kesederhanaan, kenyamanan, dan keanggunan dalam setiap detail. Dari gamis, jubah, baju koko, hingga kerudung, setiap produk dirancang untuk memberikan kualitas terbaik serta mendukung gaya hidup muslim yang modern dan sesuai syariat.</p>
+            <p class="modern-subtitle">Caymira Modest menghadirkan koleksi busana muslim yang memadukan kesederhanaan, kenyamanan, dan keanggunan dalam setiap detail.</p>
         </div>
 
         <div class="hero-banner-strip">
@@ -404,13 +401,13 @@ if (!isset($_SESSION['user_id'])) {
 
         <div class="hero-split-container">
             <div class="split-image-wrapper">
-                <img src="gambarabout/gambar baju.png" alt="Caymira Showcase" onerror="this.src='https://images.unsplash.com/photo-1552874869-5c39ec9288dc?w=600&h=800&fit=crop'">
+                <img src="gambarabout/gambar baju.png" alt="Caymira Showcase">
             </div>
             
             <div class="split-info-card">
                 <div class="glow-dot"></div>
                 <h2 class="card-title">Classic Elegance <br>For Modern Muslims</h2>
-                <p class="card-desc">Sejak didirikannya pada tahun 2020, Caymira Modest berkomitmen menghadirkan busana muslim yang memadukan nilai syar'i, kenyamanan, dan keanggunan dalam setiap detail. Mulai dari gamis, jubah, baju koko, hingga kerudung, setiap koleksi dirancang dengan bahan pilihan dan proses yang teliti untuk memberikan kualitas terbaik bagi setiap pelanggan.</p>
+                <p class="card-desc">Sejak didirikannya pada tahun 2020, Caymira Modest berkomitmen menghadirkan busana muslim yang memadukan nilai syar'i, kenyamanan, dan keanggunan dalam setiap detail.</p>
                 
                 <div class="attributes-list">
                     <div class="attr-row"><span class="attr-label">Quality Standard</span><span class="attr-value">Premium Export Quality</span></div>
@@ -421,7 +418,7 @@ if (!isset($_SESSION['user_id'])) {
         </div>
     </section>
 
-    <!-- Stats Banner (Synchronized) -->
+    <!-- Stats Banner -->
     <section class="stats-banner">
         <div class="stat-item"><span class="stat-number" data-target="5000">0</span><div class="stat-label">Happy Customers</div></div>
         <div class="stat-item"><span class="stat-number" data-target="150">0</span><div class="stat-label">Products</div></div>
@@ -431,9 +428,7 @@ if (!isset($_SESSION['user_id'])) {
     <!-- Content Narrative -->
     <section class="content-section">
         <div class="content-text">
-            <p>Kami percaya bahwa kesederhanaan adalah bentuk keindahan yang tak pernah lekang oleh waktu.
-              Dengan perpaduan kualitas terbaik, desain yang elegan, dan sentuhan detail yang penuh perhatian, Caymira Modest hadir untuk menjadi bagian dari perjalanan Anda dalam menampilkan versi terbaik diri Anda setiap hari. 
-            </p>
+            <p>Kami percaya bahwa kesederhanaan adalah bentuk keindahan yang tak pernah lekang oleh waktu.</p>
         </div>
     </section>
 
@@ -447,7 +442,7 @@ if (!isset($_SESSION['user_id'])) {
         </div>
     </section>
 
-    <!-- Footer (Same as Beranda) -->
+    <!-- Footer -->
     <footer class="footer" id="contact">
         <svg class="gold-branch-footer" viewBox="0 0 200 300" fill="none">
             <path d="M100 300 Q120 250 100 200 Q80 150 100 100 Q120 50 100 0" stroke="#c9a84c" stroke-width="1" fill="none" opacity="0.4"/>
@@ -484,8 +479,9 @@ if (!isset($_SESSION['user_id'])) {
             <div class="footer-col">
                 <h4 class="footer-title">Newsletter</h4>
                 <p class="newsletter-text">Dapatkan info terbaru & promo menarik.</p>
-                <form class="newsletter-form" onsubmit="event.preventDefault(); showToast('✅ Terima kasih telah berlangganan!');">
-                    <input type="email" placeholder="Your email" required>
+                <!-- PERBAIKAN: Form newsletter memanggil handleSubscribe -->
+                <form class="newsletter-form" onsubmit="handleSubscribe(event)">
+                    <input type="email" placeholder="Your email" required id="emailInput">
                     <button type="submit"><i class="fas fa-paper-plane"></i></button>
                 </form>
             </div>
@@ -539,7 +535,47 @@ if (!isset($_SESSION['user_id'])) {
             setTimeout(() => t.classList.remove('show'), 3000);
         }
 
-        // STATS COUNTER logic
+        // PERBAIKAN: FUNGSI NEWSLETTER UNTUK DATABASE
+        function handleSubscribe(e) {
+            e.preventDefault();
+            const emailInput = document.getElementById("emailInput");
+            const emailValue = emailInput.value;
+            const submitBtn = e.target.querySelector("button");
+
+            if (emailValue) {
+                const originalContent = submitBtn.innerHTML;
+                submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+                submitBtn.disabled = true;
+
+                const formData = new FormData();
+                formData.append("email", emailValue);
+
+                // Mengirim ke folder newsletter
+                fetch("../newsletter/newsletter.php", {
+                    method: "POST",
+                    body: formData
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.status === "success") {
+                        showToast("✅ " + data.message);
+                        emailInput.value = ""; 
+                    } else {
+                        showToast("❌ " + data.message);
+                    }
+                })
+                .catch(error => {
+                    showToast("❌ Gagal terhubung ke server.");
+                    console.error("Error:", error);
+                })
+                .finally(() => {
+                    submitBtn.innerHTML = originalContent;
+                    submitBtn.disabled = false;
+                });
+            }
+        }
+
+        // STATS COUNTER
         const statsObserver = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {

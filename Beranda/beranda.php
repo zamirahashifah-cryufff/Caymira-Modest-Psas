@@ -1988,13 +1988,6 @@ img { max-width: 100%; height: auto; }
     </button>
 
     <script>
-        // ===== LOADING SCREEN =====
-        window.addEventListener('load', () => {
-            setTimeout(() => {
-                document.getElementById('loader').classList.add('hidden');
-            }, 2000);
-        });
-
         // ===== CUSTOM CURSOR =====
         const cursor = document.getElementById('cursor');
         const cursorDot = document.getElementById('cursorDot');
@@ -2076,13 +2069,42 @@ img { max-width: 100%; height: auto; }
             setTimeout(() => toast.classList.remove('show'), 3000);
         }
 
-        // ===== NEWSLETTER =====
+        // ===== NEWSLETTER DENGAN DATABASE (FIXED) =====
         function handleSubscribe(e) {
             e.preventDefault();
-            const email = document.getElementById('emailInput').value;
-            if (email) {
-                showToast('✅ Terima kasih telah berlangganan newsletter Caymira!');
-                document.getElementById('emailInput').value = '';
+            const emailInput = document.getElementById("emailInput");
+            const emailValue = emailInput.value;
+            const submitBtn = e.target.querySelector("button");
+
+            if (emailValue) {
+                const originalContent = submitBtn.innerHTML;
+                submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+                submitBtn.disabled = true;
+
+                const formData = new FormData();
+                formData.append("email", emailValue);
+
+                fetch("../newsletter/newsletter.php", {
+                    method: "POST",
+                    body: formData
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.status === "success") {
+                        showToast("✅ " + data.message);
+                        emailInput.value = ""; 
+                    } else {
+                        showToast("❌ " + data.message);
+                    }
+                })
+                .catch(error => {
+                    showToast("❌ Gagal terhubung ke server.");
+                    console.error("Error:", error);
+                })
+                .finally(() => {
+                    submitBtn.innerHTML = originalContent;
+                    submitBtn.disabled = false;
+                });
             }
         }
 
@@ -2185,32 +2207,6 @@ img { max-width: 100%; height: auto; }
                 toggleSearch();
             }
         });
-
-        // ===== HERO TILT EFFECT =====
-        const heroSection = document.querySelector('.hero');
-        if (heroSection) {
-            heroSection.addEventListener('mousemove', (e) => {
-                const rect = heroSection.getBoundingClientRect();
-                const x = e.clientX - rect.left;
-                const y = e.clientY - rect.top;
-                const centerX = rect.width / 2;
-                const centerY = rect.height / 2;
-                const rotateX = (y - centerY) / 50;
-                const rotateY = (centerX - x) / 50;
-
-                const heroText = document.querySelector('.hero-text');
-                if (heroText) {
-                    heroText.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
-                }
-            });
-
-            heroSection.addEventListener('mouseleave', () => {
-                const heroText = document.querySelector('.hero-text');
-                if (heroText) {
-                    heroText.style.transform = 'perspective(1000px) rotateX(0) rotateY(0)';
-                }
-            });
-        }
 
         // ===================== LOGIKA KERANJANG BELANJA =====================
         function getCart() {

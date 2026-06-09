@@ -1051,7 +1051,7 @@
         <li><a href="../Beranda/beranda.php">Beranda</a></li>
         <li><a href="../About-us/aboutus.php">About Us</a></li>
         <li><a href="../best-seller/best-seller.php">Best Seller</a></li>
-        <li><a href="../login_register/contact.php"">Contact</a></li>
+        <li><a href="../login_register/contact.php">Contact</a></li>
       </ul>
 
       <div class="nav-icons">
@@ -1366,7 +1366,7 @@
         setTimeout(() => toast.classList.remove("show"), 3000);
       }
 
-      // ===== NEWSLETTER DENGAN DATABASE =====
+      // ===== NEWSLETTER DENGAN DATABASE (FIXED PATH) =====
       function handleSubscribe(e) {
         e.preventDefault();
         const emailInput = document.getElementById("emailInput");
@@ -1374,7 +1374,6 @@
         const submitBtn = e.target.querySelector("button");
 
         if (emailValue) {
-          // Berikan efek loading pada tombol
           const originalContent = submitBtn.innerHTML;
           submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
           submitBtn.disabled = true;
@@ -1382,25 +1381,28 @@
           const formData = new FormData();
           formData.append("email", emailValue);
 
-          fetch("proses_newsletter.php", {
+          // Path diperbaiki: Keluar satu tingkat lalu masuk ke folder newsletter
+          fetch("../newsletter/newsletter.php", {
             method: "POST",
             body: formData
           })
-          .then(response => response.json())
+          .then(response => {
+            if (!response.ok) throw new Error('File tidak ditemukan');
+            return response.json();
+          })
           .then(data => {
             if (data.status === "success") {
               showToast("✅ " + data.message);
-              emailInput.value = ""; // Kosongkan input jika sukses
+              emailInput.value = ""; 
             } else {
               showToast("❌ " + data.message);
             }
           })
           .catch(error => {
-            showToast("❌ Terjadi kesalahan koneksi.");
+            showToast("❌ Gagal terhubung ke server.");
             console.error("Error:", error);
           })
           .finally(() => {
-            // Kembalikan tombol ke semula
             submitBtn.innerHTML = originalContent;
             submitBtn.disabled = false;
           });
@@ -1445,7 +1447,6 @@
       document.addEventListener("DOMContentLoaded", () => {
         
         updateCartBadge();
-        // --------------------------------------------------------
 
         const contactForm = document.getElementById("contactForm");
 
@@ -1457,10 +1458,8 @@
            submitBtn.innerHTML = "Sending... <i class='fas fa-spinner fa-spin'></i>";
            submitBtn.disabled = true;
 
-          // Mengambil semua data dari form
           const formData = new FormData(this);
 
-          // Mengirim data ke proses_contact.php
         fetch("proses_contact.php", {
           method: "POST",
           body: formData
@@ -1469,7 +1468,7 @@
         .then(data => {
          if (data.status === "success") {
            showToast("✅ " + data.message);
-           contactForm.reset(); // Kosongkan form jika sukses
+           contactForm.reset(); 
           } else {
             showToast("❌ " + data.message);
           }
@@ -1479,7 +1478,6 @@
           console.error("Error:", error);
         })
         .finally(() => {
-        // Kembalikan tombol seperti semula
          submitBtn.innerHTML = "Send Now";
          submitBtn.disabled = false;
         });
